@@ -1,0 +1,171 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import SearchApp from "@/components/search/SearchApp";
+import { contentByLocale } from "@/content";
+import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { getPostsByLocale } from "@/lib/blog";
+import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
+import { messagesByLocale } from "@/lib/messages";
+import { translate, type MessageDictionary } from "@/i18n/translator";
+import { notFound } from "@/lib/http";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const localeParam = Astro.params.locale?.toLowerCase();
+const resolvedLocale = locales.find((item) => item === localeParam) as Locale | undefined;
+
+if (!resolvedLocale) {
+  return notFound();
+}
+
+const locale = resolvedLocale;
+const hero = contentByLocale[locale].blog;
+const posts = getPostsByLocale(locale);
+const meta = getBlogIndexMetadata(locale, "/search/");
+const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJsonLd(locale)];
+const messages = messagesByLocale[locale] as MessageDictionary;
+
+const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
+if (!appId) {
+  throw new Error("PUBLIC_ALGOLIA_APP_ID is required to render the search page.");
+}
+
+const searchApiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_API_KEY;
+if (!searchApiKey) {
+  throw new Error("PUBLIC_ALGOLIA_SEARCH_API_KEY is required to render the search page.");
+}
+
+const indexName =
+  (locale === "ru"
+    ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_RU
+    : locale === "en"
+      ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_EN
+      : import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_UA) ?? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
+if (!indexName) {
+  throw new Error("PUBLIC_ALGOLIA_INDEX_NAME (or ALGOLIA_INDEX_NAME) must be provided.");
+}
+
+const searchQuery =
+  Astro.url.searchParams.get("search") ??
+  Astro.url.searchParams.get("q") ??
+  "";
+
+const fallbackStrings = {
+  ua: {
+    label: "Пошук по блогу",
+    placeholder: "Введіть тему, наприклад «тривога» або «втома»",
+    reset: "Скинути",
+    noscript: "Щоб пошук працював, увімкніть JavaScript. Нижче показані всі записи.",
+    empty: "Нічого не знайдено",
+    emptyDetails: "Спробуйте сформулювати запит інакше або скиньте пошук.",
+    readMore: "Читати далі",
+    previous: "Назад",
+    next: "Вперед",
+    summary: "Сторінка {current} з {total}",
+    pageTitle: "Пошук",
+    pageDescription: hero.heroDescription,
+    heroTitle: hero.heroTitle,
+    heroDescription:
+      "Результати з’являтимуться в міру введення запиту. Для швидкого старту нижче показані останні матеріали.",
+  },
+  ru: {
+    label: "Поиск по блогу",
+    placeholder: "Введите тему, например «тревога» или «вдохновение»",
+    reset: "Сбросить",
+    noscript: "Чтобы поиск работал, включите JavaScript. Ниже показаны все записи.",
+    empty: "Ничего не найдено",
+    emptyDetails: "Попробуйте изменить запрос или сбросьте поиск.",
+    readMore: "Читать дальше",
+    previous: "Назад",
+    next: "Вперед",
+    summary: "Страница {current} из {total}",
+    pageTitle: "Поиск",
+    pageDescription: hero.heroDescription,
+    heroTitle: hero.heroTitle,
+    heroDescription: "Результаты появляются по мере ввода. Ниже показаны свежие материалы.",
+  },
+  en: {
+    label: "Search the blog",
+    placeholder: 'Try a topic, e.g., "anxiety" or "fatigue"',
+    reset: "Reset",
+    noscript: "Enable JavaScript to filter results. All posts are listed below.",
+    empty: "No matches found",
+    emptyDetails: "Try adjusting your query or reset the search.",
+    readMore: "Read more",
+    previous: "Previous",
+    next: "Next",
+    summary: "Page {current} of {total}",
+    pageTitle: "Search",
+    pageDescription: hero.heroDescription,
+    heroTitle: hero.heroTitle,
+    heroDescription: "Results appear as you type. Below are recent entries to explore.",
+  },
+} as const;
+
+const localeFallback = fallbackStrings[locale] ?? fallbackStrings.ua;
+
+const pick = (key: string, fallback: string) => {
+  const value = translate(messages, key);
+  return value === key ? fallback : value;
+};
+
+const readMore = pick("Blog.readMore", localeFallback.readMore);
+
+const searchCopy = {
+  label: pick("Search.label", localeFallback.label),
+  placeholder: pick("Search.placeholder", localeFallback.placeholder),
+  reset: pick("Search.reset", localeFallback.reset),
+  noscript: pick("Search.noscript", localeFallback.noscript),
+  empty: pick("Search.empty", localeFallback.empty),
+  emptyDetails: pick("Search.emptyDetails", localeFallback.emptyDetails),
+  readMore,
+  pagination: {
+    previous: pick("Pagination.previous", localeFallback.previous),
+    next: pick("Pagination.next", localeFallback.next),
+    summaryTemplate: pick("Pagination.pageSummary", localeFallback.summary),
+  },
+} as const;
+
+const pageTitle = pick("Search.pageTitle", localeFallback.pageTitle);
+const pageDescription = pick("Search.pageDescription", localeFallback.pageDescription);
+const heroTitle = pick("Search.heroTitle", localeFallback.heroTitle);
+const heroDescription = pick("Search.heroDescription", localeFallback.heroDescription);
+---
+<SiteLayout
+  locale={locale}
+  title={pageTitle}
+  description={pageDescription}
+  canonical={meta.canonical}
+  languageAlternates={meta.alternates}
+  feeds={meta.feeds}
+  jsonLd={jsonLd}
+>
+  <main class="relative z-10 flex flex-col gap-8 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="section-card-strong flex flex-col gap-4 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
+        <h1 class="text-balance text-[clamp(2.1rem,6vw,3.4rem)] font-semibold leading-tight text-strong">
+          {heroTitle}
+        </h1>
+        <p class="mx-auto max-w-2xl text-[clamp(1rem,3vw,1.2rem)] leading-relaxed text-primary">
+          {heroDescription}
+        </p>
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <SearchApp
+        client:load
+        appId={appId}
+        searchApiKey={searchApiKey}
+        indexName={indexName}
+        locale={locale}
+        initialQuery={searchQuery}
+        copy={searchCopy}
+      />
+    </div>
+  </main>
+</SiteLayout>

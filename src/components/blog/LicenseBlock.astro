@@ -1,0 +1,32 @@
+---
+import type { Locale } from "@/i18n/config";
+import { messagesByLocale } from "@/lib/messages";
+
+type LicenseBlockProps = {
+  locale: Locale;
+  className?: string;
+};
+
+const { locale, className = "" } = Astro.props as LicenseBlockProps;
+const messages = messagesByLocale[locale] ?? {};
+const heading = (messages?.License as Record<string, unknown>)?.heading as string | undefined;
+const body = (messages?.License as Record<string, unknown>)?.body as string | undefined;
+const [before = "", highlighted = "", after = ""] = body ? body.split(/<\/?license>/) : ["", "", ""];
+---
+<aside class={`blog-card flex flex-col gap-3 rounded-3xl border border-soft p-5 text-sm leading-relaxed text-primary ${className}`}>
+  <p class="text-xs font-semibold uppercase tracking-[0.35em] text-muted">
+    {heading ?? "License"}
+  </p>
+  <p>
+    {before}
+    <a
+      href="https://creativecommons.org/licenses/by/4.0/"
+      class="font-semibold text-accent underline decoration-dotted underline-offset-4 transition-colors hover:text-accent"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {highlighted || "Creative Commons Attribution 4.0 International"}
+    </a>
+    {after}
+  </p>
+</aside>

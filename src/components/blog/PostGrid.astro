@@ -1,0 +1,134 @@
+---
+import type { ExplorerPostView } from "@/lib/blog-explorer";
+
+type PaginationMeta = {
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
+  summary: string;
+  previousLabel: string;
+  nextLabel: string;
+};
+
+interface PostGridProps {
+  posts: ExplorerPostView[];
+  readMoreLabel: string;
+  pagination?: PaginationMeta;
+}
+
+const { posts, readMoreLabel, pagination } = Astro.props as PostGridProps;
+
+const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
+
+const buildPageHref = (basePath: string, page: number) => {
+  const normalizedBase = basePath === "/" ? "/" : ensureTrailingSlash(basePath);
+  if (page <= 1) {
+    return normalizedBase;
+  }
+  return `${normalizedBase}page/${page}/`;
+};
+---
+<section class="flex flex-col gap-6">
+  {posts.length > 0 ? (
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {posts.map((post) =>
+        post.type === "note" ? (
+          <article
+            class="blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6"
+            key={post.slug}
+          >
+            <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
+              <a
+                href={ensureTrailingSlash(post.typeUrl)}
+                class="badge-soft inline-flex items-center px-3 py-1 text-[0.65rem] leading-none transition-colors hover:bg-[#f2993f]/90 hover:text-white"
+              >
+                {post.typeLabel}
+              </a>
+            </div>
+            <h3 class="sr-only">{post.title}</h3>
+            <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
+              {post.snippet || post.title}
+            </p>
+            <div>
+              <a
+                href={ensureTrailingSlash(post.url)}
+                class="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+              >
+                {readMoreLabel}
+                <span aria-hidden>→</span>
+              </a>
+            </div>
+          </article>
+        ) : (
+          <article
+            class="blog-card flex w-full flex-col gap-5 rounded-[2.5rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-8"
+            key={post.slug}
+          >
+            <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
+              <a
+                href={ensureTrailingSlash(post.typeUrl)}
+                class="badge-soft inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.65rem] leading-none transition-colors hover:bg-[#f2993f]/90 hover:text-white"
+              >
+                {post.typeLabel}
+              </a>
+            </div>
+            <div class="flex flex-col gap-3">
+              <h3 class="text-balance text-[clamp(1.45rem,4.5vw,2rem)] font-semibold leading-tight text-strong">
+                <a href={ensureTrailingSlash(post.url)} class="text-inherit transition-colors hover:text-accent">
+                  {post.title}
+                </a>
+              </h3>
+              {post.snippet ? (
+                <p class="whitespace-pre-line text-[clamp(1rem,3vw,1.12rem)] leading-relaxed text-primary">
+                  {post.snippet}
+                </p>
+              ) : null}
+            </div>
+            <div>
+              <a
+                href={ensureTrailingSlash(post.url)}
+                class="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+              >
+                {readMoreLabel}
+                <span aria-hidden>→</span>
+              </a>
+            </div>
+          </article>
+        ),
+      )}
+    </div>
+  ) : (
+    <div class="blog-card col-span-full flex flex-col items-center gap-3 rounded-[2rem] border border-soft p-10 text-center text-primary">
+      <p class="text-xl font-semibold text-strong">Нічого не знайдено</p>
+      <p class="text-sm text-muted">Спробуйте пізніше — статті для цієї вибірки ще готуються.</p>
+    </div>
+  )}
+
+  {pagination && pagination.totalPages > 1 ? (
+    <nav class="flex items-center justify-between rounded-full border border-[#eadfcd]/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#3f3831] shadow-[0_18px_48px_-32px_rgba(40,30,20,0.35)]">
+      {pagination.currentPage > 1 ? (
+        <a
+          href={buildPageHref(pagination.basePath, pagination.currentPage - 1)}
+          class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-[#f4eadb] hover:text-[#2f2b26]"
+        >
+          ← {pagination.previousLabel}
+        </a>
+      ) : (
+        <span class="cursor-not-allowed rounded-full px-3 py-2 text-[#b2a698] opacity-70">←</span>
+      )}
+      <span class="text-xs uppercase tracking-[0.3em] text-[#7c6d5d]">
+        {pagination.summary}
+      </span>
+      {pagination.currentPage < pagination.totalPages ? (
+        <a
+          href={buildPageHref(pagination.basePath, pagination.currentPage + 1)}
+          class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-[#f4eadb] hover:text-[#2f2b26]"
+        >
+          {pagination.nextLabel} →
+        </a>
+      ) : (
+        <span class="cursor-not-allowed rounded-full px-3 py-2 text-[#b2a698] opacity-70">→</span>
+      )}
+    </nav>
+  ) : null}
+</section>

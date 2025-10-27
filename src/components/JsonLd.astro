@@ -1,0 +1,13 @@
+---
+type JsonLdProps = {
+  data: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const { data } = Astro.props as JsonLdProps;
+const json = Array.isArray(data) ? data : [data];
+const payload = JSON.stringify(json.length === 1 ? json[0] : json)
+  .replace(/</g, "\\u003c")
+  .replace(/>/g, "\\u003e")
+  .replace(/&/g, "\\u0026");
+---
+<script type="application/ld+json">{payload}</script>

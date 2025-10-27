@@ -1,0 +1,132 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import PostGrid from "@/components/blog/PostGrid.astro";
+import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { getPostsByType, paginatePostsByType } from "@/lib/blog";
+import {
+  buildPostTypeRelativePath,
+  getPostTypeDescription,
+  getPostTypeLabel,
+  isValidPostType,
+  type PostType,
+} from "@/lib/post-types";
+import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, localeToBcp47 } from "@/lib/seo";
+import { messagesByLocale } from "@/lib/messages";
+import { translate, type MessageDictionary } from "@/i18n/translator";
+import { notFound } from "@/lib/http";
+import { toExplorerPosts } from "@/lib/blog-explorer";
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { locale: string; type: string } }> = [];
+  for (const locale of locales) {
+    for (const type of ["note", "article", "story"] as const) {
+      paths.push({ params: { locale, type } });
+    }
+  }
+  return paths;
+}
+
+const localeParam = Astro.params.locale?.toLowerCase() as Locale | undefined;
+const rawType = Astro.params.type;
+
+if (!localeParam || !locales.includes(localeParam) || !rawType || !isValidPostType(rawType)) {
+  return notFound();
+}
+
+const locale = localeParam;
+const type = rawType as PostType;
+const pagination = paginatePostsByType(locale, type, 1);
+
+if (pagination.totalCount === 0) {
+  return notFound();
+}
+
+const postsView = toExplorerPosts(pagination.items, locale);
+const label = getPostTypeLabel(locale, type);
+const description = getPostTypeDescription(locale, type, pagination.totalCount);
+const relativePath = buildPostTypeRelativePath(type);
+const canonical = buildCanonicalUrl(locale, relativePath);
+const availableLocales = locales.filter((candidate) => getPostsByType(candidate, type).length > 0);
+const languageAlternates = buildLanguageAlternates(
+  availableLocales.reduce<Record<Locale, string>>((acc, candidate) => {
+    acc[candidate] = relativePath;
+    return acc;
+  }, {} as Record<Locale, string>),
+  { locales: availableLocales },
+);
+const sameAs = Object.values(languageAlternates).filter((url) => url !== canonical);
+
+const messages = messagesByLocale[locale] as MessageDictionary;
+const readMoreRaw = translate(messages, "Blog.readMore");
+const readMoreLabel =
+  readMoreRaw === "Blog.readMore"
+    ? locale === "ru"
+      ? "Читать дальше"
+      : locale === "en"
+        ? "Read more"
+        : "Читати далі"
+    : readMoreRaw;
+const previousLabel = translate(messages, "Pagination.previous");
+const nextLabel = translate(messages, "Pagination.next");
+const pageSummary = translate(messages, "Pagination.pageSummary", {
+  page: pagination.page,
+  total: pagination.totalPages,
+});
+
+const prefix = locale === defaultLocale ? "" : `/${locale}`;
+---
+<SiteLayout
+  locale={locale}
+  title={label}
+  description={description}
+  canonical={canonical}
+  languageAlternates={languageAlternates}
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: label,
+      inLanguage: localeToBcp47[locale],
+      description,
+      url: canonical,
+      isPartOf: `${SITE_URL}/blog/`,
+      sameAs,
+      about: {
+        "@type": "DefinedTerm",
+        name: label,
+        inDefinedTermSet: `${SITE_URL}/blog/type`,
+      },
+    },
+  ]}
+>
+  <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8">
+        <span class="inline-flex w-fit items-center gap-2 rounded-full bg-[#f4eadb] px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-[#7c6d5d]">
+          {label}
+        </span>
+        <h1 class="text-[clamp(2rem,5vw,2.8rem)] font-semibold leading-tight text-[#2f2b26]">
+          {label}
+        </h1>
+        <p class="text-sm leading-relaxed text-[#4b4139]">
+          {description}
+        </p>
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <PostGrid
+        posts={postsView}
+        readMoreLabel={readMoreLabel}
+        pagination={{
+          currentPage: pagination.page,
+          totalPages: pagination.totalPages,
+          basePath: `${prefix}${buildPostTypeRelativePath(type)}`,
+          summary: pageSummary,
+          previousLabel,
+          nextLabel,
+        }}
+      />
+    </div>
+  </main>
+</SiteLayout>

@@ -1,0 +1,49 @@
+---
+import AboutPage from "@/components/about/AboutPage.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { contentByLocale } from "@/content";
+import { defaultLocale, locales } from "@/i18n/config";
+import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE, PERSON_JOB_TITLES, PERSON_KNOWS_ABOUT, localeToBcp47 } from "@/lib/seo";
+
+const content = contentByLocale[defaultLocale];
+const canonical = buildCanonicalUrl(defaultLocale, "/about/");
+const languageAlternates = buildLanguageAlternates("/about/", { locales });
+const profileJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${canonical}#profile`,
+  name: content.metaTitle,
+  description: content.metaDescription,
+  inLanguage: localeToBcp47[defaultLocale],
+  url: canonical,
+  isPartOf: `${SITE_URL}/`,
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  mainEntity: {
+    "@type": "Person",
+    "@id": `${SITE_URL}/#alex-bon`,
+    name: content.brandName,
+    alternateName: ["Alex Bon"],
+    jobTitle: PERSON_JOB_TITLES[defaultLocale],
+    description: content.metaDescription,
+    sameAs: ["https://www.facebook.com/mr.alexbon"],
+    knowsAbout: PERSON_KNOWS_ABOUT[defaultLocale],
+    worksFor: {
+      "@type": "Organization",
+      name: "alexbon.com",
+      url: SITE_URL,
+    },
+    image: ABOUT_HERO_IMAGE,
+    url: SITE_URL,
+  },
+};
+---
+<SiteLayout
+  locale={defaultLocale}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  canonical={canonical}
+  languageAlternates={languageAlternates}
+  jsonLd={[profileJsonLd]}
+>
+  <AboutPage content={content} />
+</SiteLayout>

@@ -1,0 +1,163 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { defaultLocale } from "@/i18n/config";
+import { contentByLocale } from "@/content";
+import { getPostsByLocale, paginatePosts } from "@/lib/blog";
+import { getPostTypeLabel } from "@/lib/post-types";
+import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
+import { messagesByLocale } from "@/lib/messages";
+
+const locale = defaultLocale;
+const hero = contentByLocale[locale].blog;
+const pagination = paginatePosts(locale, 1);
+const posts = pagination.items;
+const allPosts = getPostsByLocale(locale);
+const meta = getBlogIndexMetadata(locale, "/");
+const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumbJsonLd(locale)];
+const readMore =
+  ((messagesByLocale[locale]?.Blog as Record<string, unknown>)?.readMore as string | undefined) ?? "Читати далі";
+
+const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
+
+function buildDefaultSnippet(text: string, maxLength = 300) {
+  const cleaned = text.replace(/\s+/g, " ").trim();
+  if (!cleaned) return "";
+
+  const segments = cleaned.split(/(?<=\.)\s+/).filter(Boolean);
+  if (segments.length === 0) {
+    return cleaned.length > maxLength ? `${cleaned.slice(0, maxLength - 1).trim()}…` : cleaned;
+  }
+
+  let snippet = segments[0];
+
+  const emotionalMarkers = [/\b(но|однако|а\s)/i, /!+/, /\?+/];
+  for (let i = 0; i < segments.length; i += 1) {
+    snippet = segments.slice(0, i + 1).join(" ").trim();
+    if (snippet.length > maxLength) {
+      snippet = snippet.slice(0, maxLength);
+      const lastSpace = snippet.lastIndexOf(" ");
+      snippet = (lastSpace > 80 ? snippet.slice(0, lastSpace) : snippet).trim();
+      return `${snippet}…`;
+    }
+
+    const current = segments[i];
+    if (emotionalMarkers.some((marker) => marker.test(current))) {
+      return snippet.length < cleaned.length ? `${snippet.trim()}…` : snippet;
+    }
+  }
+
+  if (snippet.length > maxLength) {
+    const trimmed = snippet.slice(0, maxLength);
+    const lastSpace = trimmed.lastIndexOf(" ");
+    return `${(lastSpace > 80 ? trimmed.slice(0, lastSpace) : trimmed).trim()}…`;
+  }
+
+  if (snippet.length < cleaned.length) {
+    return `${snippet.trim()}…`;
+  }
+
+  return snippet;
+}
+---
+<SiteLayout
+  locale={locale}
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  languageAlternates={meta.alternates}
+  feeds={meta.feeds}
+  jsonLd={jsonLd}
+>
+  <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="section-card-strong flex flex-col gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
+        <span class="badge-soft mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
+          {hero.badge}
+        </span>
+        <h1 class="text-balance text-[clamp(2.4rem,6.5vw,3.8rem)] font-semibold leading-tight text-strong">
+          {hero.heroTitle}
+        </h1>
+        <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.3rem)] leading-relaxed text-primary">
+          {hero.heroDescription}
+        </p>
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {posts.map((post) => {
+          const postUrl = ensureTrailingSlash(post.url);
+          const typeHref = ensureTrailingSlash(`/blog/type/${post.type}`);
+          const typeLabel = getPostTypeLabel(locale, post.type);
+          const snippetSource =
+            post.cardSnippet?.trim() || post.summary || post.description || post.plainText || "";
+          const snippet = post.type === "note" ? snippetSource : buildDefaultSnippet(snippetSource);
+
+          if (post.type === "note") {
+            return (
+              <article class="blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6">
+                <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
+                  <a
+                    href={typeHref}
+                    class="badge-soft inline-flex items-center px-3 py-1 text-[0.65rem] leading-none transition-colors hover:bg-[#f2993f]/90 hover:text-white"
+                  >
+                    {typeLabel}
+                  </a>
+                </div>
+                <h2 class="sr-only">{post.title}</h2>
+                <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
+                  {snippet}
+                </p>
+                <div>
+                  <a
+                    href={postUrl}
+                    class="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+                  >
+                    {readMore}
+                    <span aria-hidden>→</span>
+                  </a>
+                </div>
+              </article>
+            );
+          }
+
+          return (
+            <article class="blog-card flex w-full flex-col gap-5 rounded-[2.5rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-8">
+              <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
+                <a
+                  href={typeHref}
+                  class="badge-soft inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.65rem] leading-none transition-colors hover:bg-[#f2993f]/90 hover:text-white"
+                >
+                  {typeLabel}
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-3">
+                <h2 class="text-balance text-[clamp(1.45rem,4.5vw,2rem)] font-semibold leading-tight text-strong">
+                  <a href={postUrl} class="text-inherit transition-colors hover:text-accent">
+                    {post.title}
+                  </a>
+                </h2>
+                {snippet && (
+                  <p class="whitespace-pre-line text-[clamp(1rem,3vw,1.12rem)] leading-relaxed text-primary">
+                    {snippet}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <a
+                  href={postUrl}
+                  class="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+                >
+                  {readMore}
+                  <span aria-hidden>→</span>
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+    </div>
+  </main>
+</SiteLayout>

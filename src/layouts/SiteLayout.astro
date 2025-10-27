@@ -1,0 +1,206 @@
+---
+import "@/styles/globals.css";
+import JsonLd from "@/components/JsonLd.astro";
+import NavigationShell from "@/components/NavigationShell";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { contentByLocale } from "@/content";
+import { SITE_URL } from "@/lib/seo";
+import { messagesByLocale } from "@/lib/messages";
+import { DEFAULT_THEME, isThemeId } from "@/lib/themes";
+import type { MessageDictionary } from "@/i18n/translator";
+import { buildLocalizedPath } from "@/i18n/locale-utils";
+import { THEME_COOKIE } from "@/lib/preferences";
+
+type FeedLinks = {
+  rss?: string;
+  json?: string;
+};
+
+type Alternates = Record<string, string>;
+
+type SiteLayoutProps = {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  canonical?: string;
+  alternates?: Alternates;
+  feeds?: FeedLinks;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  bodyClass?: string;
+  noIndex?: boolean;
+  languageAlternates?: Record<string, string>;
+  openGraph?: Record<string, string | undefined>;
+  twitter?: Record<string, string | undefined>;
+  navigationAlternatePaths?: Partial<Record<Locale, string>>;
+};
+
+const {
+  locale,
+  title,
+  description,
+  canonical,
+  alternates,
+  feeds,
+  jsonLd,
+  bodyClass = "",
+  noIndex = false,
+  languageAlternates,
+  openGraph,
+  twitter,
+  navigationAlternatePaths,
+} = Astro.props as SiteLayoutProps;
+
+const content = contentByLocale[locale];
+const messages = messagesByLocale[locale] as MessageDictionary;
+const themeCookieValue = Astro.cookies.get(THEME_COOKIE)?.value;
+const initialTheme = isThemeId(themeCookieValue) ? themeCookieValue : DEFAULT_THEME;
+const currentPath = Astro.url.pathname;
+const currentSearch = Astro.url.search;
+
+function stripLocaleFromPath(pathname: string): string {
+  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const segments = normalized.split("/").filter(Boolean);
+  const first = segments[0];
+  if (first && locales.includes(first as Locale)) {
+    return `/${segments.slice(1).join("/")}` || "/";
+  }
+  return normalized || "/";
+}
+
+const basePath = stripLocaleFromPath(currentPath);
+const autoNavigationAlternates = locales.reduce<Partial<Record<Locale, string>>>((acc, candidate) => {
+  acc[candidate] = buildLocalizedPath(basePath, candidate);
+  return acc;
+}, {});
+const navigationPaths = {
+  ...autoNavigationAlternates,
+  ...(navigationAlternatePaths ?? {}),
+};
+
+function escapeForRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const themeCookiePattern = `(?:^|; )${escapeForRegExp(THEME_COOKIE)}=([^;]+)`;
+const themeBootstrapScript = `(function() {
+  try {
+    var stored = localStorage.getItem(${JSON.stringify(THEME_COOKIE)});
+    var cookieMatch = document.cookie.match(new RegExp(${JSON.stringify(themeCookiePattern)}));
+    var theme = stored || (cookieMatch ? decodeURIComponent(cookieMatch[1]) : ${JSON.stringify(initialTheme)});
+    if (theme) {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch (_) {}
+  document.documentElement.classList.add("js");
+})();`;
+
+const FEED_LINKS = [
+  {
+    href: `${SITE_URL}/feed.xml`,
+    type: "application/rss+xml",
+    title: "Просто простір, щоб видихнути і розібратися",
+    hreflang: "uk",
+  },
+  {
+    href: `${SITE_URL}/feed.json`,
+    type: "application/feed+json",
+    title: "Просто простір, щоб видихнути і розібратися",
+    hreflang: "uk",
+  },
+  {
+    href: `${SITE_URL}/ru/feed.xml`,
+    type: "application/rss+xml",
+    title: "Просто место, чтобы выдохнуть и разобраться",
+    hreflang: "ru",
+  },
+  {
+    href: `${SITE_URL}/ru/feed.json`,
+    type: "application/feed+json",
+    title: "Просто место, чтобы выдохнуть и разобраться",
+    hreflang: "ru",
+  },
+  {
+    href: `${SITE_URL}/en/feed.xml`,
+    type: "application/rss+xml",
+    title: "Just a space to take a breath and figure things out",
+    hreflang: "en",
+  },
+  {
+    href: `${SITE_URL}/en/feed.json`,
+    type: "application/feed+json",
+    title: "Just a space to take a breath and figure things out",
+    hreflang: "en",
+  },
+];
+
+const activeFeeds: Array<{ rel: string; type: string; title: string; href: string; hreflang?: string }> = [];
+if (feeds?.rss) {
+  activeFeeds.push({
+    rel: "alternate",
+    type: "application/rss+xml",
+    title: "RSS 2.0",
+    href: feeds.rss,
+    hreflang: locale === defaultLocale ? "uk" : locale,
+  });
+}
+if (feeds?.json) {
+  activeFeeds.push({
+    rel: "alternate",
+    type: "application/feed+json",
+    title: "JSON Feed 1.1",
+    href: feeds.json,
+    hreflang: locale === defaultLocale ? "uk" : locale,
+  });
+}
+---
+<!DOCTYPE html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {title ? <title>{title}</title> : null}
+    {description ? <meta name="description" content={description} /> : null}
+    {canonical ? <link rel="canonical" href={canonical} /> : null}
+    {noIndex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    {alternates
+      ? Object.entries(alternates).map(([key, value]) => (
+          <link rel="alternate" hrefLang={key} href={value} />
+        ))
+      : null}
+    {languageAlternates
+      ? Object.entries(languageAlternates).map(([key, value]) => (
+          <link rel="alternate" hrefLang={key} href={value} />
+        ))
+      : null}
+    {FEED_LINKS.map((link) => (
+      <link rel="alternate" type={link.type} title={link.title} href={link.href} hrefLang={link.hreflang} />
+    ))}
+    {activeFeeds.map((feed) => (
+      <link rel={feed.rel} type={feed.type} title={feed.title} href={feed.href} hrefLang={feed.hreflang} />
+    ))}
+    {openGraph
+      ? Object.entries(openGraph).map(([key, value]) =>
+          value ? <meta property={`og:${key}`} content={value} /> : null,
+        )
+      : null}
+    {twitter ? Object.entries(twitter).map(([key, value]) => (value ? <meta name={`twitter:${key}`} content={value} /> : null)) : null}
+    <script is:inline set:html={themeBootstrapScript} />
+    {Astro.slots.has("head") ? <slot name="head" /> : null}
+    {jsonLd ? <JsonLd data={jsonLd} /> : null}
+  </head>
+  <body class={`font-sans antialiased ${bodyClass}`}>
+    <NavigationShell
+      client:load
+      locale={locale}
+      brandName={content.brandName}
+      tagline={content.tagline}
+      messages={messages}
+      initialTheme={initialTheme}
+      currentPath={currentPath}
+      currentSearch={currentSearch}
+      alternatePaths={navigationPaths}
+      showPrompt={locale === defaultLocale}
+    />
+    <slot />
+  </body>
+</html>

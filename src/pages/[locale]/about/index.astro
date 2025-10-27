@@ -1,0 +1,64 @@
+---
+import AboutPage from "@/components/about/AboutPage.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { contentByLocale } from "@/content";
+import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE, PERSON_JOB_TITLES, PERSON_KNOWS_ABOUT, localeToBcp47 } from "@/lib/seo";
+import { notFound } from "@/lib/http";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const localeParam = Astro.params.locale?.toLowerCase();
+const resolvedLocale = locales.find((item) => item === localeParam) as Locale | undefined;
+
+if (!resolvedLocale) {
+  return notFound();
+}
+
+const locale = resolvedLocale;
+const content = contentByLocale[locale];
+const canonical = buildCanonicalUrl(locale, "/about/");
+const languageAlternates = buildLanguageAlternates("/about/", { locales });
+const profileJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${canonical}#profile`,
+  name: content.metaTitle,
+  description: content.metaDescription,
+  inLanguage: localeToBcp47[locale],
+  url: canonical,
+  isPartOf: `${SITE_URL}${locale === defaultLocale ? "/" : `/${locale}/`}`,
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  mainEntity: {
+    "@type": "Person",
+    "@id": `${SITE_URL}/#alex-bon`,
+    name: content.brandName,
+    alternateName: ["Alex Bon"],
+    jobTitle: PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES.defaultLocale,
+    description: content.metaDescription,
+    sameAs: ["https://www.facebook.com/mr.alexbon"],
+    knowsAbout: PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT.defaultLocale,
+    worksFor: {
+      "@type": "Organization",
+      name: "alexbon.com",
+      url: SITE_URL,
+    },
+    image: ABOUT_HERO_IMAGE,
+    url: SITE_URL,
+  },
+};
+---
+<SiteLayout
+  locale={locale}
+  title={content.metaTitle}
+  description={content.metaDescription}
+  canonical={canonical}
+  languageAlternates={languageAlternates}
+  jsonLd={[profileJsonLd]}
+>
+  <AboutPage content={content} />
+</SiteLayout>

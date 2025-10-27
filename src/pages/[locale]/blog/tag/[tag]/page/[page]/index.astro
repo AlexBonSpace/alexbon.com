@@ -1,0 +1,139 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import PostGrid from "@/components/blog/PostGrid.astro";
+import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { getAllTags, getPostsForTag, paginatePostsByTag } from "@/lib/blog";
+import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, localeToBcp47 } from "@/lib/seo";
+import { messagesByLocale } from "@/lib/messages";
+import { translate, type MessageDictionary } from "@/i18n/translator";
+import { notFound } from "@/lib/http";
+import { toExplorerPosts } from "@/lib/blog-explorer";
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { locale: string; tag: string; page: string } }> = [];
+  for (const locale of locales) {
+    for (const tag of getAllTags(locale)) {
+      const pagination = paginatePostsByTag(locale, tag, 1);
+      for (let page = 2; page <= pagination.totalPages; page += 1) {
+        paths.push({
+          params: { locale, tag: encodeURIComponent(tag), page: String(page) },
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+const localeParam = Astro.params.locale?.toLowerCase() as Locale | undefined;
+const rawTag = Astro.params.tag;
+const rawPage = Astro.params.page;
+const pageNumber = rawPage ? Number.parseInt(rawPage, 10) : NaN;
+
+if (!localeParam || !locales.includes(localeParam) || !rawTag || !rawPage || Number.isNaN(pageNumber) || pageNumber < 1) {
+  return notFound();
+}
+
+const locale = localeParam;
+const tag = decodeURIComponent(rawTag);
+const pagination = paginatePostsByTag(locale, tag, pageNumber);
+
+if (pagination.totalCount === 0 || pageNumber > pagination.totalPages) {
+  return notFound();
+}
+
+const messages = messagesByLocale[locale] as MessageDictionary;
+const basePath = `/blog/tag/${encodeURIComponent(tag)}`;
+const canonical = buildCanonicalUrl(locale, pageNumber === 1 ? `${basePath}/` : `${basePath}/page/${pageNumber}/`);
+const availableLocales = locales.filter((candidate) => {
+  const info = paginatePostsByTag(candidate, tag, 1);
+  return info.totalCount > 0 && pageNumber <= info.totalPages;
+});
+const languageAlternates =
+  availableLocales.length > 0
+    ? buildLanguageAlternates(
+        availableLocales.reduce<Record<Locale, string>>((acc, candidate) => {
+          acc[candidate] = pageNumber === 1 ? `${basePath}/` : `${basePath}/page/${pageNumber}/`;
+          return acc;
+        }, {} as Record<Locale, string>),
+        { locales: availableLocales },
+      )
+    : undefined;
+const sameAs = languageAlternates ? Object.values(languageAlternates).filter((url) => url !== canonical) : [];
+
+const title =
+  pageNumber === 1
+    ? translate(messages, "Tag.listingTitle", { tag })
+    : translate(messages, "Tag.pageTitle", { tag, page: pageNumber });
+const description = translate(messages, "Tag.listingDescription", { tag, count: pagination.totalCount });
+const postsView = toExplorerPosts(pagination.items, locale);
+const readMoreRaw = translate(messages, "Blog.readMore");
+const readMoreLabel =
+  readMoreRaw === "Blog.readMore"
+    ? locale === "ru"
+      ? "Читать дальше"
+      : locale === "en"
+        ? "Read more"
+        : "Читати далі"
+    : readMoreRaw;
+const previousLabel = translate(messages, "Pagination.previous");
+const nextLabel = translate(messages, "Pagination.next");
+const summary = translate(messages, "Pagination.pageSummary", {
+  page: pageNumber,
+  total: pagination.totalPages,
+});
+
+const prefix = locale === defaultLocale ? "" : `/${locale}`;
+---
+<SiteLayout
+  locale={locale}
+  title={title}
+  description={description}
+  canonical={canonical}
+  languageAlternates={languageAlternates}
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: title,
+      alternateName: [tag, encodeURIComponent(tag)],
+      inLanguage: localeToBcp47[locale],
+      url: canonical,
+      isPartOf: `${SITE_URL}/blog/`,
+      sameAs,
+      about: {
+        "@type": "DefinedTerm",
+        name: tag,
+        alternateName: encodeURIComponent(tag),
+        inDefinedTermSet: `${SITE_URL}/blog/tags`,
+      },
+    },
+  ]}
+>
+  <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8">
+        <span class="inline-flex w-fit items-center gap-2 rounded-full bg-[#f4eadb] px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-[#7c6d5d]">
+          {translate(messages, "Tag.badge")}
+        </span>
+        <h1 class="text-[clamp(2rem,5vw,2.8rem)] font-semibold leading-tight text-[#2f2b26]">
+          {title}
+        </h1>
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <PostGrid
+        posts={postsView}
+        readMoreLabel={readMoreLabel}
+        pagination={{
+          currentPage: pageNumber,
+          totalPages: pagination.totalPages,
+          basePath: `${prefix}${basePath}/`,
+          summary,
+          previousLabel,
+          nextLabel,
+        }}
+      />
+    </div>
+  </main>
+</SiteLayout>

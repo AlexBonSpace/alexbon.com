@@ -1,0 +1,98 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import SearchApp from "@/components/search/SearchApp";
+import { defaultLocale } from "@/i18n/config";
+import { contentByLocale } from "@/content";
+import { getPostsByLocale } from "@/lib/blog";
+import {
+  buildBlogCollectionJsonLd,
+  buildBlogBreadcrumbJsonLd,
+  getBlogIndexMetadata,
+} from "@/lib/blog-schema";
+import { messagesByLocale } from "@/lib/messages";
+import { translate, type MessageDictionary } from "@/i18n/translator";
+
+const locale = defaultLocale;
+const hero = contentByLocale[locale].blog;
+const posts = getPostsByLocale(locale);
+const meta = getBlogIndexMetadata(locale);
+const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJsonLd(locale)];
+
+const messages = messagesByLocale[locale] as MessageDictionary;
+const pick = (key: string, fallback: string) => {
+  const value = translate(messages, key);
+  return value === key ? fallback : value;
+};
+
+const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
+if (!appId) {
+  throw new Error("PUBLIC_ALGOLIA_APP_ID is required to render the blog index search.");
+}
+
+const searchApiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_API_KEY;
+if (!searchApiKey) {
+  throw new Error("PUBLIC_ALGOLIA_SEARCH_API_KEY is required to render the blog index search.");
+}
+
+const indexName =
+  import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_UA ?? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
+if (!indexName) {
+  throw new Error("PUBLIC_ALGOLIA_INDEX_NAME (or ALGOLIA_INDEX_NAME) must be provided.");
+}
+
+const searchCopy = {
+  label: pick("Search.label", "Пошук по блогу"),
+  placeholder: pick("Search.placeholder", "Введіть тему, наприклад «тривога» або «втома»"),
+  reset: pick("Search.reset", "Скинути"),
+  noscript: pick(
+    "Search.noscript",
+    "Щоб пошук працював, увімкніть JavaScript. Нижче показані всі записи.",
+  ),
+  empty: pick("Search.empty", "Нічого не знайдено"),
+  emptyDetails: pick("Search.emptyDetails", "Спробуйте сформулювати запит інакше або скиньте пошук."),
+  readMore: pick("Blog.readMore", "Читати далі"),
+  pagination: {
+    previous: pick("Pagination.previous", "Назад"),
+    next: pick("Pagination.next", "Вперед"),
+    summaryTemplate: pick("Pagination.pageSummary", "Сторінка {current} з {total}"),
+  },
+} as const;
+---
+<SiteLayout
+  locale={locale}
+  title={hero.heroTitle}
+  description={hero.heroDescription || undefined}
+  canonical={meta.canonical}
+  languageAlternates={meta.alternates}
+  feeds={meta.feeds}
+  jsonLd={jsonLd}
+>
+  <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="section-card-strong flex flex-col gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
+        <span class="badge-soft mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
+          {hero.badge}
+        </span>
+        <h1 class="text-balance text-[clamp(2.4rem,6.5vw,3.8rem)] font-semibold leading-tight text-strong">
+          {hero.heroTitle}
+        </h1>
+        {hero.heroDescription ? (
+          <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.3rem)] leading-relaxed text-primary">
+            {hero.heroDescription}
+          </p>
+        ) : null}
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <SearchApp
+        client:load
+        appId={appId}
+        searchApiKey={searchApiKey}
+        indexName={indexName}
+        locale={locale}
+        copy={searchCopy}
+      />
+    </div>
+  </main>
+</SiteLayout>

@@ -1,0 +1,153 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import SearchApp from "@/components/search/SearchApp";
+import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { contentByLocale } from "@/content";
+import { getPostsByLocale } from "@/lib/blog";
+import {
+  buildBlogCollectionJsonLd,
+  buildBlogBreadcrumbJsonLd,
+  getBlogIndexMetadata,
+} from "@/lib/blog-schema";
+import { messagesByLocale } from "@/lib/messages";
+import { notFound } from "@/lib/http";
+import { translate, type MessageDictionary } from "@/i18n/translator";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const localeParam = Astro.params.locale?.toLowerCase() as Locale | undefined;
+if (!localeParam || !locales.includes(localeParam)) {
+  return notFound();
+}
+
+const locale = localeParam;
+const hero = contentByLocale[locale].blog;
+const posts = getPostsByLocale(locale);
+const meta = getBlogIndexMetadata(locale);
+const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJsonLd(locale)];
+
+const messages = messagesByLocale[locale] as MessageDictionary;
+
+const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
+if (!appId) {
+  throw new Error("PUBLIC_ALGOLIA_APP_ID is required to render the blog index search.");
+}
+
+const searchApiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_API_KEY;
+if (!searchApiKey) {
+  throw new Error("PUBLIC_ALGOLIA_SEARCH_API_KEY is required to render the blog index search.");
+}
+
+const indexName =
+  (locale === "ru"
+    ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_RU
+    : locale === "en"
+      ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_EN
+      : import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_UA) ?? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
+if (!indexName) {
+  throw new Error("PUBLIC_ALGOLIA_INDEX_NAME (or ALGOLIA_INDEX_NAME) must be provided.");
+}
+
+const defaults = {
+  ua: {
+    label: "Пошук по блогу",
+    placeholder: "Введіть тему, наприклад «тривога» або «втома»",
+    reset: "Скинути",
+    noscript: "Щоб пошук працював, увімкніть JavaScript. Нижче показані всі записи.",
+    empty: "Нічого не знайдено",
+    emptyDetails: "Спробуйте сформулювати запит інакше або скиньте пошук.",
+    readMore: "Читати далі",
+    previous: "Назад",
+    next: "Вперед",
+    summary: "Сторінка {current} з {total}",
+  },
+  ru: {
+    label: "Поиск по блогу",
+    placeholder: "Введите тему, например «тревога» или «вдохновение»",
+    reset: "Сбросить",
+    noscript: "Чтобы поиск работал, включите JavaScript. Ниже показаны все записи.",
+    empty: "Ничего не найдено",
+    emptyDetails: "Попробуйте изменить запрос или сбросьте поиск.",
+    readMore: "Читать дальше",
+    previous: "Назад",
+    next: "Вперед",
+    summary: "Страница {current} из {total}",
+  },
+  en: {
+    label: "Search the blog",
+    placeholder: 'Try a topic, e.g., "anxiety" or "fatigue"',
+    reset: "Reset",
+    noscript: "Enable JavaScript to filter results. All posts are listed below.",
+    empty: "No matches found",
+    emptyDetails: "Try adjusting your query or reset the search.",
+    readMore: "Read more",
+    previous: "Previous",
+    next: "Next",
+    summary: "Page {current} of {total}",
+  },
+} as const;
+
+const localeDefaults = defaults[locale] ?? defaults.ua;
+
+const pick = (key: string, fallback: string) => {
+  const value = translate(messages, key);
+  return value === key ? fallback : value;
+};
+
+const searchCopy = {
+  label: pick("Search.label", localeDefaults.label),
+  placeholder: pick("Search.placeholder", localeDefaults.placeholder),
+  reset: pick("Search.reset", localeDefaults.reset),
+  noscript: pick("Search.noscript", localeDefaults.noscript),
+  empty: pick("Search.empty", localeDefaults.empty),
+  emptyDetails: pick("Search.emptyDetails", localeDefaults.emptyDetails),
+  readMore: pick("Blog.readMore", localeDefaults.readMore),
+  pagination: {
+    previous: pick("Pagination.previous", localeDefaults.previous),
+    next: pick("Pagination.next", localeDefaults.next),
+    summaryTemplate: pick("Pagination.pageSummary", localeDefaults.summary),
+  },
+} as const;
+---
+<SiteLayout
+  locale={locale}
+  title={hero.heroTitle}
+  description={hero.heroDescription || undefined}
+  canonical={meta.canonical}
+  languageAlternates={meta.alternates}
+  feeds={meta.feeds}
+  jsonLd={jsonLd}
+>
+  <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="section-card-strong flex flex-col gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
+        <span class="badge-soft mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
+          {hero.badge}
+        </span>
+        <h1 class="text-balance text-[clamp(2.4rem,6.5vw,3.8rem)] font-semibold leading-tight text-strong">
+          {hero.heroTitle}
+        </h1>
+        {hero.heroDescription ? (
+          <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.3rem)] leading-relaxed text-primary">
+            {hero.heroDescription}
+          </p>
+        ) : null}
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <SearchApp
+        client:load
+        appId={appId}
+        searchApiKey={searchApiKey}
+        indexName={indexName}
+        locale={locale}
+        copy={searchCopy}
+      />
+    </div>
+  </main>
+</SiteLayout>
