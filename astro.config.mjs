@@ -49,10 +49,7 @@ const messageChannelPolyfillPlugin = () => ({
     for (const [fileName, chunk] of Object.entries(bundle)) {
       if (
         chunk.type === "chunk" &&
-        fileName === "index.js" &&
-        chunk.code.startsWith(
-          "globalThis.process ??= {}; globalThis.process.env ??= {};"
-        ) &&
+        fileName.includes("_@astro-renderers_") &&
         !chunk.code.includes("alexbon MessageChannel polyfill")
       ) {
         chunk.code = `${messageChannelPolyfill}\n${chunk.code}`;
