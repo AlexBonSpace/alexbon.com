@@ -57,6 +57,11 @@ const searchCopy = {
     summaryTemplate: pick("Pagination.pageSummary", "Сторінка {current} з {total}"),
   },
 } as const;
+
+const introCopyByLocale = {
+  ua: "Мене звати Алекс Бон. Це простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише віддзеркалення.",
+};
+const introCopy = introCopyByLocale[locale];
 ---
 <SiteLayout
   locale={locale}
@@ -81,6 +86,9 @@ const searchCopy = {
             {hero.heroDescription}
           </p>
         ) : null}
+        <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.2rem)] leading-relaxed text-primary/90">
+          {introCopy}
+        </p>
       </section>
     </div>
 

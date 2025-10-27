@@ -32,6 +32,13 @@ const readMore =
   ((messagesByLocale[locale]?.Blog as Record<string, unknown>)?.readMore as string | undefined) ??
   (locale === "ru" ? "Читать дальше" : "Read more");
 
+const introCopyByLocale: Record<Locale, string> = {
+  ua: "Мене звати Алекс Бон. Це простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише віддзеркалення.",
+  ru: "Меня зовут Алекс Бон. А это пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
+  en: "My name is Alex Bon. This is a space to see yourself. The stories, narratives, and single lines living here are only reflections.",
+};
+const introCopy = introCopyByLocale[locale];
+
 const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
 
 function buildDefaultSnippet(text: string, maxLength = 300) {
@@ -97,6 +104,11 @@ function buildDefaultSnippet(text: string, maxLength = 300) {
         </p>
       </section>
     </div>
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.2rem)] leading-relaxed text-primary/90">
+        {introCopy}
+      </p>
+    </div>
 
     <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
       <section class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -121,17 +133,11 @@ function buildDefaultSnippet(text: string, maxLength = 300) {
                 </div>
                 <h2 class="sr-only">{post.title}</h2>
                 <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
-                  {snippet}
-                </p>
-                <div>
-                  <a
-                    href={postUrl}
-                    class="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
-                  >
-                    {readMore}
-                    <span aria-hidden>→</span>
+                  {snippet}{" "}
+                  <a href={postUrl} class="inline-flex items-center text-[1.1em] text-accent transition-colors hover:text-strong">
+                    <span aria-hidden>🦋</span>
                   </a>
-                </div>
+                </p>
               </article>
             );
           }
