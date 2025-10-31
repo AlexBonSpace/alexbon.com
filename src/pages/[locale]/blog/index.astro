@@ -1,9 +1,9 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import SearchApp from "@/components/search/SearchApp";
-import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import PostGrid from "@/components/blog/PostGrid.astro";
+import { locales, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import { getPostsByLocale } from "@/lib/blog";
+import { getPostsByLocale, paginatePosts } from "@/lib/blog";
 import {
   buildBlogCollectionJsonLd,
   buildBlogBreadcrumbJsonLd,
@@ -12,6 +12,7 @@ import {
 import { messagesByLocale } from "@/lib/messages";
 import { notFound } from "@/lib/http";
 import { translate, type MessageDictionary } from "@/i18n/translator";
+import { toExplorerPosts } from "@/lib/blog-explorer";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({
@@ -26,92 +27,13 @@ if (!localeParam || !locales.includes(localeParam)) {
 
 const locale = localeParam;
 const hero = contentByLocale[locale].blog;
-const posts = getPostsByLocale(locale);
+const allPosts = getPostsByLocale(locale);
+const firstPage = paginatePosts(locale, 1);
+const pagePosts = toExplorerPosts(firstPage.items, locale);
 const meta = getBlogIndexMetadata(locale);
-const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJsonLd(locale)];
+const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumbJsonLd(locale)];
 
 const messages = messagesByLocale[locale] as MessageDictionary;
-
-const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
-if (!appId) {
-  throw new Error("PUBLIC_ALGOLIA_APP_ID is required to render the blog index search.");
-}
-
-const searchApiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_API_KEY;
-if (!searchApiKey) {
-  throw new Error("PUBLIC_ALGOLIA_SEARCH_API_KEY is required to render the blog index search.");
-}
-
-const indexName =
-  (locale === "ru"
-    ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_RU
-    : locale === "en"
-      ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_EN
-      : import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_UA) ?? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
-if (!indexName) {
-  throw new Error("PUBLIC_ALGOLIA_INDEX_NAME (or ALGOLIA_INDEX_NAME) must be provided.");
-}
-
-const defaults = {
-  ua: {
-    label: "Пошук по блогу",
-    placeholder: "Введіть тему, наприклад «тривога» або «втома»",
-    reset: "Скинути",
-    noscript: "Щоб пошук працював, увімкніть JavaScript. Нижче показані всі записи.",
-    empty: "Нічого не знайдено",
-    emptyDetails: "Спробуйте сформулювати запит інакше або скиньте пошук.",
-    readMore: "Читати далі",
-    previous: "Назад",
-    next: "Вперед",
-    summary: "Сторінка {current} з {total}",
-  },
-  ru: {
-    label: "Поиск по блогу",
-    placeholder: "Введите тему, например «тревога» или «вдохновение»",
-    reset: "Сбросить",
-    noscript: "Чтобы поиск работал, включите JavaScript. Ниже показаны все записи.",
-    empty: "Ничего не найдено",
-    emptyDetails: "Попробуйте изменить запрос или сбросьте поиск.",
-    readMore: "Читать дальше",
-    previous: "Назад",
-    next: "Вперед",
-    summary: "Страница {current} из {total}",
-  },
-  en: {
-    label: "Search the blog",
-    placeholder: 'Try a topic, e.g., "anxiety" or "fatigue"',
-    reset: "Reset",
-    noscript: "Enable JavaScript to filter results. All posts are listed below.",
-    empty: "No matches found",
-    emptyDetails: "Try adjusting your query or reset the search.",
-    readMore: "Read more",
-    previous: "Previous",
-    next: "Next",
-    summary: "Page {current} of {total}",
-  },
-} as const;
-
-const localeDefaults = defaults[locale] ?? defaults.ua;
-
-const pick = (key: string, fallback: string) => {
-  const value = translate(messages, key);
-  return value === key ? fallback : value;
-};
-
-const searchCopy = {
-  label: pick("Search.label", localeDefaults.label),
-  placeholder: pick("Search.placeholder", localeDefaults.placeholder),
-  reset: pick("Search.reset", localeDefaults.reset),
-  noscript: pick("Search.noscript", localeDefaults.noscript),
-  empty: pick("Search.empty", localeDefaults.empty),
-  emptyDetails: pick("Search.emptyDetails", localeDefaults.emptyDetails),
-  readMore: pick("Blog.readMore", localeDefaults.readMore),
-  pagination: {
-    previous: pick("Pagination.previous", localeDefaults.previous),
-    next: pick("Pagination.next", localeDefaults.next),
-    summaryTemplate: pick("Pagination.pageSummary", localeDefaults.summary),
-  },
-} as const;
 
 const introCopyByLocale: Record<Locale, string> = {
   ua: "Мене звати Алекс Бон. Це простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише віддзеркалення.",
@@ -119,6 +41,24 @@ const introCopyByLocale: Record<Locale, string> = {
   en: "My name is Alex Bon. This is a space to see yourself. The stories, narratives, and single lines living here are only reflections.",
 };
 const introCopy = introCopyByLocale[locale];
+
+const readMoreRaw = translate(messages, "Blog.readMore");
+const readMoreLabel =
+  readMoreRaw === "Blog.readMore"
+    ? locale === "ru"
+      ? "Читать дальше"
+      : locale === "en"
+        ? "Read more"
+        : "Читати далі"
+    : readMoreRaw;
+
+const paginationSummary = translate(messages, "Pagination.pageSummary", {
+  page: firstPage.page,
+  total: firstPage.totalPages,
+});
+const previousLabel = translate(messages, "Pagination.previous");
+const nextLabel = translate(messages, "Pagination.next");
+const prefix = `/${locale}`;
 ---
 <SiteLayout
   locale={locale}
@@ -150,13 +90,21 @@ const introCopy = introCopyByLocale[locale];
     </div>
 
     <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
-      <SearchApp
-        client:load
-        appId={appId}
-        searchApiKey={searchApiKey}
-        indexName={indexName}
-        locale={locale}
-        copy={searchCopy}
+      <PostGrid
+        posts={pagePosts}
+        readMoreLabel={readMoreLabel}
+        pagination={
+          firstPage.totalPages > 1
+            ? {
+                currentPage: firstPage.page,
+                totalPages: firstPage.totalPages,
+                basePath: `${prefix}/blog/`,
+                summary: paginationSummary,
+                previousLabel,
+                nextLabel,
+              }
+            : undefined
+        }
       />
     </div>
   </main>

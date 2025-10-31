@@ -73,7 +73,7 @@ const pageSummary = translate(messages, "Pagination.pageSummary", {
   total: pagination.totalPages,
 });
 
-const prefix = locale === defaultLocale ? "" : `/${locale}`;
+const prefix = `/${locale}`;
 ---
 <SiteLayout
   locale={locale}
@@ -89,12 +89,12 @@ const prefix = locale === defaultLocale ? "" : `/${locale}`;
       inLanguage: localeToBcp47[locale],
       description,
       url: canonical,
-      isPartOf: `${SITE_URL}/blog/`,
+      isPartOf: `${SITE_URL}/${locale}/blog/`,
       sameAs,
       about: {
         "@type": "DefinedTerm",
         name: label,
-        inDefinedTermSet: `${SITE_URL}/blog/type`,
+        inDefinedTermSet: `${SITE_URL}/${locale}/blog/type`,
       },
     },
   ]}

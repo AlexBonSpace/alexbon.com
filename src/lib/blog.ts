@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
-import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl } from "@/lib/seo";
 import {
   buildGithubArchiveUrl,
@@ -82,7 +82,7 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const publishedAtIso = publishedDate.toISOString();
   const updatedAtIso = updatedDate?.toISOString();
 
-  const localizedPath = locale === defaultLocale ? `/blog/${fileSlug}` : `/${locale}/blog/${fileSlug}`;
+  const localizedPath = `/${locale}/blog/${fileSlug}`;
   const canonical = (entry.data.canonical ?? "").trim() || buildCanonicalUrl(locale, `/blog/${fileSlug}/`);
   const archived =
     (entry.data.archived ?? "").trim() || buildGithubArchiveUrl(`${locale}/${collection}/${fileSlug}.mdx`);
@@ -336,7 +336,7 @@ export function paginatePostsByType(
 
 export function buildBreadcrumbJsonLd(locale: Locale, post: BlogPost) {
   const siteUrl = "https://alexbon.com";
-  const prefix = locale === defaultLocale ? "" : `/${locale}`;
+  const prefix = `/${locale}`;
   const postUrl = `${siteUrl}${prefix}/blog/${post.slug}`;
 
   return {
@@ -347,7 +347,7 @@ export function buildBreadcrumbJsonLd(locale: Locale, post: BlogPost) {
         "@type": "ListItem",
         position: 1,
         name: locale === "en" ? "Home" : locale === "ua" ? "Головна" : "Главная",
-        item: locale === defaultLocale ? `${siteUrl}/` : `${siteUrl}/${locale}/`,
+        item: `${siteUrl}/${locale}/`,
       },
       {
         "@type": "ListItem",

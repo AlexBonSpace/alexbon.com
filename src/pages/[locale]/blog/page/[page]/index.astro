@@ -48,7 +48,7 @@ const nextLabel = translate(messages, "Pagination.next");
 const readMoreRaw = translate(messages, "Blog.readMore");
 const readMoreLabel = readMoreRaw === "Blog.readMore" ? (locale === "ru" ? "Читать дальше" : locale === "en" ? "Read more" : "Читати далі") : readMoreRaw;
 
-const prefix = locale === defaultLocale ? "" : `/${locale}`;
+const prefix = `/${locale}`;
 const path = pageNumber === 1 ? `${prefix}/blog/` : `${prefix}/blog/page/${pageNumber}/`;
 const canonical = buildCanonicalUrl(locale, pageNumber === 1 ? "/blog/" : `/blog/page/${pageNumber}/`);
 const availableLocales = locales.filter((candidate) => {

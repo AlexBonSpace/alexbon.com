@@ -1,4 +1,4 @@
-import { defaultLocale, type Locale } from "@/i18n/config";
+import type { Locale } from "@/i18n/config";
 import { getPostTypeLabel } from "@/lib/post-types";
 import type { BlogPost } from "@/lib/blog";
 
@@ -43,7 +43,7 @@ export function toExplorerPost(post: BlogPost, locale: Locale): ExplorerPostView
   const snippetSource =
     post.cardSnippet?.trim() || post.summary || post.description || post.plainText || "";
   const snippet = post.type === "note" ? snippetSource : buildSnippet(snippetSource);
-  const prefix = locale === defaultLocale ? "" : `/${locale}`;
+  const prefix = `/${locale}`;
   const typeUrl = ensureTrailingSlash(`${prefix}/blog/type/${post.type}`);
 
   return {

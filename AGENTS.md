@@ -2,9 +2,9 @@
 
 **Stack & Tooling**
 - Astro 5 running in server mode with the Cloudflare Pages adapter (`@astrojs/cloudflare`).
-- React islands handle interactivity (navbar, search, theme toggle) marked with `client:*`.
+- React islands handle interactivity (navbar, search page, theme toggle) marked with `client:*`.
 - Tailwind CSS v4 + custom tokens in `src/styles/globals.css`.
-- Algolia search pushes data via manual script (`scripts/push-algolia.mjs`) that reads RSS feeds (per-locale indices).
+- Algolia is optional: used only for interactive search; indexing happens via `scripts/push-algolia.mjs` that reads locale feeds from `dist/*/feed.json`.
 - Content sources:
   - Markdown/MDX pulled via Astro Content collections (`src/content`).
   - Translation-aware helpers in `src/lib/pages.ts` and `src/lib/blog.ts`.
@@ -18,17 +18,19 @@
 - `src/styles` – global Tailwind setup and design tokens.
 
 **Key Behaviors**
-- Language menu & browser prompt use `navigationAlternatePaths` to deep-link to translated slugs.
+- “Only [locale]” routing: each locale lives under its own prefix (`/ua/…`, `/ru/…`, `/en/…`). The bare root `/` 308-redirects to `/ua/`, and locale roots redirect to the local blog index.
+- Blog listings and pagination render server-side from local content (no Algolia dependency). `PostGrid` consumes `paginatePosts` results.
+- Language menu & browser prompt use `navigationAlternatePaths` to deep-link translated slugs.
 - Theme preference stored in cookie + localStorage (`ALEXBON_THEME`).
-- Search routes mount the Algolia-powered React app (Algolia Lite `searchForHits`); query string (`?search=`/`?q=`) seeds the initial query and locale is selected via per-language index env vars.
-- Sitemap, RSS, JSON feed generated via `/sitemap.xml.ts`, `/feed.xml.ts`, `/feed.json.ts`.
+- `/[locale]/search/` renders SSR fallback with recent posts, `robots="noindex, follow"`, and loads the Algolia-powered React app lazily (no request until the user types).
+- Sitemap, RSS, JSON feeds generated via `/sitemap.xml.ts`, `/feed.xml.ts`, `/feed.json.ts`.
 
 **Commands**
 - `npm run dev` – Astro dev server with SSR on Cloudflare shim.
-- `npm run build` – Cloudflare SSR bundle + prerendered feeds/sitemap (must run before syncing Algolia).
+- `npm run build` – Cloudflare SSR bundle + prerendered feeds/sitemap (run before syncing Algolia or deploying).
 - `npm run preview` – local preview of the SSR build.
-- `npm run algolia:sync` – parse `dist/*/feed.json`, diff against `scripts/.algolia-cache.json`, and publish only changed Algolia records (requires env keys, run after build).
-- `npm run algolia:sync -- --full` – force a full Algolia reindex and refresh the cache manifest.
+- `npm run algolia:sync` – optional; parses `dist/*/feed.json`, diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
+- `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
 
 **Algolia Sync Notes**

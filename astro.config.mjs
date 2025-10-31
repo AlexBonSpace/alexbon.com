@@ -64,6 +64,13 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "passthrough",
   }),
+  i18n: {
+    defaultLocale: "ua",
+    locales: ["ua", "ru", "en"],
+    routing: {
+      prefixDefaultLocale: true,
+    },
+  },
   session: {
     driver: "memory",
   },

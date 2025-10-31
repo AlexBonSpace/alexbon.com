@@ -141,16 +141,19 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
           </div>
           {post.tags.length > 0 && (
             <ul class="flex flex-wrap gap-2 text-xs font-semibold text-muted">
-              {post.tags.map((tag) => (
-                <li>
-                  <a
-                    href={ensureTrailingSlash(`/blog/tag/${encodeURIComponent(tag)}`)}
-                    class="tag-chip inline-flex items-center px-3 py-1 transition-colors"
-                  >
-                    #{tag}
-                  </a>
-                </li>
-              ))}
+              {post.tags.map((tag) => {
+                const tagHref = ensureTrailingSlash(`/${locale}/blog/tag/${encodeURIComponent(tag)}`);
+                return (
+                  <li>
+                    <a
+                      href={tagHref}
+                      class="tag-chip inline-flex items-center px-3 py-1 transition-colors"
+                    >
+                      #{tag}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </header>
@@ -213,7 +216,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
             {relatedPosts.map((item) => {
               const itemUrl = ensureTrailingSlash(item.url);
               const itemTypeLabel = getPostTypeLabel(locale, item.type);
-              const itemTypeHref = ensureTrailingSlash(`/blog/type/${item.type}`);
+              const itemTypeHref = ensureTrailingSlash(buildPostTypePath(locale, item.type));
               const snippet =
                 item.cardSnippet?.trim() || item.summary || item.description || item.plainText || "";
 

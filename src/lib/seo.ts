@@ -39,9 +39,9 @@ function normalizePath(path: string): string {
 export function buildLocalizedPath(locale: Locale, path: string): string {
   const normalized = normalizePath(path);
   if (normalized === "/") {
-    return locale === defaultLocale ? "/" : `/${locale}/`;
+    return `/${locale}/`;
   }
-  return locale === defaultLocale ? normalized : `/${locale}${normalized}`;
+  return `/${locale}${normalized}`;
 }
 
 export function buildCanonicalUrl(locale: Locale, path: string): string {

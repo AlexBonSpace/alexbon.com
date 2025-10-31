@@ -30,16 +30,33 @@ if (!appId || !adminKey) {
 const client = algoliasearch(appId, adminKey);
 
 const FEED_PATHS = {
-  ua: path.join(distDir, 'feed.json'),
+  ua: path.join(distDir, 'ua', 'feed.json'),
   ru: path.join(distDir, 'ru', 'feed.json'),
   en: path.join(distDir, 'en', 'feed.json'),
 };
 
-const TYPE_LABELS = {
-  ua: { label: 'Стаття', url: '/blog/', type: 'article' },
-  ru: { label: 'Статья', url: '/ru/blog/', type: 'article' },
-  en: { label: 'Article', url: '/en/blog/', type: 'article' },
+const TYPE_FALLBACKS = {
+  ua: {
+    article: { label: 'Карти внутрішнього світу', path: '/ua/blog/type/article/' },
+    note: { label: 'Іскри й проблиски', path: '/ua/blog/type/note/' },
+    story: { label: 'Історії-дзеркала', path: '/ua/blog/type/story/' },
+  },
+  ru: {
+    article: { label: 'Карты внутреннего мира', path: '/ru/blog/type/article/' },
+    note: { label: 'Искры и проблески', path: '/ru/blog/type/note/' },
+    story: { label: 'Истории-зеркала', path: '/ru/blog/type/story/' },
+  },
+  en: {
+    article: { label: 'Inner World Maps', path: '/en/blog/type/article/' },
+    note: { label: 'Sparks and Glimmers', path: '/en/blog/type/note/' },
+    story: { label: 'Mirror Stories', path: '/en/blog/type/story/' },
+  },
 };
+
+function resolveTypeMeta(locale, type) {
+  const localeMap = TYPE_FALLBACKS[locale] ?? TYPE_FALLBACKS.ua;
+  return localeMap[type] ?? localeMap.article;
+}
 
 async function loadCache() {
   try {
@@ -85,7 +102,19 @@ async function readFeed(locale) {
 function mapRecord(locale, item) {
   const url = item.url ?? item.id;
   const slug = url ? new URL(url).pathname.replace(/\/$/, '') : item.id ?? Math.random().toString(36).slice(2);
-  const localeType = TYPE_LABELS[locale] ?? TYPE_LABELS.ua;
+  const rawType =
+    (typeof item._postType === 'string' && item._postType.trim()) ||
+    (typeof item.type === 'string' && item.type.trim()) ||
+    'note';
+  const normalizedType =
+    rawType === 'article' || rawType === 'story' || rawType === 'note' ? rawType : 'note';
+  const typeMeta = resolveTypeMeta(locale, normalizedType);
+  const typeLabel =
+    (typeof item._postTypeLabel === 'string' && item._postTypeLabel.trim()) || typeMeta.label;
+  const typePath =
+    (typeof item._postTypePath === 'string' && item._postTypePath.trim()) ||
+    (typeof item._postTypeUrl === 'string' && item._postTypeUrl.trim()) ||
+    typeMeta.path;
   const content = item.content_text ?? '';
   const snippet = content.slice(0, 240).trim();
   return {
@@ -99,9 +128,9 @@ function mapRecord(locale, item) {
     tags: item.tags ?? [],
     publishedAt: item.date_published ?? null,
     updatedAt: item.date_modified ?? null,
-    type: localeType.type,
-    typeLabel: localeType.label,
-    typeUrl: localeType.url,
+    type: normalizedType,
+    typeLabel,
+    typeUrl: typePath,
   };
 }
 

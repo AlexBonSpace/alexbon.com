@@ -5,7 +5,7 @@ import JsonLd from "@/components/JsonLd.astro";
 import NavigationShell from "@/components/NavigationShell";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, localeToBcp47 } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { DEFAULT_THEME, isThemeId } from "@/lib/themes";
 import type { MessageDictionary } from "@/i18n/translator";
@@ -29,6 +29,7 @@ type SiteLayoutProps = {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   bodyClass?: string;
   noIndex?: boolean;
+  robots?: string;
   languageAlternates?: Record<string, string>;
   openGraph?: Record<string, string | undefined>;
   twitter?: Record<string, string | undefined>;
@@ -45,6 +46,7 @@ const {
   jsonLd,
   bodyClass = "",
   noIndex = false,
+  robots,
   languageAlternates,
   openGraph,
   twitter,
@@ -78,6 +80,13 @@ const navigationPaths = {
   ...(navigationAlternatePaths ?? {}),
 };
 
+const robotsContent =
+  typeof robots === "string" && robots.trim()
+    ? robots.trim()
+    : noIndex
+      ? "noindex, nofollow"
+      : null;
+
 function escapeForRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -97,13 +106,13 @@ const themeBootstrapScript = `(function() {
 
 const FEED_LINKS = [
   {
-    href: `${SITE_URL}/feed.xml`,
+    href: `${SITE_URL}/ua/feed.xml`,
     type: "application/rss+xml",
     title: "Просто простір, щоб видихнути і розібратися",
     hreflang: "uk",
   },
   {
-    href: `${SITE_URL}/feed.json`,
+    href: `${SITE_URL}/ua/feed.json`,
     type: "application/feed+json",
     title: "Просто простір, щоб видихнути і розібратися",
     hreflang: "uk",
@@ -141,7 +150,7 @@ if (feeds?.rss) {
     type: "application/rss+xml",
     title: "RSS 2.0",
     href: feeds.rss,
-    hreflang: locale === defaultLocale ? "uk" : locale,
+    hreflang: localeToBcp47[locale] ?? locale,
   });
 }
 if (feeds?.json) {
@@ -150,7 +159,7 @@ if (feeds?.json) {
     type: "application/feed+json",
     title: "JSON Feed 1.1",
     href: feeds.json,
-    hreflang: locale === defaultLocale ? "uk" : locale,
+    hreflang: localeToBcp47[locale] ?? locale,
   });
 }
 ---
@@ -162,7 +171,7 @@ if (feeds?.json) {
     {title ? <title>{title}</title> : null}
     {description ? <meta name="description" content={description} /> : null}
     {canonical ? <link rel="canonical" href={canonical} /> : null}
-    {noIndex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    {robotsContent ? <meta name="robots" content={robotsContent} /> : null}
     {alternates
       ? Object.entries(alternates).map(([key, value]) => (
           <link rel="alternate" hrefLang={key} href={value} />

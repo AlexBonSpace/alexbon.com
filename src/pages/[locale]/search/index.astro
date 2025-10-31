@@ -1,13 +1,15 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import SearchApp from "@/components/search/SearchApp";
+import PostGrid from "@/components/blog/PostGrid.astro";
 import { contentByLocale } from "@/content";
-import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import { getPostsByLocale } from "@/lib/blog";
 import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { notFound } from "@/lib/http";
+import { toExplorerPosts } from "@/lib/blog-explorer";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({
@@ -30,24 +32,15 @@ const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJso
 const messages = messagesByLocale[locale] as MessageDictionary;
 
 const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
-if (!appId) {
-  throw new Error("PUBLIC_ALGOLIA_APP_ID is required to render the search page.");
-}
-
 const searchApiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_API_KEY;
-if (!searchApiKey) {
-  throw new Error("PUBLIC_ALGOLIA_SEARCH_API_KEY is required to render the search page.");
-}
-
-const indexName =
+const resolvedIndexName =
   (locale === "ru"
     ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_RU
     : locale === "en"
       ? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_EN
       : import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME_UA) ?? import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
-if (!indexName) {
-  throw new Error("PUBLIC_ALGOLIA_INDEX_NAME (or ALGOLIA_INDEX_NAME) must be provided.");
-}
+
+const hasAlgolia = Boolean(appId && searchApiKey && resolvedIndexName);
 
 const searchQuery =
   Astro.url.searchParams.get("search") ??
@@ -59,7 +52,7 @@ const fallbackStrings = {
     label: "Пошук по блогу",
     placeholder: "Введіть тему, наприклад «тривога» або «втома»",
     reset: "Скинути",
-    noscript: "Щоб пошук працював, увімкніть JavaScript. Нижче показані всі записи.",
+    noscript: "Щоб працював живий пошук, увімкніть JavaScript. Нижче — свіжі записи з блогу.",
     empty: "Нічого не знайдено",
     emptyDetails: "Спробуйте сформулювати запит інакше або скиньте пошук.",
     readMore: "Читати далі",
@@ -76,7 +69,7 @@ const fallbackStrings = {
     label: "Поиск по блогу",
     placeholder: "Введите тему, например «тревога» или «вдохновение»",
     reset: "Сбросить",
-    noscript: "Чтобы поиск работал, включите JavaScript. Ниже показаны все записи.",
+    noscript: "Чтобы живой поиск работал, включите JavaScript. Ниже — свежие публикации.",
     empty: "Ничего не найдено",
     emptyDetails: "Попробуйте изменить запрос или сбросьте поиск.",
     readMore: "Читать дальше",
@@ -92,7 +85,7 @@ const fallbackStrings = {
     label: "Search the blog",
     placeholder: 'Try a topic, e.g., "anxiety" or "fatigue"',
     reset: "Reset",
-    noscript: "Enable JavaScript to filter results. All posts are listed below.",
+    noscript: "Enable JavaScript for live filtering. Recent posts are listed below.",
     empty: "No matches found",
     emptyDetails: "Try adjusting your query or reset the search.",
     readMore: "Read more",
@@ -113,7 +106,15 @@ const pick = (key: string, fallback: string) => {
   return value === key ? fallback : value;
 };
 
-const readMore = pick("Blog.readMore", localeFallback.readMore);
+const readMoreRaw = pick("Blog.readMore", localeFallback.readMore);
+const readMoreLabel =
+  readMoreRaw === "Blog.readMore"
+    ? locale === "ru"
+      ? "Читать дальше"
+      : locale === "en"
+        ? "Read more"
+        : "Читати далі"
+    : readMoreRaw;
 
 const searchCopy = {
   label: pick("Search.label", localeFallback.label),
@@ -122,7 +123,7 @@ const searchCopy = {
   noscript: pick("Search.noscript", localeFallback.noscript),
   empty: pick("Search.empty", localeFallback.empty),
   emptyDetails: pick("Search.emptyDetails", localeFallback.emptyDetails),
-  readMore,
+  readMore: readMoreLabel,
   pagination: {
     previous: pick("Pagination.previous", localeFallback.previous),
     next: pick("Pagination.next", localeFallback.next),
@@ -134,6 +135,8 @@ const pageTitle = pick("Search.pageTitle", localeFallback.pageTitle);
 const pageDescription = pick("Search.pageDescription", localeFallback.pageDescription);
 const heroTitle = pick("Search.heroTitle", localeFallback.heroTitle);
 const heroDescription = pick("Search.heroDescription", localeFallback.heroDescription);
+
+const latestPosts = toExplorerPosts(posts.slice(0, 12), locale);
 ---
 <SiteLayout
   locale={locale}
@@ -143,6 +146,7 @@ const heroDescription = pick("Search.heroDescription", localeFallback.heroDescri
   languageAlternates={meta.alternates}
   feeds={meta.feeds}
   jsonLd={jsonLd}
+  robots="noindex, follow"
 >
   <main class="relative z-10 flex flex-col gap-8 py-8 sm:py-12">
     <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
@@ -157,14 +161,59 @@ const heroDescription = pick("Search.heroDescription", localeFallback.heroDescri
     </div>
 
     <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
-      <SearchApp
-        client:load
-        appId={appId}
-        searchApiKey={searchApiKey}
-        indexName={indexName}
-        locale={locale}
-        initialQuery={searchQuery}
-        copy={searchCopy}
+      {hasAlgolia ? (
+        <SearchApp
+          client:load
+          appId={appId as string}
+          searchApiKey={searchApiKey as string}
+          indexName={resolvedIndexName as string}
+          locale={locale}
+          initialQuery={searchQuery}
+          copy={searchCopy}
+        />
+      ) : (
+        <div class="blog-card flex flex-col gap-3 rounded-[2rem] border border-soft p-6 text-center text-primary shadow-card sm:p-8">
+          <p class="text-lg font-semibold text-strong">
+            {locale === "en"
+              ? "Interactive search is temporarily unavailable."
+              : locale === "ru"
+                ? "Интерактивный поиск временно недоступен."
+                : "Інтерактивний пошук тимчасово недоступний."}
+          </p>
+          <p class="text-sm text-muted">
+            {locale === "en"
+              ? "Browse the latest posts below or try again later."
+              : locale === "ru"
+                ? "Просмотрите свежие материалы ниже или попробуйте позже."
+                : "Перегляньте свіжі матеріали нижче або спробуйте пізніше."}
+          </p>
+        </div>
+      )}
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <section class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 text-sm text-[#4b4139] shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8">
+        <h2 class="text-[clamp(1.8rem,4.5vw,2.4rem)] font-semibold leading-tight text-[#2f2b26]">
+          {locale === "en"
+            ? "Fresh from the blog"
+            : locale === "ru"
+              ? "Свежие материалы блога"
+              : "Свіжі матеріали блогу"}
+        </h2>
+        <p>
+          {locale === "en"
+            ? "We curate the latest entries here so you always have something to read, even without search."
+            : locale === "ru"
+              ? "Мы собрали самые свежие записи, чтобы вам было что почитать даже без поиска."
+              : "Ми зібрали найсвіжіші записи, щоб вам було що почитати навіть без пошуку."}
+        </p>
+      </section>
+    </div>
+
+    <div class="mx-auto w-[92%] max-w-6xl px-4 sm:px-6">
+      <PostGrid
+        posts={latestPosts}
+        readMoreLabel={readMoreLabel}
       />
     </div>
   </main>

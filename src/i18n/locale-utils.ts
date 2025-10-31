@@ -1,4 +1,4 @@
-import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 export { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from "@/lib/preferences";
 export const LOCALE_HEADER = "x-user-locale";
 
@@ -89,7 +89,7 @@ export function buildLocalizedPath(pathname: string, locale: Locale): string {
     segments.shift();
   }
 
-  const baseSegments = locale === defaultLocale ? segments : [locale, ...segments];
+  const baseSegments = [locale, ...segments];
   if (baseSegments.length === 0) {
     return "/";
   }

@@ -71,6 +71,12 @@ export interface LandingContent {
     imageAlt: string;
     paragraphs: string[];
   };
+  lighthouse?: {
+    heading: string;
+    paragraphs: string[];
+    bullets: string[];
+    closing: string;
+  };
   footerNote: string;
   blog: {
     badge: string;
@@ -357,129 +363,77 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   en: {
     locale: "en",
     brandName: "Alex Bon",
-    tagline: "Just a space to take a breath and figure things out",
-    metaTitle: "Online counsellor Alex Bon | A space to be read and understood",
+    tagline: "A lighthouse to see yourself",
+    metaTitle: "Meet Alex Bon | Keeper of the Lighthouse",
     metaDescription:
-      "Feeling tangled or exhausted, or just wanting a quiet place where someone will read your words with care? I hold space through writing and offer a free first exchange so we can begin gently.",
+      "Writer, psychologist, and keeper of a quiet lighthouse of reflections. Discover why these stories stay free and how their light helps you see yourself.",
     hero: {
-      title: "Just a space to take a breath and figure things out.",
+      title: "Meet the keeper of this lighthouse.",
       paragraphs: [],
     },
     introduction: {
-      heading: "Getting acquainted",
-      image: "/images/about-portrait-hero.webp",
-      imageAlt: "Oleksandr, online psychologist",
+      heading: "",
+      image: "https://alexbon.com/images/about-story-portrait.webp",
+      imageAlt: "Alex Bon seated in warm light, notebook in hand",
       paragraphs: [
-        "Hi, my name is Oleksandr.",
-        "I am a psychologist. If we drop the formalities, I'm someone who helps untangle knots of thoughts and feelings through the art of writing.",
-        "My work is to create a safe, quiet space where you can see your own thoughts clearly — perhaps for the first time in a while.",
+        "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this quiet space. The stories you find here are reflections, a space to see yourself.",
+        "But for any reflection to appear, there must be a source of light. That thought is what brought me to the image of a lighthouse.",
+        "My work here is not to offer consultations, but to tend its light—the stories and reflections you find on this site. They are, and will always be, free for everyone.",
+        "A lighthouse does not steer your ship or promise a safe harbor. Its task is more honest: it holds its ground, so you can find yours.",
+        "Its light exists to illuminate three things:",
+        "The shape of the rocks — the patterns that lie in our path.",
+        "The outlines of other ships — to remind us we are not alone.",
+        "And most importantly, the reflection of our own vessel in the water.",
+        "This is why I write.",
       ],
-      highlight: {
-        title: "What do I do?",
-        paragraphs: [
-          "I help you find language for what's happening inside. No lofty jargon, no moralising, no pressure to respond before you're ready.",
-          "We take your specific situation, your stuck point, your quiet ache — and we work with it in writing. Patiently. Honestly. With care.",
-          "I won't rush you or dissect you. I'll respond thoughtfully, word by word, human to human.",
-        ],
-      },
     },
     process: {
-      heading: "How does it work? Thoughtfully.",
-      intro:
-        "I believe healing begins with an honest exchange of words. That's why our whole process happens in writing: it gives you time to reflect, space to be vulnerable without being seen, and the chance to find the exact words for what you feel.",
-      steps: [
-        {
-          title: "Step 1. The first exchange (free)",
-          description:
-            "**What is it?** This isn’t a live chat or instant back-and-forth. It’s one thoughtful written exchange. You take your time, write to me about what’s on your mind, and I’ll send a considered reply in return.\n\n**Why do it?** It lets you see how I think, feel my style of communication, and decide whether it resonates before committing to anything.\n\n**Any commitments?** None at all. If it doesn’t feel right, that’s completely fine. My aim is for you to find the guide who fits you.",
-        },
-        {
-          title: "Step 2. Ongoing correspondence (if you choose)",
-          description:
-            "**What is it?** If you feel a quiet \"yes\" after our first exchange, we can begin a regular correspondence — usually one deep letter or message each week — creating a steady, reflective rhythm.\n\n**Why do it?** Not just to send messages, but to gently untangle your knots and move toward the life you want to build, one written thought at a time.",
-        },
-      ],
+      heading: "",
+      intro: "",
+      steps: [],
     },
     details: {
-      heading: "A closer look at our work",
-      items: [
-        {
-          icon: "video",
-          title: "Format",
-          description:
-            "We work exclusively through writing (via a secure private channel or email). You can write whenever you're ready — day or night — free from the pressure of a scheduled appointment.",
-        },
-        {
-          icon: "donate",
-          title: "Contribution",
-          description:
-            "I don’t want cost to stand between someone and the help they need. That’s why I work on a pay-what-feels-right donation basis: after each exchange you choose the amount that feels fair and manageable. Your willingness to change is the currency that matters most.",
-        },
-        {
-          icon: "lock",
-          title: "Confidentiality",
-          description:
-            "This is non-negotiable. Everything we write stays between us. It isn’t just a promise — it’s the ethical backbone of my work. You can trust that this space is completely safe.",
-        },
-      ],
+      heading: "",
+      items: [],
     },
     faq: {
-      heading: "Questions that are absolutely okay to ask",
-      items: [
-        {
-          question: "What if I'm not a good writer?",
-          answer:
-            "This isn’t about beautiful prose — it’s about honesty. Messy, fragmented, simple words carry just as much weight. My job is to understand the feeling behind them.",
-        },
-        {
-          question: "What if I have nothing to say?",
-          answer:
-            "That’s absolutely okay. The blank page can be intimidating. Begin with a single word, a question, or even a bullet list. I’ll help from there.",
-        },
-        {
-          question: "Will you be analysing me?",
-          answer:
-            "My goal isn’t to solve you like a puzzle, but to help you see and understand the patterns that emerge in your own writing.",
-        },
-      ],
+      heading: "",
+      items: [],
     },
     invitation: {
-      heading: "Ready to write the first word?",
-      body:
-        "Just message me to begin our free, no-obligation first exchange. Take all the time you need.",
-      buttons: [
-        { label: "Begin Our First Exchange", href: "https://t.me/alexbon_com" },
-      ],
+      heading: "",
+      body: "",
+      buttons: [],
     },
     testimonials: {
-      heading: "Voices of those who felt heard",
-      intro:
-        "These are voices from my journey, from both spoken and written conversations. The method may change, but the feeling of being understood remains the same.",
-      items: [
-        "I’d like to thank Oleksandr for his professionalism and warmth. He helped me make sense of what was happening inside: I stopped spiralling into the future and started noticing the here and now. Through our work I let go of the harsh self-criticism, the fears, and that long-standing sense of guilt. I feel steadier, calmer, more confident. Oleksandr creates a safe space where you can look at your challenges honestly and find a way forward. I’m genuinely glad I reached out to him.",
-        "Thank you, Oleksandr, for helping me find answers so quickly. After the session the tension was gone and there was room for new ideas. Oleksandr saw the essence of my situation and described everything that was happening inside — things I couldn’t explain myself.",
-        "Oleksandr is a wonderful specialist. After the consultation I felt lighter and clearer. It’s easy to talk to him — he inspires trust. I’m grateful for the support and gladly recommend him.",
-      ],
-      cta: {
-        text: "You can read more reviews on Google Maps or share your own here:",
-        button: {
-          label: "Google Maps Reviews",
-          href: "https://g.page/AlexBon?share",
-        },
-      },
+      heading: "",
+      intro: "",
+      items: [],
     },
     story: {
-      heading: "My story (for those who stayed till the end)",
-      image: "/images/about-story-portrait.webp",
-      imageAlt: "Alex Bon leaning on a table in a calm studio setting",
+      heading: "The Story of the Keeper",
+      image: "https://alexbon.com/images/about-portrait-hero.webp",
+      imageAlt: "Alex Bon standing by a window, looking toward the horizon",
       paragraphs: [
-        "Becoming a psychologist was never part of the plan. My path began unexpectedly — in the army. Among boots and drills I realised something simple and important: inner balance doesn’t depend on outer circumstances. The universe has a sense of humour and throws insights into the most unexpected places.",
-        "I travelled a lot, lived in Yemen, India and England, earned degrees in economics and psychology, worked in different spheres — from entry-level roles to running my own company.",
-        "I was married, went through a divorce, kept a good relationship and have lived on my own for the last ten years. Well, not entirely on my own — my cat lives with me. This experience didn’t make me a guru, but it taught me to notice threads in other people’s stories that once ran through mine. And to see that any knot can be untied.",
+        "My path to this shore was never part of a plan.",
+        "It began unexpectedly, in the army. Among the polished boots and the rigid drills, I learned a simple truth: inner balance does not depend on outer circumstances. The universe enjoys hiding its greatest insights in the most unlikely places. I have traveled widely, lived in Yemen, India, and England. I have built and lost. I have been married and divorced. Today, I live and write in Ukraine, tending this light amidst the chaos of war.",
+        "This journey hasn't made me a guru. It has simply taught me to recognize the threads in other people's stories that once ran through my own. And for the last ten years, I've lived on my own. Well, not entirely on my own—I live with my cat.",
       ],
     },
-    footerNote:
-      "P.S. “Alex Bon” is my pseudonym — it makes things easier. My legal name can remain for boring paperwork.",
+    lighthouse: {
+      heading: "Tending the Light",
+      paragraphs: [
+        "This lighthouse is kept running by those who find value in its light. Everything I create is free, without paywalls or exclusive content. This is not a transaction.",
+        "If you feel this work is necessary, here are a few ways to help keep the light burning:",
+      ],
+      bullets: [
+        "Become a Reader: Join my reader circle for free and receive stories as they are born.",
+        "Become a Patron: Your support helps me dedicate more time to writing and ensures this beam continues to shine for everyone.",
+        "Explore the Designs: Carry a piece of this space with you.",
+      ],
+      closing: "Thank you for being here. Thank you for standing watch with me.",
+    },
+    footerNote: "",
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",

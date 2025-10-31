@@ -88,7 +88,7 @@ const pageSummary = translate(messages, "Pagination.pageSummary", {
   total: pagination.totalPages,
 });
 
-const prefix = locale === defaultLocale ? "" : `/${locale}`;
+const prefix = `/${locale}`;
 ---
 <SiteLayout
   locale={locale}

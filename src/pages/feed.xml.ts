@@ -1,8 +1,8 @@
 import { defaultLocale } from "@/i18n/config";
-import { buildRssFeed } from "@/lib/feed";
 
-export const prerender = true;
+export const prerender = false;
 
 export function GET() {
-  return buildRssFeed(defaultLocale);
+  const target = `/${defaultLocale}/feed.xml`;
+  return Response.redirect(target, 308);
 }

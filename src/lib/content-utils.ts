@@ -111,9 +111,9 @@ export function buildPostJsonLd(
   slug: string,
   locale: Locale,
 ) {
-  const path = locale === defaultLocale ? `/blog/${slug}` : `/${locale}/blog/${slug}`;
+  const path = `/${locale}/blog/${slug}`;
   const image = doc.image ?? DEFAULT_POST_IMAGE;
-  const collectionUrl = locale === defaultLocale ? `${SITE_URL}/blog/` : `${SITE_URL}/${locale}/blog/`;
+  const collectionUrl = `${SITE_URL}/${locale}/blog/`;
   const licenseUrl = doc.license.startsWith("http")
     ? doc.license
     : "https://creativecommons.org/licenses/by/4.0/";
@@ -197,7 +197,7 @@ export function buildPageJsonLd(
   slug: string,
   locale: Locale,
 ) {
-  const path = locale === defaultLocale ? `/${slug}` : `/${locale}/${slug}`;
+  const path = `/${locale}/${slug}`;
   const licenseUrl = doc.license.startsWith("http")
     ? doc.license
     : "https://creativecommons.org/licenses/by/4.0/";

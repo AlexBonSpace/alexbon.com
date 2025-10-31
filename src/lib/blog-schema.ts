@@ -116,7 +116,7 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
 
 export function buildBlogBreadcrumbJsonLd(locale: Locale) {
   const homeName = locale === "en" ? "Home" : locale === "ua" ? "Головна" : "Главная";
-  const homeUrl = locale === defaultLocale ? `${SITE_URL}/` : `${SITE_URL}/${locale}/`;
+  const homeUrl = buildCanonicalUrl(locale, "/");
   const blogUrl = buildCanonicalUrl(locale, "/blog/");
   return {
     "@context": "https://schema.org",
@@ -146,8 +146,8 @@ export function getBlogIndexMetadata(locale: Locale, path = "/blog/") {
     canonical: buildCanonicalUrl(locale, path),
     alternates: buildLanguageAlternates(path),
     feeds: {
-      rss: `${SITE_URL}${locale === defaultLocale ? "" : `/${locale}`}/feed.xml`,
-      json: `${SITE_URL}${locale === defaultLocale ? "" : `/${locale}`}/feed.json`,
+      rss: `${SITE_URL}/${locale}/feed.xml`,
+      json: `${SITE_URL}/${locale}/feed.json`,
     },
   };
 }

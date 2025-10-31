@@ -53,8 +53,7 @@ rawPages.forEach((entry) => {
   const archived =
     (entry.data.archived ?? "").trim() ||
     buildGithubArchiveUrl(`${locale}/pages/${fileSlug}.mdx`);
-  const url =
-    locale === defaultLocale ? `/${fileSlug}/` : `/${locale}/${fileSlug}/`;
+  const url = `/${locale}/${fileSlug}/`;
 
   const page: SitePage = {
     slug: fileSlug,

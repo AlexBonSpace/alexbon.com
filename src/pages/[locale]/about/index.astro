@@ -31,7 +31,7 @@ const profileJsonLd = {
   description: content.metaDescription,
   inLanguage: localeToBcp47[locale],
   url: canonical,
-  isPartOf: `${SITE_URL}${locale === defaultLocale ? "/" : `/${locale}/`}`,
+  isPartOf: `${SITE_URL}/${locale}/`,
   license: "https://creativecommons.org/licenses/by/4.0/",
   mainEntity: {
     "@type": "Person",

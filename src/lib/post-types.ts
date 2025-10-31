@@ -84,8 +84,8 @@ export function getPostTypeDescription(locale: Locale, type: PostType, count: nu
   return template.replace("{count}", formatCount(locale, count));
 }
 
-export function buildPostTypePath(_locale: Locale, type: PostType): string {
-  return `/blog/type/${type}`;
+export function buildPostTypePath(locale: Locale, type: PostType): string {
+  return `/${locale}${buildPostTypeRelativePath(type)}`;
 }
 
 export function buildPostTypeRelativePath(type: PostType): string {

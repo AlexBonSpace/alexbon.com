@@ -1,8 +1,8 @@
 import { defaultLocale } from "@/i18n/config";
-import { buildJsonFeed } from "@/lib/feed";
 
-export const prerender = true;
+export const prerender = false;
 
 export function GET() {
-  return buildJsonFeed(defaultLocale);
+  const target = `/${defaultLocale}/feed.json`;
+  return Response.redirect(target, 308);
 }

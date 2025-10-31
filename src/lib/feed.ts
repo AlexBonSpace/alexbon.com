@@ -2,6 +2,7 @@ import { contentByLocale } from "@/content";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { getPostsByLocale } from "@/lib/blog";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
+import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
 
@@ -10,7 +11,7 @@ function resolveLocale(locale: string): Locale | null {
 }
 
 function getLocalePrefix(locale: Locale): string {
-  return locale === defaultLocale ? "" : `/${locale}`;
+  return `/${locale}`;
 }
 
 function getFeedTitle(locale: Locale): string {
@@ -39,6 +40,9 @@ function mapPostToFeedItem(locale: Locale) {
     const url = `${SITE_URL}${post.url}`;
     const image = post.image ?? DEFAULT_POST_IMAGE;
     const fullText = post.plainText || post.searchContent || "";
+    const typeLabel = getPostTypeLabel(locale, post.type);
+    const typePath = buildPostTypePath(locale, post.type);
+    const typeUrl = `${SITE_URL}${typePath}`;
 
     return {
       id: url,
@@ -57,6 +61,10 @@ function mapPostToFeedItem(locale: Locale) {
       ],
       _license: LICENSE_URL,
       image,
+      _postType: post.type,
+      _postTypeLabel: typeLabel,
+      _postTypePath: typePath,
+      _postTypeUrl: typeUrl,
     };
   });
 }

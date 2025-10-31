@@ -36,8 +36,8 @@ export function GET() {
   const entries: string[] = [];
 
   for (const locale of locales) {
-    const prefix = locale === defaultLocale ? "" : `/${locale}`;
-    const homeUrl = locale === defaultLocale ? `${SITE_URL}/` : `${SITE_URL}${prefix}/`;
+    const prefix = `/${locale}`;
+    const homeUrl = `${SITE_URL}${prefix}/`;
 
     entries.push(
       buildUrlEntry({

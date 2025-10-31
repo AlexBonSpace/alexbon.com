@@ -119,17 +119,15 @@ function HitCard({ hit, readMore }: { hit: HighlightableHit; readMore: string })
           <HighlightedText value={highlightedTitle} />
         </h3>
         <p className="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
-          {highlightedSnippet ? <HighlightedText value={highlightedSnippet} /> : hit.title}
-        </p>
-        <div>
+          {highlightedSnippet ? <HighlightedText value={highlightedSnippet} /> : hit.title}{" "}
           <a
             href={canonicalHref}
-            className="button-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center text-[1.05em] text-accent/80 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            aria-label={readMore}
           >
-            {readMore}
-            <span aria-hidden>→</span>
+            <span aria-hidden>🦋</span>
           </a>
-        </div>
+        </p>
       </article>
     );
   }
@@ -263,6 +261,20 @@ export function SearchApp({
   useEffect(() => {
     let cancelled = false;
     const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+      setStatus("idle");
+      setError(null);
+      setResult({
+        hits: [],
+        page: 0,
+        nbPages: 0,
+        nbHits: 0,
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+
     setStatus("loading");
     setError(null);
 
@@ -322,12 +334,13 @@ export function SearchApp({
     };
   }, [client, indexName, query, page, hitsPerPage, locale]);
 
+  const hasQuery = query.trim().length > 0;
   const canPrevious = result.page > 0;
   const canNext = result.page + 1 < result.nbPages;
   const currentPageDisplay = result.nbPages > 0 ? result.page + 1 : 0;
   const totalPagesDisplay = result.nbPages;
 
-  const showEmptyState = status === "success" && result.nbHits === 0;
+  const showEmptyState = hasQuery && status === "success" && result.nbHits === 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -353,14 +366,14 @@ export function SearchApp({
         </button>
       </div>
 
-      {status === "error" ? (
+      {hasQuery && status === "error" ? (
         <div className="blog-card col-span-full flex flex-col items-center gap-3 rounded-[2rem] border border-soft p-10 text-center text-primary">
           <p className="text-xl font-semibold text-strong">Algo­liа тимчасово недоступна</p>
           <p className="text-sm text-muted">{error ?? "Спробуйте пізніше або оновіть сторінку."}</p>
         </div>
       ) : null}
 
-      {status === "loading" ? (
+      {hasQuery && status === "loading" ? (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
@@ -378,7 +391,7 @@ export function SearchApp({
         </div>
       ) : null}
 
-      {status === "success" && result.hits.length > 0 ? (
+      {hasQuery && status === "success" && result.hits.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {result.hits.map((hit) => (
             <HitCard key={hit.objectID} hit={hit} readMore={copy.readMore} />
@@ -386,7 +399,7 @@ export function SearchApp({
         </div>
       ) : null}
 
-      {showPagination ? (
+      {showPagination && hasQuery ? (
         <PaginationControls
           copy={copy.pagination}
           currentPage={currentPageDisplay}
