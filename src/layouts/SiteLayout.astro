@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import JsonLd from "@/components/JsonLd.astro";
 import NavigationShell from "@/components/NavigationShell";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
-import { contentByLocale } from "@/content";
+import { contentByLocale, languageLinks } from "@/content";
 import { SITE_URL, localeToBcp47 } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { DEFAULT_THEME, isThemeId } from "@/lib/themes";
@@ -75,10 +75,29 @@ const autoNavigationAlternates = locales.reduce<Partial<Record<Locale, string>>>
   acc[candidate] = buildLocalizedPath(basePath, candidate);
   return acc;
 }, {});
+const searchSuffix =
+  currentSearch && currentSearch !== "?"
+    ? currentSearch.startsWith("?")
+      ? currentSearch
+      : `?${currentSearch}`
+    : "";
+
 const navigationPaths = {
   ...autoNavigationAlternates,
   ...(navigationAlternatePaths ?? {}),
 };
+
+const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) => {
+  const localeKey = linkLocale as Locale;
+  const localizedPath = navigationPaths[localeKey] ?? buildLocalizedPath(basePath, localeKey);
+  const href = `${localizedPath}${searchSuffix}`.replace(/\?$/, "");
+  return {
+    label,
+    locale: localeKey,
+    href,
+    isActive: localeKey === locale,
+  };
+});
 
 const robotsContent =
   typeof robots === "string" && robots.trim()
@@ -212,5 +231,20 @@ if (feeds?.json) {
       showPrompt={locale === defaultLocale}
     />
     <slot />
+    <nav class="language-links language-links--footer" aria-label="Languages">
+      <ul class="language-links__list">
+        {languageSwitcherLinks.map((link) => (
+          <li class="language-links__item" key={link.locale}>
+            <a
+              href={link.href}
+              class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
+              aria-current={link.isActive ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </body>
 </html>
