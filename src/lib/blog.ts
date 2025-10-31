@@ -2,7 +2,6 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { locales, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl } from "@/lib/seo";
 import {
-  buildGithubArchiveUrl,
   buildPostJsonLd,
   cleanCardSnippet,
   createDescription,
@@ -24,7 +23,6 @@ export type BlogPost = {
   title: string;
   description: string;
   canonical: string;
-  archived: string;
   publishedAt: string;
   updatedAt?: string;
   publishedDate: Date;
@@ -84,9 +82,6 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
 
   const localizedPath = `/${locale}/blog/${fileSlug}`;
   const canonical = (entry.data.canonical ?? "").trim() || buildCanonicalUrl(locale, `/blog/${fileSlug}/`);
-  const archived =
-    (entry.data.archived ?? "").trim() || buildGithubArchiveUrl(`${locale}/${collection}/${fileSlug}.mdx`);
-
   const tags = Array.isArray(entry.data.tags) ? entry.data.tags.map((tag) => tag.trim()).filter(Boolean) : [];
 
   const jsonLd = buildPostJsonLd(
@@ -95,7 +90,6 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
       type,
       description,
       canonical,
-      archived,
       publishedAt: publishedAtIso,
       updatedAt: updatedAtIso,
       author: entry.data.author,
@@ -117,7 +111,6 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
     title: (entry.data.title ?? "").trim() || summary || fileSlug,
     description,
     canonical,
-    archived,
     publishedAt: publishedAtIso,
     updatedAt: updatedAtIso,
     publishedDate,
