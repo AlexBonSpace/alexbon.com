@@ -164,7 +164,7 @@ if (feeds?.json) {
 }
 ---
 <!DOCTYPE html>
-<html lang={locale}>
+<html lang={localeToBcp47[locale] ?? locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
