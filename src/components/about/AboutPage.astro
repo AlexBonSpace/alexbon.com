@@ -13,6 +13,10 @@ type ProcessStep = {
   paragraphs: FormattedParagraph[];
 };
 
+type IntroductionBlock =
+  | { type: "paragraph"; text: string }
+  | { type: "bulletList"; items: string[] };
+
 interface AboutPageProps {
   content: LandingContent;
 }
@@ -22,6 +26,20 @@ const lang = content.locale === "ua" ? "uk" : content.locale === "en" ? "en" : "
 
 const containerClass = "mx-auto w-[90%] max-w-6xl px-4 sm:px-6";
 const isEnglish = content.locale === "en";
+
+const introductionBlocks: IntroductionBlock[] = (() => {
+  const blocks: IntroductionBlock[] = [];
+  const { paragraphs, bulletList } = content.introduction;
+
+  for (const paragraph of paragraphs) {
+    blocks.push({ type: "paragraph", text: paragraph });
+    if (bulletList && bulletList.afterParagraph === paragraph) {
+      blocks.push({ type: "bulletList", items: bulletList.items });
+    }
+  }
+
+  return blocks;
+})();
 
 const processSteps: ProcessStep[] = content.process.steps.map((step, idx) => ({
   index: String(idx + 1).padStart(2, "0"),
@@ -54,9 +72,22 @@ const hasHeroParagraphs = content.hero.paragraphs.length > 0;
         class={`relative isolate overflow-hidden rounded-[2.25rem] border border-soft px-6 py-10 text-left shadow-card backdrop-blur-sm section-card ${containerClass} flex flex-col gap-8 lg:flex-row lg:items-center sm:px-10`}
       >
         <div class="relative z-10 flex flex-1 flex-col gap-5 text-base leading-relaxed text-primary sm:text-lg">
-          {content.introduction.paragraphs.map((paragraph) => (
-            <p class="text-[clamp(1.05rem,3.1vw,1.28rem)]">{paragraph}</p>
-          ))}
+          {introductionBlocks.map((block, index) =>
+            block.type === "paragraph" ? (
+              <p class="text-[clamp(1.05rem,3.1vw,1.28rem)]" key={`paragraph-${index}`}>
+                {block.text}
+              </p>
+            ) : (
+              <ul
+                class="ml-6 list-disc space-y-2 text-[clamp(1.05rem,3.1vw,1.28rem)]"
+                key={`bullet-${index}`}
+              >
+                {block.items.map((item, itemIndex) => (
+                  <li key={itemIndex}>{item}</li>
+                ))}
+              </ul>
+            )
+          )}
         </div>
         <div class="relative z-10 flex flex-1 justify-center">
           <div class="section-card-strong overflow-hidden rounded-[2rem] border border-soft shadow-card">
@@ -113,8 +144,24 @@ const hasHeroParagraphs = content.hero.paragraphs.length > 0;
               <p>{paragraph}</p>
             ))}
             <ul class="ml-4 list-disc space-y-2 text-[clamp(1.02rem,3vw,1.15rem)]">
-              {content.lighthouse.bullets.map((bullet) => (
-                <li>{bullet}</li>
+              {content.lighthouse.bullets.map((bullet, index) => (
+                <li key={index}>
+                  {typeof bullet === "string" ? (
+                    bullet
+                  ) : (
+                    <>
+                      <a
+                        href={bullet.href}
+                        target={bullet.external ? "_blank" : undefined}
+                        rel={bullet.external ? "noopener noreferrer" : undefined}
+                        class="text-strong underline-offset-4 hover:underline"
+                      >
+                        {bullet.label}
+                      </a>
+                      {bullet.description}
+                    </>
+                  )}
+                </li>
               ))}
             </ul>
             <p class="text-[clamp(1.05rem,3.2vw,1.2rem)] font-medium text-strong">

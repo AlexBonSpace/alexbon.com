@@ -17,6 +17,10 @@ export interface LandingContent {
     image: string;
     imageAlt: string;
     paragraphs: string[];
+    bulletList?: {
+      afterParagraph: string;
+      items: string[];
+    };
     highlight?: {
       title: string;
       paragraphs: string[];
@@ -74,7 +78,15 @@ export interface LandingContent {
   lighthouse?: {
     heading: string;
     paragraphs: string[];
-    bullets: string[];
+    bullets: Array<
+      | string
+      | {
+          label: string;
+          description: string;
+          href: string;
+          external?: boolean;
+        }
+    >;
     closing: string;
   };
   footerNote: string;
@@ -381,11 +393,16 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "My work here is not to offer consultations, but to tend its light—the stories and reflections you find on this site. They are, and will always be, free for everyone.",
         "A lighthouse does not steer your ship or promise a safe harbor. Its task is more honest: it holds its ground, so you can find yours.",
         "Its light exists to illuminate three things:",
-        "The shape of the rocks — the patterns that lie in our path.",
-        "The outlines of other ships — to remind us we are not alone.",
-        "And most importantly, the reflection of our own vessel in the water.",
         "This is why I write.",
       ],
+      bulletList: {
+        afterParagraph: "Its light exists to illuminate three things:",
+        items: [
+          "The shape of the rocks — the patterns that lie in our path.",
+          "The outlines of other ships — to remind us we are not alone.",
+          "And most importantly, the reflection of our own vessel in the water.",
+        ],
+      },
     },
     process: {
       heading: "",
@@ -427,9 +444,25 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "If you feel this work is necessary, here are a few ways to help keep the light burning:",
       ],
       bullets: [
-        "Become a Reader: Join my reader circle for free and receive stories as they are born.",
-        "Become a Patron: Your support helps me dedicate more time to writing and ensures this beam continues to shine for everyone.",
-        "Explore the Designs: Carry a piece of this space with you.",
+        {
+          label: "Become a Reader",
+          description: ": Join my reader circle for free and receive stories as they are born.",
+          href: "https://www.patreon.com/cw/alexboncom",
+          external: true,
+        },
+        {
+          label: "Become a Patron",
+          description:
+            ": Your support helps me dedicate more time to writing and ensures this beam continues to shine for everyone.",
+          href: "https://www.patreon.com/cw/alexboncom",
+          external: true,
+        },
+        {
+          label: "Explore the Designs",
+          description: ": Carry a piece of this space with you.",
+          href: "https://www.redbubble.com/people/AlexBonSpace/explore?page=1&sortOrder=recent",
+          external: true,
+        },
       ],
       closing: "Thank you for being here. Thank you for standing watch with me.",
     },
