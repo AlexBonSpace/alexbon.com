@@ -7,9 +7,6 @@ import {
   localeToBcp47,
 } from "@/lib/seo";
 
-const GITHUB_CONTENT_BASE_URL = "https://github.com/alexbon-com/alexbon.com/blob/main/content";
-const GITHUB_RAW_CONTENT_BASE_URL = "https://raw.githubusercontent.com/alexbon-com/alexbon.com/main/content";
-
 const ARTICLE_SECTION_BY_LOCALE: Record<Locale, string> = {
   ua: "Карти внутрішнього світу: глибокі статті про психологію, усвідомленість і будову нашої свідомості.",
   ru: "Карты внутреннего мира: глубокие статьи о психологии, осознанности и устройстве нашего сознания.",
@@ -76,29 +73,12 @@ export function createSearchContent(raw: string): string {
     .slice(0, 5000);
 }
 
-export function normalizeContentPath(sourcePath: string): string {
-  const trimmed = sourcePath.startsWith("/") ? sourcePath.slice(1) : sourcePath;
-  if (trimmed.endsWith(".mdx") || trimmed.endsWith(".md")) {
-    return trimmed;
-  }
-  return `${trimmed}.mdx`;
-}
-
-export function buildGithubArchiveUrl(sourcePath: string): string {
-  return `${GITHUB_CONTENT_BASE_URL}/${normalizeContentPath(sourcePath)}`;
-}
-
-export function buildGithubRawUrl(sourcePath: string): string {
-  return `${GITHUB_RAW_CONTENT_BASE_URL}/${normalizeContentPath(sourcePath)}`;
-}
-
 export function buildPostJsonLd(
   doc: {
     title: string;
     type: "note" | "article" | "story";
     description: string;
     canonical: string;
-    archived: string;
     publishedAt: string;
     updatedAt?: string;
     author: string;
@@ -147,7 +127,6 @@ export function buildPostJsonLd(
     image,
     thumbnailUrl: image,
     isPartOf: collectionUrl,
-    ...(doc.archived ? { sameAs: [doc.archived] } : {}),
   };
 
   switch (doc.type) {
@@ -189,7 +168,6 @@ export function buildPageJsonLd(
     title: string;
     description: string;
     canonical: string;
-    archived: string;
     author: string;
     authorUrl: string;
     license: string;
@@ -219,6 +197,5 @@ export function buildPageJsonLd(
       "@type": "WebPage",
       "@id": `${SITE_URL}${path}`,
     },
-    ...(doc.archived ? { sameAs: [doc.archived] } : {}),
   };
 }

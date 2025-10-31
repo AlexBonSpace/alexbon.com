@@ -2,7 +2,6 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl } from "@/lib/seo";
 import {
-  buildGithubArchiveUrl,
   buildPageJsonLd,
   cleanCardSnippet,
   createPlainText,
@@ -18,7 +17,6 @@ export type SitePage = {
   title: string;
   description: string;
   canonical: string;
-  archived: string;
   author: string;
   authorUrl: string;
   license: string;
@@ -50,9 +48,6 @@ rawPages.forEach((entry) => {
   const canonical =
     (entry.data.canonical ?? "").trim() ||
     buildCanonicalUrl(locale, `/${fileSlug}/`);
-  const archived =
-    (entry.data.archived ?? "").trim() ||
-    buildGithubArchiveUrl(`${locale}/pages/${fileSlug}.mdx`);
   const url = `/${locale}/${fileSlug}/`;
 
   const page: SitePage = {
@@ -61,7 +56,6 @@ rawPages.forEach((entry) => {
     title: (entry.data.title ?? "").trim() || fileSlug,
     description,
     canonical,
-    archived,
     author: entry.data.author,
     authorUrl: entry.data.authorUrl,
     license: entry.data.license,
@@ -76,7 +70,6 @@ rawPages.forEach((entry) => {
         title: (entry.data.title ?? "").trim() || fileSlug,
         description,
         canonical,
-        archived,
         author: entry.data.author,
         authorUrl: entry.data.authorUrl,
         license: entry.data.license,
