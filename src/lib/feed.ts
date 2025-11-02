@@ -100,6 +100,11 @@ export async function buildJsonFeed(locale: Locale) {
       tags: item.tags,
       authors: item.authors,
       image: item.image,
+      type: item.postType,
+      _postType: item.postType,
+      _postTypeLabel: item.postTypeLabel,
+      _postTypePath: item.postTypePath,
+      _postTypeUrl: item.postTypeUrl,
       attachments: item.image
         ? [
             {
