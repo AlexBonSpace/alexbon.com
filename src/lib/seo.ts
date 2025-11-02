@@ -1,6 +1,6 @@
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 
-export const SITE_URL = "https://alexbon.com";
+export const SITE_URL = "https://www.alexbon.com";
 
 const hreflangMap: Record<Locale, string> = {
   ua: "uk-UA",
