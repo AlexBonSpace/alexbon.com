@@ -5,6 +5,7 @@ import { contentByLocale } from "@/content";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE, PERSON_JOB_TITLES, PERSON_KNOWS_ABOUT, localeToBcp47 } from "@/lib/seo";
 import { notFound } from "@/lib/http";
+import { buildAuthorPersonJsonLd } from "@/lib/content-utils";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({
@@ -23,6 +24,7 @@ const locale = resolvedLocale;
 const content = contentByLocale[locale];
 const canonical = buildCanonicalUrl(locale, "/about/");
 const languageAlternates = buildLanguageAlternates("/about/", { locales });
+const personJsonLd = buildAuthorPersonJsonLd(locale);
 const profileJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -35,13 +37,13 @@ const profileJsonLd = {
   license: "https://creativecommons.org/licenses/by/4.0/",
   mainEntity: {
     "@type": "Person",
-    "@id": `${SITE_URL}/#alex-bon`,
+    "@id": personJsonLd["@id"],
     name: content.brandName,
     alternateName: ["Alex Bon"],
-    jobTitle: PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES.defaultLocale,
+    jobTitle: PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale],
     description: content.metaDescription,
     sameAs: ["https://www.facebook.com/mr.alexbon"],
-    knowsAbout: PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT.defaultLocale,
+    knowsAbout: PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale],
     worksFor: {
       "@type": "Organization",
       name: "alexbon.com",
@@ -58,7 +60,7 @@ const profileJsonLd = {
   description={content.metaDescription}
   canonical={canonical}
   languageAlternates={languageAlternates}
-  jsonLd={[profileJsonLd]}
+  jsonLd={[profileJsonLd, personJsonLd]}
 >
   <AboutPage content={content} />
 </SiteLayout>

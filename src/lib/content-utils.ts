@@ -1,6 +1,7 @@
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import {
   DEFAULT_POST_IMAGE,
+  ABOUT_HERO_IMAGE,
   PERSON_JOB_TITLES,
   PERSON_KNOWS_ABOUT,
   SITE_URL,
@@ -24,6 +25,109 @@ const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
   ru: ["Истории-зеркала. Художественные рассказы и психологические притчи о встрече с собой."],
   en: ["Mirror stories. Literary tales and psychological parables about meeting yourself."],
 };
+
+const AUTHOR_DESCRIPTIONS: Record<Locale, string> = {
+  ru: "Психолог и писатель, помогает распутывать клубки мыслей и чувств и создавать пространство для честного разговора.",
+  ua: "Психолог і письменник, допомагає розплутувати клубок думок і почуттів та створювати простір для чесної розмови.",
+  en: "Writer and psychologist tending a lighthouse of reflective stories so you can see your patterns and hear yourself.",
+};
+
+const AUTHOR_ALTERNATE_NAMES: Record<Locale, string[]> = {
+  ru: ["Alex Bon", "Александр"],
+  ua: ["Alex Bon"],
+  en: ["Алекс Бон"],
+};
+
+const AUTHOR_LANGUAGES: Record<Locale, string[]> = {
+  ru: ["ru", "uk"],
+  ua: ["uk", "ru"],
+  en: ["en", "ru", "uk"],
+};
+
+const AUTHOR_ADDRESS_LOCALITY: Record<Locale, string> = {
+  ru: "Киев",
+  ua: "Київ",
+  en: "Kyiv",
+};
+
+const AUTHOR_SERVICE_OFFERS: Record<Locale, Array<Record<string, unknown>>> = {
+  ru: [
+    {
+      "@type": "Service",
+      name: "Встреча-знакомство",
+      description:
+        "Бесплатная 20-минутная онлайн встреча, чтобы познакомиться и понять, комфортно ли работать вместе.",
+      serviceType: "Психологическая консультация",
+      areaServed: "Worldwide",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+    },
+    {
+      "@type": "Service",
+      name: "Глубокая работа",
+      description:
+        "Регулярные индивидуальные онлайн-сессии для работы с конкретными ситуациями. На основе добровольного пожертвования.",
+      serviceType: "Психологическая поддержка",
+      areaServed: "Worldwide",
+    },
+  ],
+  ua: [
+    {
+      "@type": "Service",
+      name: "Зустріч-знайомство",
+      description:
+        "Безкоштовна 20-хвилинна онлайн зустріч, щоб познайомитися і зрозуміти, чи комфортно працювати разом.",
+      serviceType: "Психологічна консультація",
+      areaServed: "Worldwide",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+    },
+    {
+      "@type": "Service",
+      name: "Глибока робота",
+      description:
+        "Регулярні індивідуальні онлайн-сесії для роботи з конкретними ситуаціями. На основі добровільного внеску.",
+      serviceType: "Психологічна підтримка",
+      areaServed: "Worldwide",
+    },
+  ],
+  en: [],
+};
+
+const AUTHOR_SUPPORT_OFFERS = {
+  "@type": "OfferCatalog",
+  name: "Ways to keep the light burning",
+  itemListElement: [
+    {
+      "@type": "Offer",
+      name: "Become a Reader",
+      description: "Join the reader circle for free and receive stories as they are born.",
+    },
+    {
+      "@type": "Offer",
+      name: "Become a Patron",
+      description: "Support to dedicate more time to writing and ensure this beam continues to shine.",
+    },
+    {
+      "@type": "Offer",
+      name: "Explore the Designs",
+      description: "Carry a piece of this space with you.",
+    },
+  ],
+};
+
+const CONTACT_LINKS = [
+  "https://t.me/alexbon_com",
+  "https://wa.me/+380986552222",
+  "viber://chat?number=+380986552222",
+  "https://g.page/AlexBon?share",
+];
 
 export function createPlainText(raw: string): string {
   return raw
@@ -92,33 +196,37 @@ export function buildPostJsonLd(
   locale: Locale,
 ) {
   const path = `/${locale}/blog/${slug}`;
+  const aboutUrl = `${SITE_URL}/${locale}/about/`;
   const image = doc.image ?? DEFAULT_POST_IMAGE;
   const collectionUrl = `${SITE_URL}/${locale}/blog/`;
   const licenseUrl = doc.license.startsWith("http")
     ? doc.license
     : "https://creativecommons.org/licenses/by/4.0/";
+  const inLanguage = localeToBcp47[locale] ?? locale;
+  const aboutTags =
+    doc.tags && doc.tags.length > 0
+      ? doc.tags.map((tag) => ({
+          "@type": "Thing",
+          name: tag,
+        }))
+      : undefined;
+  const authorReference = {
+    "@type": "Person",
+    "@id": aboutUrl,
+  };
   const base = {
     "@context": "https://schema.org",
+    "@id": doc.canonical,
     license: licenseUrl,
-    author: {
-      "@type": "Person",
-      name: doc.author,
-      url: doc.authorUrl,
-      sameAs: ["https://www.facebook.com/mr.alexbon"],
-      jobTitle: PERSON_JOB_TITLES[locale],
-      knowsAbout: PERSON_KNOWS_ABOUT[locale],
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "alexbon.com",
-      url: SITE_URL,
-      sameAs: ["https://www.facebook.com/mr.alexbon"],
-    },
+    author: authorReference,
+    creator: authorReference,
+    publisher: authorReference,
+    copyrightHolder: authorReference,
     headline: doc.title,
     datePublished: doc.publishedAt,
     dateModified: doc.updatedAt ?? doc.publishedAt,
     keywords: doc.tags,
-    inLanguage: localeToBcp47[locale] ?? locale,
+    inLanguage,
     url: doc.canonical,
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -126,7 +234,12 @@ export function buildPostJsonLd(
     },
     image,
     thumbnailUrl: image,
-    isPartOf: collectionUrl,
+    isPartOf: {
+      "@type": "Blog",
+      "@id": collectionUrl,
+    },
+    isAccessibleForFree: true,
+    ...(aboutTags ? { about: aboutTags } : {}),
   };
 
   switch (doc.type) {
@@ -148,11 +261,71 @@ export function buildPostJsonLd(
     default:
       return {
         ...base,
-        "@type": "SocialMediaPosting",
+        "@type": "Quotation",
         description: doc.description,
+        text: doc.description,
         articleSection: NOTE_SECTION_BY_LOCALE[locale],
       };
   }
+}
+
+export function buildAuthorPersonJsonLd(locale: Locale) {
+  const aboutUrl = `${SITE_URL}/${locale}/about/`;
+  const description = AUTHOR_DESCRIPTIONS[locale];
+  const alternateName = AUTHOR_ALTERNATE_NAMES[locale];
+  const knowsLanguage = AUTHOR_LANGUAGES[locale];
+  const jobTitle = PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale];
+  const knowsAbout = PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale];
+  const addressLocality = AUTHOR_ADDRESS_LOCALITY[locale];
+  const sameAs = Array.from(
+    new Set([
+      ...CONTACT_LINKS,
+      ...locales.map((currentLocale) => `${SITE_URL}/${currentLocale}/about/`),
+    ]),
+  );
+
+  const base: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": aboutUrl,
+    url: aboutUrl,
+    inLanguage: localeToBcp47[locale] ?? locale,
+    name: locale === "en" ? "Alex Bon" : "Алекс Бон",
+    alternateName,
+    description,
+    jobTitle,
+    image: ABOUT_HERO_IMAGE,
+    knowsAbout,
+    knowsLanguage,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality,
+      addressCountry: "UA",
+    },
+    nationality: {
+      "@type": "Country",
+      name: locale === "en" ? "Ukraine" : locale === "ua" ? "Україна" : "Украина",
+    },
+    sameAs,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Personal consultation",
+      availableLanguage: knowsLanguage,
+      url: aboutUrl,
+    },
+  };
+
+  if (locale === "en") {
+    return {
+      ...base,
+      hasOfferCatalog: AUTHOR_SUPPORT_OFFERS,
+    };
+  }
+
+  return {
+    ...base,
+    makesOffer: AUTHOR_SERVICE_OFFERS[locale],
+  };
 }
 
 export function resolveLocaleFromSlug(slugSegments: string[]): Locale {

@@ -36,8 +36,6 @@ const BLOG_TOPICS_BY_LOCALE: Record<Locale, string[]> = {
   ],
 };
 
-const SOCIAL_PROFILES = ["https://www.facebook.com/mr.alexbon"];
-
 function mapPostTypeToSchemaTypes(type: BlogPost["type"]) {
   if (type === "story") return ["BlogPosting", "ShortStory"] as const;
   if (type === "article") return ["BlogPosting", "Article"] as const;
@@ -52,10 +50,9 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
     "@type": "Thing",
     name: topic,
   }));
+  const aboutUrl = `${SITE_URL}/${locale}/about/`;
   const postEntries = posts.slice(0, 12).map((post) => {
     const image = post.image ?? DEFAULT_POST_IMAGE;
-    const jobTitle = PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale];
-    const knowsAbout = PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale];
     return {
       "@type": mapPostTypeToSchemaTypes(post.type),
       "@id": `${SITE_URL}${post.url}`,
@@ -68,11 +65,7 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
       thumbnailUrl: image,
       author: {
         "@type": "Person",
-        name: post.author,
-        url: post.authorUrl ?? SITE_URL,
-        sameAs: SOCIAL_PROFILES,
-        ...(jobTitle ? { jobTitle } : {}),
-        ...(knowsAbout ? { knowsAbout } : {}),
+        "@id": aboutUrl,
       },
     };
   });
@@ -86,22 +79,12 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
     url: canonical,
     license: "https://creativecommons.org/licenses/by/4.0/",
     publisher: {
-      "@type": "Organization",
-      name: "alexbon.com",
-      url: SITE_URL,
-      sameAs: SOCIAL_PROFILES,
+      "@type": "Person",
+      "@id": aboutUrl,
     },
     creator: {
       "@type": "Person",
-      name: "Алекс Бон",
-      url: SITE_URL,
-      sameAs: SOCIAL_PROFILES,
-      jobTitle:
-        locale === "en"
-          ? "Psychologist and mindfulness guide"
-          : locale === "ua"
-            ? "Психолог і провідник усвідомленості"
-            : "Психолог и проводник осознанности",
+      "@id": aboutUrl,
     },
     ...(aboutTopics ? { about: aboutTopics } : {}),
     genre: BLOG_TOPICS_BY_LOCALE[locale][0],
