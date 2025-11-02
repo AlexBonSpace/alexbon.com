@@ -89,6 +89,18 @@ export interface LandingContent {
     >;
     closing: string;
   };
+  door?: {
+    heading: string;
+    paragraphs: string[];
+    cta?: {
+      text: string;
+      contacts: Array<{
+        label: string;
+        href: string;
+        external?: boolean;
+      }>;
+    };
+  };
   footerNote: string;
   blog: {
     badge: string;
@@ -390,7 +402,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       paragraphs: [
         "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this quiet space. The stories you find here are reflections, a space to see yourself.",
         "But for any reflection to appear, there must be a source of light. That thought is what brought me to the image of a lighthouse.",
-        "My work here is not to offer consultations, but to tend its light—the stories and reflections you find on this site. They are, and will always be, free for everyone.",
+        "My work here is to tend its light—the stories and reflections you find on this site.",
         "A lighthouse does not steer your ship or promise a safe harbor. Its task is more honest: it holds its ground, so you can find yours.",
         "Its light exists to illuminate three things:",
         "This is why I write.",
@@ -465,6 +477,23 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         },
       ],
       closing: "Thank you for being here. Thank you for standing watch with me.",
+    },
+    door: {
+      heading: "The Door",
+      paragraphs: [
+        "The lighthouse is for everyone. It shines for ships I will never know. That is its job.",
+        "But at the base of the lighthouse, there's a small door you'd mistake for part of the wall until you get up close. It doesn't lead up to the lamp. It leads to my kitchen.",
+        "It doesn't smell of sea and wind in there. It smells of coffee, old wood, and, if you're lucky, something good to eat. There's a perpetual mess of books and mugs on the table, but there's always room for one more cup. A man in an old sweater sits there. Not the keeper. Just Alex.",
+        "This door is never locked.",
+      ],
+      cta: {
+        text: "Knock, if you need to:",
+        contacts: [
+          { label: "Telegram", href: "https://t.me/alexbon_com", external: true },
+          { label: "Viber", href: "viber://chat?number=+380986552222" },
+          { label: "WhatsApp", href: "https://wa.me/+380986552222", external: true },
+        ],
+      },
     },
     footerNote: "",
     blog: {

@@ -63,6 +63,8 @@ const detailIcons: Record<string, string> = {
 const starSvg = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" class="h-4 w-4" aria-hidden="true"><path d="M12 2.3 14.36 7.1l5.22.76-3.78 3.68.89 5.2L12 14.9l-4.69 2.84.89-5.2L4.42 7.86l5.22-.76L12 2.3Z"></path></svg>`;
 const starSlots = Array.from({ length: 5 }, (_, index) => index);
 const hasHeroParagraphs = content.hero.paragraphs.length > 0;
+const doorContacts = content.door?.cta?.contacts ?? [];
+const doorCtaText = content.door?.cta?.text ?? "";
 ---
 {isEnglish ? (
   <div lang={lang} class="relative min-h-screen overflow-hidden bg-surface text-strong">
@@ -167,6 +169,37 @@ const hasHeroParagraphs = content.hero.paragraphs.length > 0;
             <p class="text-[clamp(1.05rem,3.2vw,1.2rem)] font-medium text-strong">
               {content.lighthouse.closing}
             </p>
+          </div>
+        </section>
+      ) : null}
+
+      {content.door ? (
+        <section class={`rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm section-card ${containerClass} sm:px-10`}>
+          <div class="flex flex-col gap-5 text-base leading-relaxed text-primary sm:text-lg">
+            <h2 class="text-[clamp(2.1rem,5vw,2.6rem)] font-semibold text-strong">
+              {content.door.heading}
+            </h2>
+            {content.door.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            {doorContacts.length ? (
+              <p class="text-[clamp(1.02rem,3vw,1.15rem)] font-medium text-strong">
+                {doorCtaText}{" "}
+                {doorContacts.map((contact, index) => (
+                  <span key={`door-contact-${index}`}>
+                    {index > 0 ? " / " : null}
+                    <a
+                      href={contact.href}
+                      target={contact.external ? "_blank" : undefined}
+                      rel={contact.external ? "noopener noreferrer" : undefined}
+                      class="text-strong underline-offset-4 hover:underline"
+                    >
+                      {contact.label}
+                    </a>
+                  </span>
+                ))}
+              </p>
+            ) : null}
           </div>
         </section>
       ) : null}

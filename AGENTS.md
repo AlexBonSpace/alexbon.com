@@ -24,6 +24,7 @@
 - Theme preference stored in cookie + localStorage (`ALEXBON_THEME`).
 - `/[locale]/search/` renders SSR fallback with recent posts, `robots="noindex, follow"`, and loads the Algolia-powered React app lazily (no request until the user types).
 - Sitemap, RSS, JSON feeds generated via `/sitemap.xml.ts`, `/feed.xml.ts`, `/feed.json.ts`.
+- Shared 404 handling: `src/lib/http.ts` returns the HTML from `src/components/system/not-found.html`, the same markup served by `src/pages/404.astro`, so SSR fallbacks show the branded error page.
 
 **Commands**
 - `npm run dev` – Astro dev server with SSR on Cloudflare shim.
