@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap&subset=cyrillic");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -43,8 +42,8 @@ html.js .js-only {
   --surface-card-strong: var(--surface-card);
   --border-card: rgba(218, 206, 184, 0.7);
   --shadow-card: 0 28px 84px -40px rgba(40, 30, 20, 0.45);
-  --badge-bg: rgba(244, 234, 219, 0.85);
-  --badge-text: #7c6d5d;
+  --badge-bg: #f0ddc2;
+  --badge-text: #3c2f24;
   --chip-bg: rgba(237, 224, 204, 0.8);
   --chip-text: #374354;
 }
@@ -80,8 +79,8 @@ html.js .js-only {
   --surface-card-strong: var(--surface-card);
   --border-card: rgba(97, 121, 158, 0.4);
   --shadow-card: 0 30px 84px -44px rgba(5, 10, 20, 0.8);
-  --badge-bg: rgba(63, 78, 110, 0.55);
-  --badge-text: #d6deeb;
+  --badge-bg: rgba(63, 78, 110, 0.65);
+  --badge-text: #eef3ff;
   --chip-bg: rgba(63, 85, 118, 0.55);
   --chip-text: #f5f7fa;
 }
@@ -117,8 +116,8 @@ html.js .js-only {
   --surface-card-strong: var(--surface-card);
   --border-card: rgba(165, 198, 236, 0.55);
   --shadow-card: 0 28px 84px -42px rgba(24, 60, 110, 0.25);
-  --badge-bg: rgba(203, 226, 255, 0.85);
-  --badge-text: #1d2d45;
+  --badge-bg: rgba(188, 216, 255, 0.9);
+  --badge-text: #15263d;
   --chip-bg: rgba(210, 232, 255, 0.8);
   --chip-text: #1d2d45;
 }
@@ -154,8 +153,8 @@ html.js .js-only {
   --surface-card-strong: var(--surface-card);
   --border-card: rgba(238, 198, 138, 0.55);
   --shadow-card: 0 28px 84px -40px rgba(110, 75, 28, 0.32);
-  --badge-bg: rgba(250, 223, 184, 0.85);
-  --badge-text: #3b2c1c;
+  --badge-bg: rgba(240, 202, 149, 0.92);
+  --badge-text: #2a2015;
   --chip-bg: rgba(248, 215, 176, 0.82);
   --chip-text: #3b2c1c;
 }
@@ -394,7 +393,7 @@ body {
 
   .badge-soft {
     background-color: var(--badge-bg);
-    color: var(--badge-text);
+    color: var(--badge-text) !important;
   }
 
   .tag-chip {

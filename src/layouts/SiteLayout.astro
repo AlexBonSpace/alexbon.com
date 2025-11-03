@@ -181,6 +181,9 @@ if (feeds?.json) {
     hreflang: localeToBcp47[locale] ?? locale,
   });
 }
+
+const FONT_STYLESHEET =
+  "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap&subset=cyrillic";
 ---
 <!DOCTYPE html>
 <html lang={localeToBcp47[locale] ?? locale}>
@@ -213,13 +216,20 @@ if (feeds?.json) {
         )
       : null}
     {twitter ? Object.entries(twitter).map(([key, value]) => (value ? <meta name={`twitter:${key}`} content={value} /> : null)) : null}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+    <link rel="preload" href={FONT_STYLESHEET} as="style" />
+    <link rel="stylesheet" href={FONT_STYLESHEET} media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href={FONT_STYLESHEET} />
+    </noscript>
     <script is:inline set:html={themeBootstrapScript} />
     {Astro.slots.has("head") ? <slot name="head" /> : null}
     {jsonLd ? <JsonLd data={jsonLd} /> : null}
   </head>
   <body class={`font-sans antialiased ${bodyClass}`}>
     <NavigationShell
-      client:load
+      client:idle
       locale={locale}
       brandName={content.brandName}
       tagline={content.tagline}

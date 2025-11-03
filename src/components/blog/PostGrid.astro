@@ -45,7 +45,7 @@ const buildPageHref = (basePath: string, page: number) => {
                 {post.typeLabel}
               </a>
             </div>
-            <h3 class="sr-only">{post.title}</h3>
+            <h2 class="sr-only">{post.title}</h2>
             <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
               {post.snippet || post.title}{" "}
               <a
@@ -71,11 +71,11 @@ const buildPageHref = (basePath: string, page: number) => {
               </a>
             </div>
             <div class="flex flex-col gap-3">
-              <h3 class="text-balance text-[clamp(1.45rem,4.5vw,2rem)] font-semibold leading-tight text-strong">
+              <h2 class="text-balance text-[clamp(1.45rem,4.5vw,2rem)] font-semibold leading-tight text-strong">
                 <a href={ensureTrailingSlash(post.url)} class="text-inherit transition-colors hover:text-accent">
                   {post.title}
                 </a>
-              </h3>
+              </h2>
               {post.snippet ? (
                 <p class="whitespace-pre-line text-[clamp(1rem,3vw,1.12rem)] leading-relaxed text-primary">
                   {post.snippet}
