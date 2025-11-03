@@ -226,6 +226,16 @@ export function getPostBySlug(locale: Locale, slug: string): BlogPost | undefine
   return getPostsByLocale(locale).find((post) => post.slug === slug);
 }
 
+export function findPostLocaleBySlug(slug: string): { locale: Locale; post: BlogPost } | undefined {
+  for (const candidateLocale of locales) {
+    const candidate = getPostBySlug(candidateLocale, slug);
+    if (candidate) {
+      return { locale: candidateLocale, post: candidate };
+    }
+  }
+  return undefined;
+}
+
 export function getAllSlugs(locale: Locale): string[] {
   return getPostsByLocale(locale).map((post) => post.slug);
 }

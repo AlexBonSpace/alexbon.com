@@ -1,11 +1,21 @@
 ---
 import { defaultLocale } from "@/i18n/config";
+import { findPostLocaleBySlug } from "@/lib/blog";
+import { notFound } from "@/lib/http";
 
-const slug = Astro.params.slug;
-if (!slug) {
-  return Astro.redirect(`/${defaultLocale}/blog/`, 308);
+const slugParam = Astro.params.slug;
+if (!slugParam) {
+  return notFound();
 }
 
-const target = `/${defaultLocale}/blog/${slug}/`;
+const matched = findPostLocaleBySlug(slugParam);
+
+if (!matched) {
+  return notFound();
+}
+
+const targetLocale = matched.locale ?? defaultLocale;
+const targetSlug = matched.post.slug;
+const target = `/${targetLocale}/blog/${targetSlug}/`;
 return Astro.redirect(target, 308);
 ---
