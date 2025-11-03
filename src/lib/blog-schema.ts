@@ -1,16 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import {
-  DEFAULT_POST_IMAGE,
-  PERSON_JOB_TITLES,
-  PERSON_KNOWS_ABOUT,
-  SITE_URL,
-  buildCanonicalUrl,
-  buildLanguageAlternates,
-  localeToBcp47,
-} from "@/lib/seo";
+import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, buildLanguageAlternates, localeToBcp47 } from "@/lib/seo";
 import type { BlogPost } from "@/lib/blog";
-import { defaultLocale } from "@/i18n/config";
+import { buildAuthorReference } from "@/lib/content-utils";
 
 const BLOG_LABEL_BY_LOCALE: Record<Locale, string> = {
   ua: "Відображення",
@@ -46,11 +38,11 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
   const canonical = buildCanonicalUrl(locale, "/blog/");
   const inLanguage = localeToBcp47[locale] ?? locale;
   const hero = contentByLocale[locale].blog;
+  const authorReference = buildAuthorReference(locale);
   const aboutTopics = BLOG_TOPICS_BY_LOCALE[locale]?.map((topic) => ({
     "@type": "Thing",
     name: topic,
   }));
-  const aboutUrl = `${SITE_URL}/${locale}/about/`;
   const postEntries = posts.slice(0, 12).map((post) => {
     const image = post.image ?? DEFAULT_POST_IMAGE;
     return {
@@ -63,10 +55,7 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
       keywords: post.tags,
       image,
       thumbnailUrl: image,
-      author: {
-        "@type": "Person",
-        "@id": aboutUrl,
-      },
+      author: authorReference,
     };
   });
 
@@ -78,14 +67,8 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
     inLanguage,
     url: canonical,
     license: "https://creativecommons.org/licenses/by/4.0/",
-    publisher: {
-      "@type": "Person",
-      "@id": aboutUrl,
-    },
-    creator: {
-      "@type": "Person",
-      "@id": aboutUrl,
-    },
+    publisher: authorReference,
+    creator: authorReference,
     ...(aboutTopics ? { about: aboutTopics } : {}),
     genre: BLOG_TOPICS_BY_LOCALE[locale][0],
     isAccessibleForFree: true,

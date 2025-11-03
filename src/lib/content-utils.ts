@@ -26,6 +26,12 @@ const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
   en: ["Mirror stories. Literary tales and psychological parables about meeting yourself."],
 };
 
+export const AUTHOR_DISPLAY_BY_LOCALE: Record<Locale, string> = {
+  ua: "Алекс Бон",
+  ru: "Алекс Бон",
+  en: "Alex Bon",
+};
+
 const AUTHOR_DESCRIPTIONS: Record<Locale, string> = {
   ru: "Психолог и писатель, помогает распутывать клубки мыслей и чувств и создавать пространство для честного разговора.",
   ua: "Психолог і письменник, допомагає розплутувати клубок думок і почуттів та створювати простір для чесної розмови.",
@@ -129,6 +135,12 @@ const CONTACT_LINKS = [
   "https://g.page/AlexBon?share",
 ];
 
+export const AUTHOR_SAME_AS = [
+  `${SITE_URL}/en/about/`,
+  `${SITE_URL}/ru/about/`,
+  `${SITE_URL}/ua/about/`,
+] as const;
+
 export function createPlainText(raw: string): string {
   return raw
     .replace(/```[\s\S]*?```/g, " ")
@@ -177,6 +189,33 @@ export function createSearchContent(raw: string): string {
     .slice(0, 5000);
 }
 
+export function buildAuthorReference(
+  locale: Locale,
+  overrides: {
+    display?: Partial<Record<Locale, string>>;
+    url?: string;
+    sameAs?: string[];
+  } = {},
+) {
+  const aboutUrl = overrides.url?.trim() || `${SITE_URL}/${locale}/about/`;
+  const displayMap = overrides.display ?? {};
+  const name =
+    displayMap[locale] ??
+    AUTHOR_DISPLAY_BY_LOCALE[locale] ??
+    AUTHOR_DISPLAY_BY_LOCALE[defaultLocale];
+  const reference: Record<string, unknown> = {
+    "@type": "Person",
+    "@id": aboutUrl,
+    url: aboutUrl,
+    name,
+  };
+  const sameAsCandidate = overrides.sameAs?.length ? overrides.sameAs : Array.from(AUTHOR_SAME_AS);
+  if (sameAsCandidate.length > 0) {
+    reference.sameAs = Array.from(new Set(sameAsCandidate));
+  }
+  return reference;
+}
+
 export function buildPostJsonLd(
   doc: {
     title: string;
@@ -187,6 +226,8 @@ export function buildPostJsonLd(
     updatedAt?: string;
     author: string;
     authorUrl: string;
+    authorDisplay?: Partial<Record<Locale, string>>;
+    authorSameAs?: string[];
     license: string;
     tags: string[];
     image?: string;
@@ -196,7 +237,6 @@ export function buildPostJsonLd(
   locale: Locale,
 ) {
   const path = `/${locale}/blog/${slug}`;
-  const aboutUrl = `${SITE_URL}/${locale}/about/`;
   const image = doc.image ?? DEFAULT_POST_IMAGE;
   const collectionUrl = `${SITE_URL}/${locale}/blog/`;
   const licenseUrl = doc.license.startsWith("http")
@@ -210,10 +250,11 @@ export function buildPostJsonLd(
           name: tag,
         }))
       : undefined;
-  const authorReference = {
-    "@type": "Person",
-    "@id": aboutUrl,
-  };
+  const authorReference = buildAuthorReference(locale, {
+    display: doc.authorDisplay,
+    url: doc.authorUrl,
+    sameAs: doc.authorSameAs,
+  });
   const base = {
     "@context": "https://schema.org",
     "@id": doc.canonical,
@@ -274,15 +315,11 @@ export function buildAuthorPersonJsonLd(locale: Locale) {
   const description = AUTHOR_DESCRIPTIONS[locale];
   const alternateName = AUTHOR_ALTERNATE_NAMES[locale];
   const knowsLanguage = AUTHOR_LANGUAGES[locale];
+  const name = AUTHOR_DISPLAY_BY_LOCALE[locale] ?? AUTHOR_DISPLAY_BY_LOCALE[defaultLocale];
   const jobTitle = PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale];
   const knowsAbout = PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale];
   const addressLocality = AUTHOR_ADDRESS_LOCALITY[locale];
-  const sameAs = Array.from(
-    new Set([
-      ...CONTACT_LINKS,
-      ...locales.map((currentLocale) => `${SITE_URL}/${currentLocale}/about/`),
-    ]),
-  );
+  const sameAs = Array.from(new Set([...AUTHOR_SAME_AS, ...CONTACT_LINKS]));
 
   const base: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -290,7 +327,7 @@ export function buildAuthorPersonJsonLd(locale: Locale) {
     "@id": aboutUrl,
     url: aboutUrl,
     inLanguage: localeToBcp47[locale] ?? locale,
-    name: locale === "en" ? "Alex Bon" : "Алекс Бон",
+    name,
     alternateName,
     description,
     jobTitle,

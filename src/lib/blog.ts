@@ -2,6 +2,8 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { locales, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl } from "@/lib/seo";
 import {
+  AUTHOR_DISPLAY_BY_LOCALE,
+  AUTHOR_SAME_AS,
   buildPostJsonLd,
   cleanCardSnippet,
   createDescription,
@@ -10,6 +12,7 @@ import {
   extractFirstSentence,
   resolveLocaleFromSlug,
 } from "@/lib/content-utils";
+import { SITE_URL } from "@/lib/seo";
 
 type PostCollectionEntry = CollectionEntry<"posts">;
 
@@ -30,6 +33,8 @@ export type BlogPost = {
   tags: string[];
   author: string;
   authorUrl: string;
+  authorDisplay: Record<Locale, string>;
+  authorSameAs: string[];
   license: string;
   cardSnippet: string;
   image?: string;
@@ -74,6 +79,13 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const summary = extractFirstSentence(plainText) || description;
   const cardSnippet = cleanCardSnippet(entry.data.cardSnippet);
   const translationGroup = (entry.data.translationGroup ?? "").trim() || fileSlug;
+  const authorDisplay = entry.data.authorDisplay ?? AUTHOR_DISPLAY_BY_LOCALE;
+  const authorSameAs = entry.data.authorSchema?.sameAs ?? Array.from(AUTHOR_SAME_AS);
+  const rawAuthorUrl = (entry.data.authorUrl ?? "").trim();
+  const authorUrl =
+    rawAuthorUrl && rawAuthorUrl !== "https://alexbon.com" && rawAuthorUrl !== "https://alexbon.com/"
+      ? rawAuthorUrl
+      : `${SITE_URL}/${locale}/about/`;
 
   const publishedDate = entry.data.publishedAt;
   const updatedDate = entry.data.updatedAt ?? entry.data.publishedAt;
@@ -93,7 +105,9 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
       publishedAt: publishedAtIso,
       updatedAt: updatedAtIso,
       author: entry.data.author,
-      authorUrl: entry.data.authorUrl,
+      authorUrl,
+      authorDisplay,
+      authorSameAs,
       license: entry.data.license,
       tags,
       image: entry.data.image?.trim() || undefined,
@@ -117,7 +131,9 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
     updatedDate,
     tags,
     author: entry.data.author,
-    authorUrl: entry.data.authorUrl,
+    authorUrl,
+    authorDisplay,
+    authorSameAs,
     license: entry.data.license,
     cardSnippet,
     image: entry.data.image?.trim() || undefined,
