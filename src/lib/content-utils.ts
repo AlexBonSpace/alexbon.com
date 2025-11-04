@@ -139,6 +139,7 @@ export const AUTHOR_SAME_AS = [
   `${SITE_URL}/en/about/`,
   `${SITE_URL}/ru/about/`,
   `${SITE_URL}/ua/about/`,
+  "https://climatejustice.social/@AlexBon",
 ] as const;
 
 export function createPlainText(raw: string): string {

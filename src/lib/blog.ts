@@ -80,7 +80,9 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const cardSnippet = cleanCardSnippet(entry.data.cardSnippet);
   const translationGroup = (entry.data.translationGroup ?? "").trim() || fileSlug;
   const authorDisplay = entry.data.authorDisplay ?? AUTHOR_DISPLAY_BY_LOCALE;
-  const authorSameAs = entry.data.authorSchema?.sameAs ?? Array.from(AUTHOR_SAME_AS);
+  const authorSameAs = Array.from(
+    new Set([...(entry.data.authorSchema?.sameAs ?? []), ...AUTHOR_SAME_AS]),
+  );
   const rawAuthorUrl = (entry.data.authorUrl ?? "").trim();
   const authorUrl =
     rawAuthorUrl && rawAuthorUrl !== "https://alexbon.com" && rawAuthorUrl !== "https://alexbon.com/"

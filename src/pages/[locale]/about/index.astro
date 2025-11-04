@@ -25,6 +25,7 @@ const content = contentByLocale[locale];
 const canonical = buildCanonicalUrl(locale, "/about/");
 const languageAlternates = buildLanguageAlternates("/about/", { locales });
 const personJsonLd = buildAuthorPersonJsonLd(locale);
+const mastodonProfile = "https://climatejustice.social/@AlexBon";
 const profileJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -42,7 +43,7 @@ const profileJsonLd = {
     alternateName: ["Alex Bon"],
     jobTitle: PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale],
     description: content.metaDescription,
-    sameAs: ["https://www.facebook.com/mr.alexbon"],
+    sameAs: [mastodonProfile],
     knowsAbout: PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale],
     worksFor: {
       "@type": "Organization",
