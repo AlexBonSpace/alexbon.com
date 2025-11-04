@@ -3,6 +3,7 @@ import mdxRenderer from "@astrojs/mdx/server.js";
 
 import { contentByLocale } from "@/content";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS } from "@/lib/content-utils";
 import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
@@ -59,13 +60,24 @@ type FeedItem = {
   date_published: string;
   date_modified: string;
   tags: string[];
-  authors: Array<{ name: string; url?: string }>;
+  authors: FeedAuthor[];
   license: string;
   image?: string;
   postType: BlogPost["type"];
   postTypeLabel: string;
   postTypePath: string;
   postTypeUrl: string;
+};
+
+type FeedAuthor = {
+  name: string;
+  url?: string;
+  _alexbon?: {
+    authorDisplay: Record<Locale, string>;
+    authorSchema?: {
+      sameAs: string[];
+    };
+  };
 };
 
 export async function buildJsonFeed(locale: Locale) {
@@ -79,12 +91,7 @@ export async function buildJsonFeed(locale: Locale) {
     feed_url: feedJsonUrl,
     language,
     description,
-    authors: [
-      {
-        name: "Alex Bon",
-        url: SITE_URL,
-      },
-    ],
+    authors: [buildFeedAuthor(locale, { url: SITE_URL })],
     icon: FEED_ICON_URL,
     favicon: `${SITE_URL}/favicon.ico`,
     items: items.map((item) => ({
@@ -229,12 +236,7 @@ async function mapPostsToFeedItems(locale: Locale): Promise<FeedItem[]> {
         date_published: post.publishedAt,
         date_modified: post.updatedAt ?? post.publishedAt,
         tags: post.tags,
-        authors: [
-          {
-            name: post.author,
-            url: post.authorUrl || SITE_URL,
-          },
-        ],
+        authors: [buildFeedAuthor(post.locale as Locale, { url: post.authorUrl || SITE_URL, display: post.authorDisplay, sameAs: post.authorSameAs, fallbackName: post.author })],
         license: post.license || LICENSE_URL,
         image,
         postType: post.type,
@@ -293,4 +295,47 @@ function escapeXml(value: string) {
 
 function escapeCdata(value: string) {
   return value.replace(/]]>/g, "]]]]><![CDATA[>");
+}
+
+function buildFeedAuthor(
+  locale: Locale,
+  options: {
+    url?: string;
+    display?: Record<Locale, string>;
+    sameAs?: string[];
+    fallbackName?: string;
+  } = {},
+): FeedAuthor {
+  const displayMap = options.display ?? AUTHOR_DISPLAY_BY_LOCALE;
+  const authorDisplay = Object.fromEntries(
+    locales.map((candidateLocale) => [
+      candidateLocale,
+      displayMap[candidateLocale] ?? AUTHOR_DISPLAY_BY_LOCALE[candidateLocale] ?? AUTHOR_DISPLAY_BY_LOCALE[defaultLocale],
+    ]),
+  ) as Record<Locale, string>;
+
+  const localizedName =
+    [authorDisplay[locale], authorDisplay[defaultLocale], options.fallbackName, AUTHOR_DISPLAY_BY_LOCALE[locale], AUTHOR_DISPLAY_BY_LOCALE[defaultLocale], "Alex Bon"].find(
+      (value): value is string => typeof value === "string" && value.length > 0,
+    ) ?? "Alex Bon";
+
+  const sameAs = options.sameAs ?? Array.from(AUTHOR_SAME_AS);
+
+  const author: FeedAuthor = {
+    name: localizedName,
+    url: options.url ?? SITE_URL,
+    _alexbon: {
+      authorDisplay,
+    },
+  };
+
+  const normalizedSameAs = Array.from(new Set(sameAs.filter((value) => typeof value === "string" && value.length > 0)));
+  if (normalizedSameAs.length > 0) {
+    author._alexbon ??= { authorDisplay };
+    author._alexbon.authorSchema = {
+      sameAs: normalizedSameAs,
+    };
+  }
+
+  return author;
 }

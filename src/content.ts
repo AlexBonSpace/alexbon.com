@@ -126,7 +126,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Просто место, чтобы выдохнуть и разобраться",
     metaTitle: "Психолог онлайн Алекс Бон | Человек, который слушает и слышит",
     metaDescription:
-      "Запутался(ась), устал(а) или просто хочешь выдохнуть? Я не лечу, а слушаю. Предлагаю безопасное пространство для разговора и бесплатную 20-минутную встречу, чтобы познакомиться.",
+      "Меня зовут Алек Бон. Я психолог, а это просто место, чтобы выдохнуть и разобраться, пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
     hero: {
       title: "Просто место, чтобы выдохнуть и разобраться.",
       paragraphs: [],
@@ -249,7 +249,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
-      heroDescription: "",
+      heroDescription:
+        "Меня зовут Алек Бон. Я психолог, а это просто место, чтобы выдохнуть и разобраться, пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
     },
   },
   ua: {
@@ -258,7 +259,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Просто простір, щоб видихнути і розібратися",
     metaTitle: "Психолог онлайн Алекс Бон | Людина, яка слухає та чує",
     metaDescription:
-      "Заплутався/заплуталася, втомився/втомилася чи просто хочеш видихнути? Я не лікую, а слухаю. Пропоную безпечний простір для розмови та безкоштовну 20-хвилинну зустріч, щоб познайомитися.",
+      "Мене звати Алекс Бон. Я психолог, а це — просто місце, щоб видихнути й розібратися, простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише відображення",
     hero: {
       title: "Просто простір, щоб видихнути і розібратися.",
       paragraphs: [],
@@ -381,7 +382,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
-      heroDescription: "",
+      heroDescription:
+        "Мене звати Алекс Бон. Я психолог, а це — просто місце, щоб видихнути й розібратися, простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише відображення",
     },
   },
   en: {
@@ -390,7 +392,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "A lighthouse to see yourself",
     metaTitle: "Meet Alex Bon | Keeper of the Lighthouse",
     metaDescription:
-      "Writer, psychologist, and keeper of a quiet lighthouse of reflections. Discover why these stories stay free and how their light helps you see yourself.",
+      "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this lighthouse to see yourself. The stories you find here are reflections.",
     hero: {
       title: "Meet the keeper of this lighthouse.",
       paragraphs: [],
@@ -499,7 +501,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",
-      heroDescription: "",
+      heroDescription:
+        "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this lighthouse to see yourself. The stories you find here are reflections.",
     },
   },
 };
