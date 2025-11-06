@@ -121,7 +121,6 @@ type PlainFeedItem = {
   slug?: string;
   type_label?: string;
   type_url?: string;
-  card_snippet?: string;
 };
 
 export async function buildFullJsonFeed(locale: Locale) {
@@ -285,10 +284,7 @@ function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
   const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
   const typePath = buildPostTypePath(locale, post.type);
   const typeUrl = ensureAbsoluteUrl(typePath);
-  const isNote = post.type === "note";
-  const fallbackSummary = post.summary || post.description || "";
-  const cardSnippet = (post.cardSnippet || fallbackSummary || "").trim();
-  const summary = isNote ? cardSnippet : fallbackSummary;
+  const snippet = (post.cardSnippet || post.summary || post.description || "").trim();
 
   return {
     id: canonicalUrl,
@@ -298,7 +294,7 @@ function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
     collection: post.collection,
     language: postLanguage,
     tags: post.tags,
-    summary: summary ?? "",
+    summary: snippet,
     content_text: post.plainText || "",
     date_published: post.publishedAt,
     date_modified: post.updatedAt ?? post.publishedAt,
@@ -306,7 +302,6 @@ function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
     slug: post.slug,
     type_label: getPostTypeLabel(locale, post.type),
     type_url: typeUrl,
-    card_snippet: cardSnippet,
   };
 }
 

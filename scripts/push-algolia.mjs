@@ -116,10 +116,9 @@ function mapRecord(locale, item) {
     (typeof item.type_url === 'string' && item.type_url.trim()) ||
     typeMeta.path;
   const content = item.content_text ?? '';
-  const preferredSnippet = typeof item.card_snippet === 'string' && item.card_snippet.trim().length > 0 ? item.card_snippet.trim() : '';
   const summarySnippet = typeof item.summary === 'string' && item.summary.trim().length > 0 ? item.summary.trim() : '';
-  const snippetSource = preferredSnippet || summarySnippet || content;
-  const snippet = normalizedType === 'note' ? snippetSource : snippetSource.slice(0, 240).trim();
+  const snippetSource = summarySnippet || content;
+  const snippet = snippetSource;
   return {
     objectID: `${locale}:${slug}`,
     locale,
