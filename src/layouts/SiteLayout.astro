@@ -93,17 +93,27 @@ const FULL_FEED_TITLES: Record<Locale, string> = {
   en: "Alex Bon (Full archive — AI-friendly JSON)",
 };
 
-const FEED_LINKS = locales.flatMap((feedLocale) => {
+type FeedLink = {
+  rel?: string;
+  type: string;
+  title: string;
+  href: string;
+  hreflang?: string;
+};
+
+const BASE_FEED_LINKS: FeedLink[] = locales.flatMap((feedLocale) => {
   const feedContent = contentByLocale[feedLocale];
   const hreflang = localeToBcp47[feedLocale] ?? feedLocale;
   return [
     {
+      rel: "alternate",
       href: `${SITE_URL}/${feedLocale}/feed.xml`,
       type: "application/rss+xml",
       title: feedContent.tagline,
       hreflang,
     },
     {
+      rel: "alternate",
       href: `${SITE_URL}/${feedLocale}/feed-full.json`,
       type: "application/feed+json",
       title: FULL_FEED_TITLES[feedLocale],
@@ -193,9 +203,9 @@ const themeBootstrapScript = `(function() {
   document.documentElement.classList.add("js");
 })();`;
 
-const activeFeeds: Array<{ rel: string; type: string; title: string; href: string; hreflang?: string }> = [];
+const contextualFeeds: FeedLink[] = [];
 if (feeds?.rss) {
-  activeFeeds.push({
+  contextualFeeds.push({
     rel: "alternate",
     type: "application/rss+xml",
     title: "RSS 2.0",
@@ -204,7 +214,7 @@ if (feeds?.rss) {
   });
 }
 if (feeds?.json) {
-  activeFeeds.push({
+  contextualFeeds.push({
     rel: "alternate",
     type: "application/feed+json",
     title: "JSON Feed 1.1",
@@ -212,6 +222,15 @@ if (feeds?.json) {
     hreflang: localeToBcp47[locale] ?? locale,
   });
 }
+
+const feedLinks = Array.from(
+  new Map(
+    [...BASE_FEED_LINKS, ...contextualFeeds].map((feed) => {
+      const key = `${feed.type}|${feed.href}`;
+      return [key, { rel: "alternate", ...feed }] as const;
+    }),
+  ).values(),
+);
 
 const FONT_STYLESHEET =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap&subset=cyrillic";
@@ -235,11 +254,8 @@ const FONT_STYLESHEET =
           <link rel="alternate" hrefLang={key} href={value} />
         ))
       : null}
-    {FEED_LINKS.map((link) => (
-      <link rel="alternate" type={link.type} title={link.title} href={link.href} hrefLang={link.hreflang} />
-    ))}
-    {activeFeeds.map((feed) => (
-      <link rel={feed.rel} type={feed.type} title={feed.title} href={feed.href} hrefLang={feed.hreflang} />
+    {feedLinks.map((link) => (
+      <link rel={link.rel ?? "alternate"} type={link.type} title={link.title} href={link.href} hrefLang={link.hreflang} />
     ))}
     {openGraph
       ? Object.entries(openGraph).map(([key, value]) =>
