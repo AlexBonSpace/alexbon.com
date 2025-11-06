@@ -88,9 +88,9 @@ const navigationPaths = {
 };
 
 const FULL_FEED_TITLES: Record<Locale, string> = {
-  ua: "Alex Bon (повний архів — AI-friendly JSON)",
-  ru: "Alex Bon (полный архив — AI-friendly JSON)",
-  en: "Alex Bon (Full archive — AI-friendly JSON)",
+  ua: "Alex Bon — повний архів — AI-friendly JSON",
+  ru: "Alex Bon — полный архив — AI-friendly JSON",
+  en: "Alex Bon — Full archive — AI-friendly JSON",
 };
 
 type FeedLink = {
@@ -101,26 +101,23 @@ type FeedLink = {
   hreflang?: string;
 };
 
-const BASE_FEED_LINKS: FeedLink[] = locales.flatMap((feedLocale) => {
-  const feedContent = contentByLocale[feedLocale];
-  const hreflang = localeToBcp47[feedLocale] ?? feedLocale;
-  return [
-    {
-      rel: "alternate",
-      href: `${SITE_URL}/${feedLocale}/feed.xml`,
-      type: "application/rss+xml",
-      title: feedContent.tagline,
-      hreflang,
-    },
-    {
-      rel: "alternate",
-      href: `${SITE_URL}/${feedLocale}/feed-full.json`,
-      type: "application/feed+json",
-      title: FULL_FEED_TITLES[feedLocale],
-      hreflang,
-    },
-  ];
-});
+const currentHreflang = localeToBcp47[locale] ?? locale;
+const baseFeedLinks: FeedLink[] = [
+  {
+    rel: "alternate",
+    href: `${SITE_URL}/${locale}/feed.xml`,
+    type: "application/rss+xml",
+    title: content.tagline,
+    hreflang: currentHreflang,
+  },
+  {
+    rel: "alternate",
+    href: `${SITE_URL}/${locale}/feed-full.json`,
+    type: "application/feed+json",
+    title: FULL_FEED_TITLES[locale],
+    hreflang: currentHreflang,
+  },
+];
 
 const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) => {
   const localeKey = linkLocale as Locale;
@@ -208,24 +205,24 @@ if (feeds?.rss) {
   contextualFeeds.push({
     rel: "alternate",
     type: "application/rss+xml",
-    title: "RSS 2.0",
+    title: content.tagline,
     href: feeds.rss,
-    hreflang: localeToBcp47[locale] ?? locale,
+    hreflang: currentHreflang,
   });
 }
 if (feeds?.json) {
   contextualFeeds.push({
     rel: "alternate",
     type: "application/feed+json",
-    title: "JSON Feed 1.1",
+    title: FULL_FEED_TITLES[locale],
     href: feeds.json,
-    hreflang: localeToBcp47[locale] ?? locale,
+    hreflang: currentHreflang,
   });
 }
 
 const feedLinks = Array.from(
   new Map(
-    [...BASE_FEED_LINKS, ...contextualFeeds].map((feed) => {
+    [...baseFeedLinks, ...contextualFeeds].map((feed) => {
       const key = `${feed.type}|${feed.href}`;
       return [key, { rel: "alternate", ...feed }] as const;
     }),
