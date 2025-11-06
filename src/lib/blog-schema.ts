@@ -113,7 +113,7 @@ export function getBlogIndexMetadata(locale: Locale, path = "/blog/") {
     alternates: buildLanguageAlternates(path),
     feeds: {
       rss: `${SITE_URL}/${locale}/feed.xml`,
-      json: `${SITE_URL}/${locale}/feed.json`,
+      json: `${SITE_URL}/${locale}/feed-full.json`,
     },
   };
 }

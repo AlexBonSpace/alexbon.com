@@ -49,6 +49,45 @@ export type BlogPost = {
 };
 
 const rawPosts = await getCollection("posts");
+const CARD_SNIPPET_LIMIT = 350;
+
+type PostType = "note" | "article" | "story";
+
+function truncateToBoundary(text: string, limit: number): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  if (normalized.length <= limit) return normalized;
+
+  const sliced = normalized.slice(0, limit);
+  const lastSpace = sliced.lastIndexOf(" ");
+  if (lastSpace > Math.floor(limit * 0.5)) {
+    return sliced.slice(0, lastSpace).trimEnd();
+  }
+  return sliced.trimEnd();
+}
+
+function ensureEllipsis(text: string): string {
+  const trimmed = text.trimEnd();
+  if (!trimmed) return "";
+  if (/[.]{3}$/.test(trimmed) || trimmed.endsWith("…")) {
+    return trimmed;
+  }
+  return `${trimmed}...`;
+}
+
+function buildCardSnippet(type: PostType, plainText: string, override?: string): string {
+  const overrideValue = override?.trim();
+  if (type === "note") {
+    return overrideValue && overrideValue.length > 0 ? overrideValue : plainText;
+  }
+
+  if (overrideValue && overrideValue.length > 0) {
+    return ensureEllipsis(overrideValue);
+  }
+
+  const auto = truncateToBoundary(plainText, CARD_SNIPPET_LIMIT);
+  return ensureEllipsis(auto || plainText);
+}
 
 function resolveCollection(segment: string | undefined): "articles" | "notes" | "stories" {
   if (segment === "articles" || segment === "stories") {
@@ -77,7 +116,8 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const plainText = createPlainText(rawBody);
   const description = (entry.data.description ?? "").trim() || createDescription(plainText, 160);
   const summary = extractFirstSentence(plainText) || description;
-  const cardSnippet = cleanCardSnippet(entry.data.cardSnippet);
+  const cardSnippetOverride = cleanCardSnippet(entry.data.cardSnippet);
+  const cardSnippet = buildCardSnippet(type, plainText, cardSnippetOverride);
   const translationGroup = (entry.data.translationGroup ?? "").trim() || fileSlug;
   const authorDisplay = entry.data.authorDisplay ?? AUTHOR_DISPLAY_BY_LOCALE;
   const authorSameAs = Array.from(

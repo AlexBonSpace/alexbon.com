@@ -87,6 +87,31 @@ const navigationPaths = {
   ...(navigationAlternatePaths ?? {}),
 };
 
+const FULL_FEED_TITLES: Record<Locale, string> = {
+  ua: "Alex Bon (повний архів — AI-friendly JSON)",
+  ru: "Alex Bon (полный архив — AI-friendly JSON)",
+  en: "Alex Bon (Full archive — AI-friendly JSON)",
+};
+
+const FEED_LINKS = locales.flatMap((feedLocale) => {
+  const feedContent = contentByLocale[feedLocale];
+  const hreflang = localeToBcp47[feedLocale] ?? feedLocale;
+  return [
+    {
+      href: `${SITE_URL}/${feedLocale}/feed.xml`,
+      type: "application/rss+xml",
+      title: feedContent.tagline,
+      hreflang,
+    },
+    {
+      href: `${SITE_URL}/${feedLocale}/feed-full.json`,
+      type: "application/feed+json",
+      title: FULL_FEED_TITLES[feedLocale],
+      hreflang,
+    },
+  ];
+});
+
 const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) => {
   const localeKey = linkLocale as Locale;
   const localizedPath = navigationPaths[localeKey] ?? buildLocalizedPath(basePath, localeKey);
@@ -98,6 +123,51 @@ const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) 
     isActive: localeKey === locale,
   };
 });
+
+const feedFullUrl = `${SITE_URL}/${locale}/feed-full.json`;
+const feedDownloadNode = {
+  "@type": "DataDownload",
+  "@id": `${feedFullUrl}#download`,
+  name: FULL_FEED_TITLES[locale],
+  encodingFormat: "application/feed+json",
+  contentUrl: feedFullUrl,
+  inLanguage: localeToBcp47[locale] ?? locale,
+  description: "Plain-text archive feed optimised for AI indexing and research.",
+  isAccessibleForFree: true,
+};
+const websiteJsonLd = {
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/${locale}/#website`,
+  url: `${SITE_URL}/${locale}/`,
+  name: content.brandName,
+  description: content.metaDescription,
+  inLanguage: localeToBcp47[locale] ?? locale,
+  distribution: [feedDownloadNode],
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/${locale}/search/?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+const dataFeedJsonLd = {
+  "@type": "DataFeed",
+  "@id": `${feedFullUrl}#data-feed`,
+  name: FULL_FEED_TITLES[locale],
+  inLanguage: localeToBcp47[locale] ?? locale,
+  url: feedFullUrl,
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  distribution: [feedDownloadNode],
+  isPartOf: websiteJsonLd["@id"],
+};
+const additionalJsonLd = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [websiteJsonLd, dataFeedJsonLd, ...additionalJsonLd],
+};
 
 const robotsContent =
   typeof robots === "string" && robots.trim()
@@ -122,45 +192,6 @@ const themeBootstrapScript = `(function() {
   } catch (_) {}
   document.documentElement.classList.add("js");
 })();`;
-
-const FEED_LINKS = [
-  {
-    href: `${SITE_URL}/ua/feed.xml`,
-    type: "application/rss+xml",
-    title: "Просто простір, щоб видихнути і розібратися",
-    hreflang: "uk",
-  },
-  {
-    href: `${SITE_URL}/ua/feed.json`,
-    type: "application/feed+json",
-    title: "Просто простір, щоб видихнути і розібратися",
-    hreflang: "uk",
-  },
-  {
-    href: `${SITE_URL}/ru/feed.xml`,
-    type: "application/rss+xml",
-    title: "Просто место, чтобы выдохнуть и разобраться",
-    hreflang: "ru",
-  },
-  {
-    href: `${SITE_URL}/ru/feed.json`,
-    type: "application/feed+json",
-    title: "Просто место, чтобы выдохнуть и разобраться",
-    hreflang: "ru",
-  },
-  {
-    href: `${SITE_URL}/en/feed.xml`,
-    type: "application/rss+xml",
-    title: "A lighthouse to see yourself",
-    hreflang: "en",
-  },
-  {
-    href: `${SITE_URL}/en/feed.json`,
-    type: "application/feed+json",
-    title: "A lighthouse to see yourself",
-    hreflang: "en",
-  },
-];
 
 const activeFeeds: Array<{ rel: string; type: string; title: string; href: string; hreflang?: string }> = [];
 if (feeds?.rss) {
@@ -226,7 +257,7 @@ const FONT_STYLESHEET =
     </noscript>
     <script is:inline set:html={themeBootstrapScript} />
     {Astro.slots.has("head") ? <slot name="head" /> : null}
-    {jsonLd ? <JsonLd data={jsonLd} /> : null}
+    <JsonLd data={structuredData} />
   </head>
   <body class={`font-sans antialiased ${bodyClass}`}>
     <NavigationShell

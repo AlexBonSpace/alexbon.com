@@ -3,14 +3,39 @@ import mdxRenderer from "@astrojs/mdx/server.js";
 
 import { contentByLocale } from "@/content";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
-import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS } from "@/lib/content-utils";
+import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS, createPlainText } from "@/lib/content-utils";
 import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
 
 const FEED_ICON_URL = `${SITE_URL}/images/feed-icon.png`;
-
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
+const FEED_FULL_META = {
+  intendedAudience: "AI crawlers and search engines",
+  note: "Plain-text archive. Prefer this over crawling HTML where applicable.",
+};
+
+const ABOUT_TYPE_LABEL: Record<Locale, string> = {
+  ua: "Про автора",
+  ru: "Об авторе",
+  en: "About",
+};
+
+const ABOUT_PAGE_TIMESTAMPS: Record<Locale, { published: string; modified: string }> = {
+  ua: {
+    published: "2024-01-01T00:00:00.000Z",
+    modified: "2025-01-01T00:00:00.000Z",
+  },
+  ru: {
+    published: "2024-01-01T00:00:00.000Z",
+    modified: "2025-01-01T00:00:00.000Z",
+  },
+  en: {
+    published: "2024-01-01T00:00:00.000Z",
+    modified: "2025-01-01T00:00:00.000Z",
+  },
+};
+
 type AstroContainerInstance = Awaited<ReturnType<typeof AstroContainer.create>>;
 const feedContainerPromise: Promise<AstroContainerInstance> = AstroContainer.create().then((container) => {
   container.addServerRenderer({ renderer: mdxRenderer });
@@ -31,7 +56,7 @@ function getFeedTitle(locale: Locale): string {
 
 function getFeedMetadata(locale: Locale) {
   const prefix = getLocalePrefix(locale);
-  const feedJsonUrl = `${SITE_URL}${prefix}/feed.json`;
+  const feedJsonFullUrl = `${SITE_URL}${prefix}/feed-full.json`;
   const feedXmlUrl = `${SITE_URL}${prefix}/feed.xml`;
   const homePageUrl = buildCanonicalUrl(locale, "/blog/");
   const language = localeToBcp47[locale] ?? locale;
@@ -39,7 +64,7 @@ function getFeedMetadata(locale: Locale) {
   const description = contentByLocale[locale].metaDescription;
 
   return {
-    feedJsonUrl,
+    feedJsonFullUrl,
     feedXmlUrl,
     homePageUrl,
     language,
@@ -80,66 +105,72 @@ type FeedAuthor = {
   };
 };
 
-export async function buildJsonFeed(locale: Locale) {
-  const { feedJsonUrl, homePageUrl, language, title, description } = getFeedMetadata(locale);
-  const items = await mapPostsToFeedItems(locale);
+type PlainFeedItem = {
+  id: string;
+  url: string;
+  title: string;
+  type: BlogPost["type"] | "about";
+  collection: BlogPost["collection"] | "page";
+  language: string;
+  tags: string[];
+  summary: string;
+  content_text: string;
+  date_published: string;
+  date_modified: string;
+  image?: string;
+  slug?: string;
+  type_label?: string;
+  type_url?: string;
+  card_snippet?: string;
+};
+
+export async function buildFullJsonFeed(locale: Locale) {
+  const { feedJsonFullUrl, homePageUrl, language, title, description } = getFeedMetadata(locale);
+  const posts = getPostsByLocale(locale);
+  const postItems = posts.map((post) => mapPostToPlainFeedItem(locale, post));
+  const aboutItem = buildAboutFeedItem(locale);
+  const items = aboutItem ? [...postItems, aboutItem] : postItems;
 
   const feed = {
     version: "https://jsonfeed.org/version/1.1",
     title,
     home_page_url: homePageUrl,
-    feed_url: feedJsonUrl,
+    feed_url: feedJsonFullUrl,
     language,
     description,
     authors: [buildFeedAuthor(locale, { url: SITE_URL })],
     icon: FEED_ICON_URL,
     favicon: `${SITE_URL}/favicon.ico`,
-    items: items.map((item) => ({
-      id: item.id,
-      url: item.url,
-      title: item.title,
-      content_html: item.content_html,
-      content_text: item.content_text,
-      summary: item.summary,
-      date_published: item.date_published,
-      date_modified: item.date_modified,
-      language: item.language,
-      tags: item.tags,
-      authors: item.authors,
-      image: item.image,
-      type: item.postType,
-      _postType: item.postType,
-      _postTypeLabel: item.postTypeLabel,
-      _postTypePath: item.postTypePath,
-      _postTypeUrl: item.postTypeUrl,
-      attachments: item.image
-        ? [
-            {
-              url: item.image,
-              mime_type: "image/webp",
-            },
-          ]
-        : undefined,
-      _meta: {
-        license: item.license,
-        postType: item.postType,
-        postTypeLabel: item.postTypeLabel,
-        postTypeUrl: item.postTypeUrl,
-      },
-    })),
-  };
+    _meta: {
+      ...FEED_FULL_META,
+      itemCount: items.length,
+    },
+    items,
+  } as const;
 
-  return new Response(JSON.stringify(feed, null, 2), {
+  const payload = JSON.stringify(feed, null, 2);
+  const sizeMB = new TextEncoder().encode(payload).length / (1024 * 1024);
+  if (sizeMB > 90) {
+    console.warn(`⚠️ Feed size ${sizeMB.toFixed(2)} MB approaching 100 MB limit.`);
+  }
+
+  return new Response(payload, {
     headers: {
       "Content-Type": "application/feed+json; charset=utf-8",
-      "Cache-Control": "public, s-maxage=600, stale-while-revalidate",
+      "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600",
     },
   });
 }
 
+export function resolveFeedLocale(rawLocale?: string): Locale {
+  if (!rawLocale) return defaultLocale;
+  const resolved = resolveLocale(rawLocale);
+  return resolved ?? defaultLocale;
+}
+
 export async function buildRssFeed(locale: Locale) {
   const { feedXmlUrl, homePageUrl, language, title, description } = getFeedMetadata(locale);
-  const items = await mapPostsToFeedItems(locale);
+  const items = await mapPostsToFeedItems(locale, 30);
 
   const rssItems = items
     .map((item) => {
@@ -196,19 +227,13 @@ export async function buildRssFeed(locale: Locale) {
   return new Response(rss, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, s-maxage=600, stale-while-revalidate",
+      "Cache-Control": "public, max-age=600, s-maxage=600, stale-while-revalidate=300",
     },
   });
 }
 
-export function resolveFeedLocale(rawLocale?: string): Locale {
-  if (!rawLocale) return defaultLocale;
-  const resolved = resolveLocale(rawLocale);
-  return resolved ?? defaultLocale;
-}
-
-async function mapPostsToFeedItems(locale: Locale): Promise<FeedItem[]> {
-  const posts = getPostsByLocale(locale).slice(0, 30);
+async function mapPostsToFeedItems(locale: Locale, limit: number): Promise<FeedItem[]> {
+  const posts = getPostsByLocale(locale).slice(0, limit);
   const container = await feedContainerPromise;
 
   return Promise.all(
@@ -222,7 +247,7 @@ async function mapPostsToFeedItems(locale: Locale): Promise<FeedItem[]> {
       const normalizedHtml = absolutizeRelativeUrls(contentHtml);
       const summary = post.summary || post.description || truncatePlainText(post.plainText, 280);
 
-      const image = post.image?.trim() || undefined;
+      const image = post.image?.trim() || DEFAULT_POST_IMAGE;
 
       return {
         id: canonicalUrl,
@@ -236,7 +261,14 @@ async function mapPostsToFeedItems(locale: Locale): Promise<FeedItem[]> {
         date_published: post.publishedAt,
         date_modified: post.updatedAt ?? post.publishedAt,
         tags: post.tags,
-        authors: [buildFeedAuthor(post.locale as Locale, { url: post.authorUrl || SITE_URL, display: post.authorDisplay, sameAs: post.authorSameAs, fallbackName: post.author })],
+        authors: [
+          buildFeedAuthor(post.locale as Locale, {
+            url: post.authorUrl || SITE_URL,
+            display: post.authorDisplay,
+            sameAs: post.authorSameAs,
+            fallbackName: post.author,
+          }),
+        ],
         license: post.license || LICENSE_URL,
         image,
         postType: post.type,
@@ -246,6 +278,163 @@ async function mapPostsToFeedItems(locale: Locale): Promise<FeedItem[]> {
       };
     }),
   );
+}
+
+function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
+  const canonicalUrl = ensureAbsoluteUrl(post.canonical || `${SITE_URL}${post.url}`);
+  const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
+  const typePath = buildPostTypePath(locale, post.type);
+  const typeUrl = ensureAbsoluteUrl(typePath);
+  const isNote = post.type === "note";
+  const fallbackSummary = post.summary || post.description || "";
+  const cardSnippet = (post.cardSnippet || fallbackSummary || "").trim();
+  const summary = isNote ? cardSnippet : fallbackSummary;
+
+  return {
+    id: canonicalUrl,
+    url: canonicalUrl,
+    title: post.title,
+    type: post.type,
+    collection: post.collection,
+    language: postLanguage,
+    tags: post.tags,
+    summary: summary ?? "",
+    content_text: post.plainText || "",
+    date_published: post.publishedAt,
+    date_modified: post.updatedAt ?? post.publishedAt,
+    image: post.image?.trim(),
+    slug: post.slug,
+    type_label: getPostTypeLabel(locale, post.type),
+    type_url: typeUrl,
+    card_snippet: cardSnippet,
+  };
+}
+
+function buildAboutFeedItem(locale: Locale): PlainFeedItem | null {
+  const content = contentByLocale[locale];
+  if (!content) return null;
+
+  const canonical = buildCanonicalUrl(locale, "/about/");
+  const language = localeToBcp47[locale] ?? locale;
+  const timestamps = ABOUT_PAGE_TIMESTAMPS[locale] ?? ABOUT_PAGE_TIMESTAMPS[defaultLocale];
+  const summary = content.metaDescription ?? content.tagline;
+  const contentText = buildAboutContentText(locale);
+
+  return {
+    id: canonical,
+    url: canonical,
+    title: content.metaTitle || content.brandName,
+    type: "about",
+    collection: "page",
+    language,
+    tags: [],
+    summary,
+    content_text: contentText,
+    date_published: timestamps.published,
+    date_modified: timestamps.modified,
+    slug: "about",
+    type_label: ABOUT_TYPE_LABEL[locale],
+    type_url: canonical,
+  };
+}
+
+function buildAboutContentText(locale: Locale): string {
+  const content = contentByLocale[locale];
+  const segments: string[] = [];
+
+  const push = (value?: string | null) => {
+    if (!value) return;
+    const trimmed = value.trim();
+    if (trimmed) {
+      segments.push(trimmed);
+    }
+  };
+
+  const pushMany = (values?: string[]) => {
+    if (!values) return;
+    for (const value of values) {
+      push(value);
+    }
+  };
+
+  push(content.hero.title);
+  pushMany(content.hero.paragraphs);
+
+  push(content.introduction.heading);
+  pushMany(content.introduction.paragraphs);
+  if (content.introduction.bulletList) {
+    pushMany(content.introduction.bulletList.items);
+  }
+  if (content.introduction.highlight) {
+    push(content.introduction.highlight.title);
+    pushMany(content.introduction.highlight.paragraphs);
+  }
+
+  push(content.process.heading);
+  push(content.process.intro);
+  for (const step of content.process.steps) {
+    push(step.title);
+    push(step.description);
+  }
+
+  push(content.details.heading);
+  for (const item of content.details.items) {
+    push(`${item.title}. ${item.description}`);
+  }
+
+  push(content.story.heading);
+  pushMany(content.story.paragraphs);
+
+  if (content.lighthouse) {
+    push(content.lighthouse.heading);
+    pushMany(content.lighthouse.paragraphs);
+    for (const bullet of content.lighthouse.bullets) {
+      if (typeof bullet === "string") {
+        push(bullet);
+      } else {
+        push(`${bullet.label}${bullet.description ? ` ${bullet.description}` : ""}`);
+      }
+    }
+    push(content.lighthouse.closing);
+  }
+
+  if (content.door) {
+    push(content.door.heading);
+    pushMany(content.door.paragraphs);
+    if (content.door.cta) {
+      push(content.door.cta.text);
+      for (const contact of content.door.cta.contacts) {
+        push(`${contact.label}: ${contact.href}`);
+      }
+    }
+  }
+
+  push(content.faq.heading);
+  for (const item of content.faq.items) {
+    push(item.question);
+    push(item.answer);
+  }
+
+  push(content.invitation.heading);
+  push(content.invitation.body);
+  for (const button of content.invitation.buttons) {
+    push(`${button.label}: ${button.href}`);
+  }
+
+  push(content.testimonials.heading);
+  if (content.testimonials.intro) {
+    push(content.testimonials.intro);
+  }
+  pushMany(content.testimonials.items);
+  if (content.testimonials.cta) {
+    push(content.testimonials.cta.text);
+    push(`${content.testimonials.cta.button.label}: ${content.testimonials.cta.button.href}`);
+  }
+
+  push(content.footerNote);
+  push(content.tagline);
+
+  return createPlainText(segments.join("\n\n"));
 }
 
 async function renderPostHtml(container: AstroContainerInstance, renderResult: Awaited<ReturnType<BlogPost["render"]>>) {
@@ -315,9 +504,14 @@ function buildFeedAuthor(
   ) as Record<Locale, string>;
 
   const localizedName =
-    [authorDisplay[locale], authorDisplay[defaultLocale], options.fallbackName, AUTHOR_DISPLAY_BY_LOCALE[locale], AUTHOR_DISPLAY_BY_LOCALE[defaultLocale], "Alex Bon"].find(
-      (value): value is string => typeof value === "string" && value.length > 0,
-    ) ?? "Alex Bon";
+    [
+      authorDisplay[locale],
+      authorDisplay[defaultLocale],
+      options.fallbackName,
+      AUTHOR_DISPLAY_BY_LOCALE[locale],
+      AUTHOR_DISPLAY_BY_LOCALE[defaultLocale],
+      "Alex Bon",
+    ].find((value): value is string => typeof value === "string" && value.length > 0) ?? "Alex Bon";
 
   const sameAs = options.sameAs ?? Array.from(AUTHOR_SAME_AS);
 

@@ -30,9 +30,9 @@ if (!appId || !adminKey) {
 const client = algoliasearch(appId, adminKey);
 
 const FEED_PATHS = {
-  ua: path.join(distDir, 'ua', 'feed.json'),
-  ru: path.join(distDir, 'ru', 'feed.json'),
-  en: path.join(distDir, 'en', 'feed.json'),
+  ua: path.join(distDir, 'ua', 'feed-full.json'),
+  ru: path.join(distDir, 'ru', 'feed-full.json'),
+  en: path.join(distDir, 'en', 'feed-full.json'),
 };
 
 const TYPE_FALLBACKS = {
@@ -100,23 +100,26 @@ async function readFeed(locale) {
 }
 
 function mapRecord(locale, item) {
+  if (item?.type === 'about') {
+    return null;
+  }
+
   const url = item.url ?? item.id;
   const slug = url ? new URL(url).pathname.replace(/\/$/, '') : item.id ?? Math.random().toString(36).slice(2);
-  const rawType =
-    (typeof item._postType === 'string' && item._postType.trim()) ||
-    (typeof item.type === 'string' && item.type.trim()) ||
-    'note';
+  const rawType = typeof item.type === 'string' && item.type.trim() ? item.type.trim() : 'note';
   const normalizedType =
     rawType === 'article' || rawType === 'story' || rawType === 'note' ? rawType : 'note';
   const typeMeta = resolveTypeMeta(locale, normalizedType);
   const typeLabel =
-    (typeof item._postTypeLabel === 'string' && item._postTypeLabel.trim()) || typeMeta.label;
+    (typeof item.type_label === 'string' && item.type_label.trim()) || typeMeta.label;
   const typePath =
-    (typeof item._postTypePath === 'string' && item._postTypePath.trim()) ||
-    (typeof item._postTypeUrl === 'string' && item._postTypeUrl.trim()) ||
+    (typeof item.type_url === 'string' && item.type_url.trim()) ||
     typeMeta.path;
   const content = item.content_text ?? '';
-  const snippet = content.slice(0, 240).trim();
+  const preferredSnippet = typeof item.card_snippet === 'string' && item.card_snippet.trim().length > 0 ? item.card_snippet.trim() : '';
+  const summarySnippet = typeof item.summary === 'string' && item.summary.trim().length > 0 ? item.summary.trim() : '';
+  const snippetSource = preferredSnippet || summarySnippet || content;
+  const snippet = normalizedType === 'note' ? snippetSource : snippetSource.slice(0, 240).trim();
   return {
     objectID: `${locale}:${slug}`,
     locale,
@@ -161,7 +164,9 @@ async function pushLocale(locale, previousManifest) {
     return previousManifest;
   }
 
-  const records = items.map((item) => mapRecord(locale, item));
+  const records = items
+    .map((item) => mapRecord(locale, item))
+    .filter((record) => record !== null);
   const indexName = indexNames[locale];
   const nextManifest = {};
 

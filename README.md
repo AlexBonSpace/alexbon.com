@@ -46,7 +46,7 @@ Other scripts:
 └── astro.config.mjs        # Astro + Cloudflare adapter config
 ```
 
-Algolia feeds (`dist/*/feed.json`) are consumed by `scripts/push-algolia.mjs`. The script diffs records locally and supports `--full` to force a full reindex.
+Algolia feeds (`dist/*/feed-full.json`) are consumed by `scripts/push-algolia.mjs`. The script diffs records locally and supports `--full` to force a full reindex.
 
 ## 🔑 Environment variables
 

@@ -40,9 +40,12 @@ export function buildSnippet(text: string, maxLength = 300) {
 }
 
 export function toExplorerPost(post: BlogPost, locale: Locale): ExplorerPostView {
-  const snippetSource =
-    post.cardSnippet?.trim() || post.summary || post.description || post.plainText || "";
-  const snippet = post.type === "note" ? snippetSource : buildSnippet(snippetSource);
+  const primarySnippet = post.cardSnippet?.trim();
+  const fallbackSource = post.summary || post.description || post.plainText || "";
+  let snippet = primarySnippet ?? (post.type === "note" ? fallbackSource : buildSnippet(fallbackSource));
+  if (!snippet) {
+    snippet = buildSnippet(post.plainText || "");
+  }
   const prefix = `/${locale}`;
   const typeUrl = ensureTrailingSlash(`${prefix}/blog/type/${post.type}`);
 

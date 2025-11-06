@@ -1,0 +1,28 @@
+{
+  "static": {
+    "/feed-full.json": {
+      "cache": {
+        "browser": 86400,
+        "edge": 86400
+      }
+    },
+    "/ua/feed-full.json": {
+      "cache": {
+        "browser": 86400,
+        "edge": 86400
+      }
+    },
+    "/ru/feed-full.json": {
+      "cache": {
+        "browser": 86400,
+        "edge": 86400
+      }
+    },
+    "/en/feed-full.json": {
+      "cache": {
+        "browser": 86400,
+        "edge": 86400
+      }
+    }
+  }
+}
