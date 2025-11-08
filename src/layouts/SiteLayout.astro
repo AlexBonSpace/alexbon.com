@@ -55,8 +55,8 @@ const {
 
 const content = contentByLocale[locale];
 const messages = messagesByLocale[locale] as MessageDictionary;
-const themeCookieValue = Astro.cookies.get(THEME_COOKIE)?.value;
-const initialTheme = isThemeId(themeCookieValue) ? themeCookieValue : DEFAULT_THEME;
+let themeCookieValue: string | undefined;
+const initialTheme = DEFAULT_THEME;
 const currentPath = Astro.url.pathname;
 const currentSearch = Astro.url.search;
 

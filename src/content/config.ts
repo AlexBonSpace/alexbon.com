@@ -86,30 +86,4 @@ const posts = defineCollection({
   },
 });
 
-const pages = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string().optional(),
-    description: z.string().optional(),
-    canonical: z.string().optional(),
-    author: z.string().default("Alex Bon"),
-    authorUrl: z.string().default("https://alexbon.com"),
-    license: z.string().default("CC BY 4.0"),
-    cardSnippet: z.string().optional(),
-  }),
-  markdown: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "wrap",
-          properties: { className: ["heading-anchor"] },
-        },
-      ],
-    ],
-  },
-});
-
-export const collections = { posts, pages };
+export const collections = { posts };
