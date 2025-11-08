@@ -24,13 +24,13 @@ Other scripts:
 | Command                  | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
 | `npm run dev`            | Astro dev server (reads cached post summaries, no cache cleanup)            |
-| `npm run build`          | Production build (runs `prebuild` → syncs `updatedAt` + rebuilds cache)     |
+| `npm run build`          | Production build (runs `prebuild` → rebuilds cache)                         |
 | `npm run preview`        | Preview the production build locally                                        |
 | `npm run cache:build`    | Rebuild `src/lib/.cache/post-summaries.json` (auto-runs in `predev/prebuild`)|
-| `npm run sync:updated-at`| Rewrite/check `updatedAt` in MDX files using git commit dates               |
 | `npm run test`           | Vitest suite                                                                |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
-| `./scripts/deploy-local.sh` | (copy example) Run full cycle: sync → build → Algolia → push            |
+
+Рекомендованный деплой-порядок: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
 
 ## 🗂️ Project structure
 
@@ -51,6 +51,10 @@ Other scripts:
 ```
 
 Algolia feeds (`dist/*/feed-full.json`) are consumed by `scripts/push-algolia.mjs`. The script diffs records locally and supports `--full` to force a full reindex.
+
+### Content timestamps
+
+`updatedAt` values in MDX are now maintained manually. Keep them equal to `publishedAt` unless a post really changes — there is no longer an automated sync with git history.
 
 ## 🔑 Environment variables
 

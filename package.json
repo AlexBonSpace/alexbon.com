@@ -13,9 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "cache:build": "node scripts/build-cache.mjs",
-    "sync:updated-at": "node scripts/sync-updated-at.mjs",
     "predev": "npm run cache:build",
-    "prebuild": "npm run sync:updated-at -- --check && npm run cache:build",
+    "prebuild": "npm run cache:build",
     "prepare": "husky"
   },
   "dependencies": {
