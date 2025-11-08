@@ -1,13 +1,36 @@
-import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+const isNodeRuntime = typeof process !== "undefined" && Boolean(process.versions?.node);
 
-const PROJECT_ROOT = fileURLToPath(new URL("../../", import.meta.url));
-const POSTS_CONTENT_DIR = path.join(PROJECT_ROOT, "src/content/posts");
+let execFileSync: typeof import("node:child_process").execFileSync | undefined;
+let existsSync: typeof import("node:fs").existsSync | undefined;
+let pathModule: typeof import("node:path") | undefined;
+let fileURLToPath: typeof import("node:url").fileURLToPath | undefined;
+
+if (isNodeRuntime) {
+  const [{ execFileSync: childExec }, { existsSync: fsExistsSync }, pathImport, { fileURLToPath: urlToPath }] =
+    await Promise.all([
+      import("node:child_process"),
+      import("node:fs"),
+      import("node:path"),
+      import("node:url"),
+    ]);
+  execFileSync = childExec;
+  existsSync = fsExistsSync;
+  pathModule = pathImport;
+  fileURLToPath = urlToPath;
+}
+
+const PROJECT_ROOT =
+  isNodeRuntime && fileURLToPath && pathModule
+    ? fileURLToPath(new URL("../../", import.meta.url))
+    : undefined;
+const POSTS_CONTENT_DIR = PROJECT_ROOT && pathModule ? pathModule.join(PROJECT_ROOT, "src/content/posts") : undefined;
 const gitTimestampCache = new Map<string, Date | null>();
 
 function resolvePostFilePath(entryId: string): string | null {
+  if (!POSTS_CONTENT_DIR || !pathModule || !existsSync) {
+    return null;
+  }
+
   const normalizedId = entryId.replace(/\\/g, "/");
   const candidates = [normalizedId];
 
@@ -20,7 +43,7 @@ function resolvePostFilePath(entryId: string): string | null {
   }
 
   for (const candidate of candidates) {
-    const absolutePath = path.join(POSTS_CONTENT_DIR, candidate);
+    const absolutePath = pathModule.join(POSTS_CONTENT_DIR, candidate);
     if (existsSync(absolutePath)) {
       return absolutePath;
     }
@@ -30,6 +53,10 @@ function resolvePostFilePath(entryId: string): string | null {
 }
 
 function readGitTimestamp(relativePath: string): Date | null {
+  if (!execFileSync || !PROJECT_ROOT) {
+    return null;
+  }
+
   if (gitTimestampCache.has(relativePath)) {
     return gitTimestampCache.get(relativePath) ?? null;
   }
@@ -61,9 +88,13 @@ function readGitTimestamp(relativePath: string): Date | null {
 }
 
 export function getGitLastModifiedDate(entryId: string): Date | null {
+  if (!isNodeRuntime || !PROJECT_ROOT || !pathModule) {
+    return null;
+  }
+
   const filePath = resolvePostFilePath(entryId);
   if (!filePath) return null;
 
-  const relativePath = path.relative(PROJECT_ROOT, filePath);
+  const relativePath = pathModule.relative(PROJECT_ROOT, filePath);
   return readGitTimestamp(relativePath);
 }
