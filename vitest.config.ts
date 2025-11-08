@@ -6,6 +6,7 @@ export default defineConfig({
     environment: "happy-dom",
     globals: true,
     setupFiles: ["./tests/setupTests.ts"],
+    pool: "threads",
     coverage: {
       reporter: ["text", "lcov"],
       include: ["src/**/*.{ts,tsx,js,jsx}"],

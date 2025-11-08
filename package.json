@@ -18,11 +18,11 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.7",
-    "@astrojs/react": "^4.4.0",
-    "algoliasearch": "^5.41.0",
-    "astro": "^5.14.7",
-    "dotenv": "^16.4.5",
+    "@astrojs/mdx": "^4.3.10",
+    "@astrojs/react": "^4.4.2",
+    "algoliasearch": "^5.43.0",
+    "astro": "^5.15.4",
+    "dotenv": "^17.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "rehype-autolink-headings": "^7.1.0",
@@ -33,7 +33,7 @@
     "@astrojs/cloudflare": "^12.6.10",
     "@csstools/css-parser-algorithms": "^3.0.5",
     "@csstools/css-tokenizer": "^3.0.4",
-    "@tailwindcss/postcss": "^4.1.15",
+    "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -45,8 +45,8 @@
     "happy-dom": "^20.0.10",
     "husky": "^9.1.7",
     "jsonfeed-schema": "^0.5.0",
-    "tailwindcss": "^4.1.15",
+    "tailwindcss": "^4.1.17",
     "vitest": "^4.0.8",
-    "wrangler": "^4.45.0"
+    "wrangler": "^4.46.0"
   }
 }
