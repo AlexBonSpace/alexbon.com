@@ -30,6 +30,7 @@ Other scripts:
 | `npm run sync:updated-at`| Rewrite/check `updatedAt` in MDX files using git commit dates               |
 | `npm run test`           | Vitest suite                                                                |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
+| `./scripts/deploy-local.sh` | (copy example) Run full cycle: sync → build → Algolia → push            |
 
 ## 🗂️ Project structure
 
