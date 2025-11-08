@@ -8,7 +8,7 @@ type LandingPageProps = {
   content: LandingContent;
 };
 
-const container = "mx-auto w-[90%] max-w-6xl px-4 sm:px-6";
+const container = "mx-auto w-full max-w-6xl px-4 sm:px-6";
 
 type SectionProps = {
   children: ReactNode;

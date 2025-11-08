@@ -21,6 +21,8 @@
 - “Only [locale]” routing: each locale lives under its own prefix (`/ua/…`, `/ru/…`, `/en/…`). The bare root `/` 308-redirects to `/ua/`, and locale roots redirect to the local blog index.
 - Blog listings and pagination render server-side from local content (no Algolia dependency). `PostGrid` consumes `paginatePosts` results.
 - Updated timestamps: `updatedAt` in frontmatter is optional; when it’s missing we derive the value during build via `git log -1` (`src/lib/git-metadata.ts`) and fall back to `publishedAt` if git history is unavailable. Cache lives only for the build process.
+- Mobile layout now uses full-width (`w-full`) containers with padding instead of `w-[92%]`, and story/article text shares the larger clamp used for notes (`clamp(1.1rem, 3.2vw, 1.3rem)`).
+- Rel=me and sameAs now point to GitHub (`https://github.com/AlexBonSpace/alexbon.com`); Mastodon profile links were removed from head metadata and content defaults.
 - Language menu & browser prompt use `navigationAlternatePaths` to deep-link translated slugs.
 - Theme preference stored in cookie + localStorage (`ALEXBON_THEME`).
 - `/[locale]/search/` renders SSR fallback with recent posts, `robots="noindex, follow"`, and loads the Algolia-powered React app lazily (no request until the user types).

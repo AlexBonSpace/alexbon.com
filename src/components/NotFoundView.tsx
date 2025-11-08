@@ -15,7 +15,7 @@ export function NotFoundView({ locale, t }: { locale: Locale; t: TranslateFn }) 
   ];
 
   return (
-    <section className="mx-auto flex w-[92%] max-w-3xl flex-col justify-center gap-8 py-16 text-[#2f2b26]">
+    <section className="mx-auto flex w-full max-w-3xl flex-col justify-center gap-8 px-4 py-16 text-[#2f2b26] sm:px-6">
       <header className="flex flex-col gap-4">
         <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#b39c7d]">{t("title")}</p>
         <h1 className="text-balance text-[clamp(2.6rem,8vw,4rem)] font-semibold leading-tight">

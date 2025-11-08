@@ -24,7 +24,7 @@ interface AboutPageProps {
 const { content } = Astro.props as AboutPageProps;
 const lang = content.locale === "ua" ? "uk" : content.locale === "en" ? "en" : "ru";
 
-const containerClass = "mx-auto w-[90%] max-w-6xl px-4 sm:px-6";
+const containerClass = "mx-auto w-full max-w-6xl px-4 sm:px-6";
 const isEnglish = content.locale === "en";
 
 const introductionBlocks: IntroductionBlock[] = (() => {

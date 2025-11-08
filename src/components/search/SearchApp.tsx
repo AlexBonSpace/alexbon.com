@@ -151,7 +151,7 @@ function HitCard({ hit, readMore }: { hit: HighlightableHit; readMore: string })
           </a>
         </h3>
         {highlightedSnippet ? (
-          <p className="whitespace-pre-line text-[clamp(1rem,3vw,1.12rem)] leading-relaxed text-primary">
+          <p className="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-primary">
             <HighlightedText value={highlightedSnippet} />
           </p>
         ) : null}
