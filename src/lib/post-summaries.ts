@@ -33,6 +33,9 @@ const summariesData = summaries as PostSummary[];
 const postsByLocale = new Map<Locale, PostSummary[]>();
 const tagsByLocale = new Map<Locale, Map<string, PostSummary[]>>();
 const typesByLocale = new Map<Locale, Map<PostSummary["type"], PostSummary[]>>();
+const summaryLookup = new Map<string, PostSummary>();
+
+const summaryKey = (locale: Locale, slug: string) => `${locale}:${slug}`;
 
 for (const summary of summariesData) {
   if (!postsByLocale.has(summary.locale)) {
@@ -41,6 +44,7 @@ for (const summary of summariesData) {
     typesByLocale.set(summary.locale, new Map());
   }
   postsByLocale.get(summary.locale)?.push(summary);
+  summaryLookup.set(summaryKey(summary.locale, summary.slug), summary);
 
   for (const tag of summary.tags) {
     const localeTags = tagsByLocale.get(summary.locale)!;
@@ -84,6 +88,10 @@ function paginate(collection: PostSummary[], page: number, pageSize = POSTS_PER_
 
 export function getSummariesByLocale(locale: Locale): PostSummary[] {
   return postsByLocale.get(locale) ?? [];
+}
+
+export function getSummaryByLocaleAndSlug(locale: Locale, slug: string): PostSummary | undefined {
+  return summaryLookup.get(summaryKey(locale, slug));
 }
 
 export function paginateSummaries(locale: Locale, page: number, pageSize = POSTS_PER_PAGE) {

@@ -7,6 +7,8 @@ import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE,
 import { notFound } from "@/lib/http";
 import { buildAuthorPersonJsonLd } from "@/lib/content-utils";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   return locales.map((locale) => ({
     params: { locale },

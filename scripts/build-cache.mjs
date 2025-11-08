@@ -2,6 +2,7 @@
 import fg from "fast-glob";
 import matter from "gray-matter";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,6 +11,7 @@ const POSTS_DIR = path.join(ROOT, "src/content/posts");
 const CACHE_DIR = path.join(ROOT, "src/lib/.cache");
 const CACHE_FILE = path.join(CACHE_DIR, "post-summaries.json");
 const SITE_URL = "https://www.alexbon.com";
+const MAX_TEXT_LENGTH = 300;
 
 const { default: astroConfig } = await import("../astro.config.mjs");
 const LOCALES = new Set(astroConfig?.i18n?.locales ?? ["ua", "ru", "en"]);
@@ -91,6 +93,32 @@ function resolveType(collection, candidate) {
   return "note";
 }
 
+function getGitTimestamp(relativePath) {
+  try {
+    const isoString = execFileSync("git", ["log", "-1", "--format=%cI", "--", relativePath], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    return isoString || null;
+  } catch {
+    return null;
+  }
+}
+
+function limitTextLength(text, limit = MAX_TEXT_LENGTH) {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  if (normalized.length <= limit) {
+    return normalized;
+  }
+  if (limit <= 1) {
+    return normalized.slice(0, limit);
+  }
+  const slice = normalized.slice(0, limit - 1).trimEnd();
+  return `${slice}…`;
+}
+
 async function main() {
   const files = await fg("**/*.mdx", { cwd: POSTS_DIR });
   const summaries = [];
@@ -109,14 +137,19 @@ async function main() {
     const fileSlug = slugSegments[slugSegments.length - 1];
     const type = resolveType(collection, parsed.data.type);
 
-    const plainText = ensurePlainText(parsed.content);
+    const plainTextFull = ensurePlainText(parsed.content);
+    const plainText = limitTextLength(plainTextFull, MAX_TEXT_LENGTH);
     const description = (parsed.data.description ?? "").trim() || createDescription(plainText, 160);
     const summary = extractFirstSentence(plainText) || description;
-    const cardSnippet = buildCardSnippet(type, plainText, parsed.data.cardSnippet);
-    const searchContent = createSearchContent(parsed.content);
+    const cardSnippet = buildCardSnippet(type, plainTextFull, parsed.data.cardSnippet);
+    const searchContentFull = createSearchContent(parsed.content);
+    const searchContent = limitTextLength(searchContentFull, MAX_TEXT_LENGTH);
 
     const publishedAt = new Date(parsed.data.publishedAt).toISOString();
-    const updatedAt = parsed.data.updatedAt ? new Date(parsed.data.updatedAt).toISOString() : publishedAt;
+    const gitTimestamp = getGitTimestamp(path.relative(ROOT, absolute));
+    const updatedAt = parsed.data.updatedAt
+      ? new Date(parsed.data.updatedAt).toISOString()
+      : gitTimestamp ?? publishedAt;
     const tags = Array.isArray(parsed.data.tags)
       ? parsed.data.tags.map((tag) => String(tag).trim()).filter(Boolean)
       : [];

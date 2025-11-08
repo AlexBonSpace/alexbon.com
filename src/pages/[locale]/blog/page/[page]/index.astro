@@ -9,6 +9,8 @@ import { buildCanonicalUrl, buildLanguageAlternates } from "@/lib/seo";
 import { toExplorerPosts } from "@/lib/blog-explorer";
 import { notFound } from "@/lib/http";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; page: string } }> = [];
   for (const locale of locales) {

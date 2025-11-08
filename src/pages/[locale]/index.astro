@@ -2,6 +2,8 @@
 import { locales, type Locale } from "@/i18n/config";
 import { notFound } from "@/lib/http";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }

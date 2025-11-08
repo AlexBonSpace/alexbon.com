@@ -12,8 +12,8 @@ import {
   extractFirstSentence,
   resolveLocaleFromSlug,
 } from "@/lib/content-utils";
-import { getGitLastModifiedDate } from "@/lib/git-metadata";
 import { POSTS_PER_PAGE } from "@/lib/blog-constants";
+import { getSummaryByLocaleAndSlug } from "@/lib/post-summaries";
 
 type PostCollectionEntry = CollectionEntry<"posts">;
 
@@ -110,6 +110,7 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const collection = resolveCollection(segments[1]);
   const fileSlug = segments[segments.length - 1] ?? entry.slug;
   const type = resolveType(collection, entry.data.type);
+  const summaryMetadata = getSummaryByLocaleAndSlug(locale, fileSlug);
 
   const rawBody = entry.body;
   const plainText = createPlainText(rawBody);
@@ -129,8 +130,11 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
       : `${SITE_URL}/${locale}/about/`;
 
   const publishedDate = entry.data.publishedAt;
-  const gitUpdatedAt = entry.data.updatedAt ? null : getGitLastModifiedDate(entry.id);
-  const updatedDate = entry.data.updatedAt ?? gitUpdatedAt ?? entry.data.publishedAt;
+  const summaryUpdatedDate =
+    summaryMetadata?.updatedAt !== undefined ? new Date(summaryMetadata.updatedAt) : null;
+  const normalizedSummaryUpdatedDate =
+    summaryUpdatedDate && !Number.isNaN(summaryUpdatedDate.getTime()) ? summaryUpdatedDate : null;
+  const updatedDate = entry.data.updatedAt ?? normalizedSummaryUpdatedDate ?? entry.data.publishedAt;
   const publishedAtIso = publishedDate.toISOString();
   const updatedAtIso = updatedDate?.toISOString();
 
