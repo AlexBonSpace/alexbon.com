@@ -15,6 +15,7 @@
     "cache:build": "node scripts/build-cache.mjs",
     "predev": "npm run cache:build",
     "prebuild": "npm run cache:build",
+    "postbuild": "node scripts/normalize-routes.mjs",
     "prepare": "husky"
   },
   "dependencies": {
