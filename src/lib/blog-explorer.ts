@@ -15,6 +15,11 @@ export type ExplorerPostView = {
   searchContent: string;
 };
 
+type ExplorerSource = Pick<
+  BlogPost,
+  "slug" | "title" | "url" | "type" | "cardSnippet" | "summary" | "description" | "plainText" | "tags" | "searchContent"
+>;
+
 const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
 
 export function buildSnippet(text: string, maxLength = 300) {
@@ -39,7 +44,7 @@ export function buildSnippet(text: string, maxLength = 300) {
   return composed;
 }
 
-export function toExplorerPost(post: BlogPost, locale: Locale): ExplorerPostView {
+export function toExplorerPost(post: ExplorerSource, locale: Locale): ExplorerPostView {
   const primarySnippet = post.cardSnippet?.trim();
   const fallbackSource = post.summary || post.description || post.plainText || "";
   let snippet = primarySnippet ?? (post.type === "note" ? fallbackSource : buildSnippet(fallbackSource));
@@ -63,6 +68,6 @@ export function toExplorerPost(post: BlogPost, locale: Locale): ExplorerPostView
   };
 }
 
-export function toExplorerPosts(posts: BlogPost[], locale: Locale): ExplorerPostView[] {
+export function toExplorerPosts(posts: ExplorerSource[], locale: Locale): ExplorerPostView[] {
   return posts.map((post) => toExplorerPost(post, locale));
 }

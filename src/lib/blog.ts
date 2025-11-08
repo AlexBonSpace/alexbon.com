@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { locales, type Locale } from "@/i18n/config";
-import { buildCanonicalUrl } from "@/lib/seo";
+import { buildCanonicalUrl, SITE_URL } from "@/lib/seo";
 import {
   AUTHOR_DISPLAY_BY_LOCALE,
   AUTHOR_SAME_AS,
@@ -13,11 +13,9 @@ import {
   resolveLocaleFromSlug,
 } from "@/lib/content-utils";
 import { getGitLastModifiedDate } from "@/lib/git-metadata";
-import { SITE_URL } from "@/lib/seo";
+import { POSTS_PER_PAGE } from "@/lib/blog-constants";
 
 type PostCollectionEntry = CollectionEntry<"posts">;
-
-export const POSTS_PER_PAGE = 20;
 
 export type BlogPost = {
   slug: string;

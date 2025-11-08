@@ -21,12 +21,15 @@ npm run start
 
 Other scripts:
 
-| Command             | Description                                   |
-|---------------------|-----------------------------------------------|
-| `npm run dev`       | Astro dev server (no cache cleanup)           |
-| `npm run build`     | Production build into `dist/`                 |
-| `npm run preview`   | Preview the production build locally          |
-| `npm run algolia:sync` | Push latest feeds to Algolia (run after build) |
+| Command                  | Description                                                                 |
+|--------------------------|-----------------------------------------------------------------------------|
+| `npm run dev`            | Astro dev server (reads cached post summaries, no cache cleanup)            |
+| `npm run build`          | Production build (runs `prebuild` → syncs `updatedAt` + rebuilds cache)     |
+| `npm run preview`        | Preview the production build locally                                        |
+| `npm run cache:build`    | Rebuild `src/lib/.cache/post-summaries.json` (auto-runs in `predev/prebuild`)|
+| `npm run sync:updated-at`| Rewrite/check `updatedAt` in MDX files using git commit dates               |
+| `npm run test`           | Vitest suite                                                                |
+| `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
 
 ## 🗂️ Project structure
 
@@ -59,11 +62,18 @@ PUBLIC_ALGOLIA_INDEX_NAME=
 PUBLIC_ALGOLIA_INDEX_NAME_UA=
 PUBLIC_ALGOLIA_INDEX_NAME_RU=
 PUBLIC_ALGOLIA_INDEX_NAME_EN=
+ALGOLIA_APP_ID=
 ALGOLIA_ADMIN_API_KEY=
+ALGOLIA_INDEX_NAME=
+ALGOLIA_INDEX_UA=
+ALGOLIA_INDEX_RU=
+ALGOLIA_INDEX_EN=
+ASTRO_SESSION_SECRET=
 ```
 
 - `npm run dev` needs the `PUBLIC_*` variables.
 - `npm run algolia:sync` requires the admin/write API key.
+- `ASTRO_SESSION_SECRET` is used by the cookie-based session driver. Generate one via `openssl rand -base64 32` (or similar) and set it in Cloudflare Pages.
 
 ## 🌩 Deployment
 

@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { getPostsByType, paginatePostsByType } from "@/lib/blog";
+import { getSummariesByType, paginateSummariesByType } from "@/lib/post-summaries";
 import {
   buildPostTypePath,
   buildPostTypeRelativePath,
@@ -23,7 +23,7 @@ export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; type: string; page: string } }> = [];
   for (const locale of locales) {
     for (const type of ["note", "article", "story"] as const) {
-      const pagination = paginatePostsByType(locale, type, 1);
+      const pagination = paginateSummariesByType(locale, type, 1);
       for (let page = 2; page <= pagination.totalPages; page += 1) {
         paths.push({ params: { locale, type, page: String(page) } });
       }
@@ -43,13 +43,13 @@ if (!localeParam || !locales.includes(localeParam) || !rawType || !isValidPostTy
 
 const locale = localeParam;
 const type = rawType as PostType;
-const pagination = paginatePostsByType(locale, type, pageNumber);
+const pagination = paginateSummariesByType(locale, type, pageNumber);
 
 if (pagination.totalCount === 0 || pageNumber > pagination.totalPages) {
   return notFound();
 }
 
-const allPosts = getPostsByType(locale, type);
+const allPosts = getSummariesByType(locale, type);
 const postsView = toExplorerPosts(pagination.items, locale);
 const label = getPostTypeLabel(locale, type);
 const pageTitle = getPostTypePageTitle(locale, type, pageNumber);
@@ -57,7 +57,7 @@ const pageDescription = getPostTypePageDescription(locale, type, allPosts.length
 const relativePath = buildPostTypeRelativePath(type);
 const canonical = buildCanonicalUrl(locale, pageNumber === 1 ? relativePath : `${relativePath}page/${pageNumber}/`);
 const availableLocales = locales.filter((candidate) => {
-  const info = paginatePostsByType(candidate, type, 1);
+  const info = paginateSummariesByType(candidate, type, 1);
   return info.totalPages >= pageNumber && info.totalPages > 1;
 });
 const languageAlternates =

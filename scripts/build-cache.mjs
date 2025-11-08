@@ -1,0 +1,159 @@
+#!/usr/bin/env node
+import fg from "fast-glob";
+import matter from "gray-matter";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
+const POSTS_DIR = path.join(ROOT, "src/content/posts");
+const CACHE_DIR = path.join(ROOT, "src/lib/.cache");
+const CACHE_FILE = path.join(CACHE_DIR, "post-summaries.json");
+const SITE_URL = "https://www.alexbon.com";
+
+const { default: astroConfig } = await import("../astro.config.mjs");
+const LOCALES = new Set(astroConfig?.i18n?.locales ?? ["ua", "ru", "en"]);
+
+const ensurePlainText = (raw) =>
+  raw
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`+/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+    .replace(/[*_~>#]+/g, " ")
+    .replace(/-{3,}/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+function createDescription(text, limit = 160) {
+  const trimmed = text.trim();
+  if (!trimmed) return "";
+  if (trimmed.length <= limit) return trimmed;
+  return `${trimmed.slice(0, limit - 3).trimEnd()}...`;
+}
+
+function extractFirstSentence(text) {
+  if (!text) return "";
+  const match = text.match(/(.+?[.!?])(\s|$)/);
+  return match ? match[1].trim() : text.trim();
+}
+
+function truncateToBoundary(text, limit) {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  if (normalized.length <= limit) return normalized;
+  const sliced = normalized.slice(0, limit);
+  const lastSpace = sliced.lastIndexOf(" ");
+  return lastSpace > Math.floor(limit * 0.5) ? sliced.slice(0, lastSpace).trimEnd() : sliced.trimEnd();
+}
+
+function ensureEllipsis(text) {
+  const trimmed = text.trimEnd();
+  if (!trimmed) return "";
+  if (/[.]{3}$/.test(trimmed) || trimmed.endsWith("…")) {
+    return trimmed;
+  }
+  return `${trimmed}...`;
+}
+
+function buildCardSnippet(type, plainText, override) {
+  const overrideValue = override?.trim();
+  if (type === "note") {
+    return overrideValue && overrideValue.length > 0 ? overrideValue : plainText;
+  }
+  if (overrideValue && overrideValue.length > 0) {
+    return ensureEllipsis(overrideValue);
+  }
+  const auto = truncateToBoundary(plainText, 350);
+  return ensureEllipsis(auto || plainText);
+}
+
+function createSearchContent(raw) {
+  return raw
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/[`*_>#]/g, " ")
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 5000);
+}
+
+function resolveCollection(segment) {
+  if (segment === "articles" || segment === "stories") return segment;
+  return "notes";
+}
+
+function resolveType(collection, candidate) {
+  if (collection === "articles") return "article";
+  if (collection === "stories") return "story";
+  if (candidate === "article" || candidate === "story") return candidate;
+  return "note";
+}
+
+async function main() {
+  const files = await fg("**/*.mdx", { cwd: POSTS_DIR });
+  const summaries = [];
+
+  for (const relativeFile of files) {
+    const absolute = path.join(POSTS_DIR, relativeFile);
+    const raw = await readFile(absolute, "utf8");
+    const parsed = matter(raw);
+    const segments = relativeFile.split(path.sep);
+    const locale = segments[0];
+    if (!LOCALES.has(locale)) {
+      continue;
+    }
+    const slugSegments = segments.map((segment) => segment.replace(/\.mdx$/, ""));
+    const collection = resolveCollection(slugSegments[1]);
+    const fileSlug = slugSegments[slugSegments.length - 1];
+    const type = resolveType(collection, parsed.data.type);
+
+    const plainText = ensurePlainText(parsed.content);
+    const description = (parsed.data.description ?? "").trim() || createDescription(plainText, 160);
+    const summary = extractFirstSentence(plainText) || description;
+    const cardSnippet = buildCardSnippet(type, plainText, parsed.data.cardSnippet);
+    const searchContent = createSearchContent(parsed.content);
+
+    const publishedAt = new Date(parsed.data.publishedAt).toISOString();
+    const updatedAt = parsed.data.updatedAt ? new Date(parsed.data.updatedAt).toISOString() : publishedAt;
+    const tags = Array.isArray(parsed.data.tags)
+      ? parsed.data.tags.map((tag) => String(tag).trim()).filter(Boolean)
+      : [];
+
+    const translationGroup = (parsed.data.translationGroup ?? "").trim() || fileSlug;
+    const url = `/${locale}/blog/${fileSlug}/`;
+    const canonical =
+      (parsed.data.canonical ?? "").trim() ||
+      `${SITE_URL}/${locale}/blog/${fileSlug}/`;
+
+    summaries.push({
+      slug: fileSlug,
+      locale,
+      collection,
+      type,
+      title: (parsed.data.title ?? "").trim() || summary || fileSlug,
+      description,
+      summary,
+      cardSnippet,
+      plainText,
+      searchContent,
+      tags,
+      url,
+      canonical,
+      publishedAt,
+      updatedAt,
+      translationGroup,
+    });
+  }
+
+  summaries.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  await mkdir(CACHE_DIR, { recursive: true });
+  await writeFile(CACHE_FILE, JSON.stringify(summaries, null, 2));
+  console.log(`[cache] Wrote ${summaries.length} post summaries to ${path.relative(ROOT, CACHE_FILE)}`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

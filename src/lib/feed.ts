@@ -7,6 +7,7 @@ import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS, createPlainText } from "@/lib
 import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
+import { getSummariesByLocale, type PostSummary } from "@/lib/post-summaries";
 
 const FEED_ICON_URL = `${SITE_URL}/images/feed-icon.png`;
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
@@ -125,8 +126,8 @@ type PlainFeedItem = {
 
 export async function buildFullJsonFeed(locale: Locale) {
   const { feedJsonFullUrl, homePageUrl, language, title, description } = getFeedMetadata(locale);
-  const posts = getPostsByLocale(locale);
-  const postItems = posts.map((post) => mapPostToPlainFeedItem(locale, post));
+  const posts = getSummariesByLocale(locale);
+  const postItems = posts.map((post) => mapSummaryToPlainFeedItem(locale, post));
   const aboutItem = buildAboutFeedItem(locale);
   const items = aboutItem ? [...postItems, aboutItem] : postItems;
 
@@ -279,7 +280,7 @@ async function mapPostsToFeedItems(locale: Locale, limit: number): Promise<FeedI
   );
 }
 
-function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
+function mapSummaryToPlainFeedItem(locale: Locale, post: PostSummary): PlainFeedItem {
   const canonicalUrl = ensureAbsoluteUrl(post.canonical || `${SITE_URL}${post.url}`);
   const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
   const typePath = buildPostTypePath(locale, post.type);

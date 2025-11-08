@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { paginatePosts } from "@/lib/blog";
+import { paginateSummaries } from "@/lib/post-summaries";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { buildCanonicalUrl, buildLanguageAlternates } from "@/lib/seo";
@@ -12,7 +12,7 @@ import { notFound } from "@/lib/http";
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; page: string } }> = [];
   for (const locale of locales) {
-    const pagination = paginatePosts(locale, 1);
+    const pagination = paginateSummaries(locale, 1);
     for (let page = 2; page <= pagination.totalPages; page += 1) {
       paths.push({ params: { locale, page: String(page) } });
     }
@@ -29,7 +29,7 @@ if (!localeParam || !locales.includes(localeParam) || !rawPage || Number.isNaN(p
 }
 
 const locale = localeParam;
-const pagination = paginatePosts(locale, pageNumber);
+const pagination = paginateSummaries(locale, pageNumber);
 if (pageNumber > pagination.totalPages || pagination.totalCount === 0) {
   return notFound();
 }
@@ -52,7 +52,7 @@ const prefix = `/${locale}`;
 const path = pageNumber === 1 ? `${prefix}/blog/` : `${prefix}/blog/page/${pageNumber}/`;
 const canonical = buildCanonicalUrl(locale, pageNumber === 1 ? "/blog/" : `/blog/page/${pageNumber}/`);
 const availableLocales = locales.filter((candidate) => {
-  const info = paginatePosts(candidate, 1);
+  const info = paginateSummaries(candidate, 1);
   return info.totalPages >= pageNumber && info.totalPages > 1;
 });
 const languageAlternates =

@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { getPostsByType, paginatePostsByType } from "@/lib/blog";
+import { getSummariesByType, paginateSummariesByType } from "@/lib/post-summaries";
 import {
   buildPostTypeRelativePath,
   getPostTypeDescription,
@@ -35,7 +35,7 @@ if (!localeParam || !locales.includes(localeParam) || !rawType || !isValidPostTy
 
 const locale = localeParam;
 const type = rawType as PostType;
-const pagination = paginatePostsByType(locale, type, 1);
+const pagination = paginateSummariesByType(locale, type, 1);
 
 if (pagination.totalCount === 0) {
   return notFound();
@@ -46,7 +46,7 @@ const label = getPostTypeLabel(locale, type);
 const description = getPostTypeDescription(locale, type, pagination.totalCount);
 const relativePath = buildPostTypeRelativePath(type);
 const canonical = buildCanonicalUrl(locale, relativePath);
-const availableLocales = locales.filter((candidate) => getPostsByType(candidate, type).length > 0);
+const availableLocales = locales.filter((candidate) => getSummariesByType(candidate, type).length > 0);
 const languageAlternates = buildLanguageAlternates(
   availableLocales.reduce<Record<Locale, string>>((acc, candidate) => {
     acc[candidate] = relativePath;

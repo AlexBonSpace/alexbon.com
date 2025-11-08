@@ -1,7 +1,14 @@
 import { defaultLocale, locales } from "@/i18n/config";
-import { getAllPosts, getAllTags, paginatePostsByTag, paginatePostsByType, POSTS_PER_PAGE } from "@/lib/blog";
 import { POST_TYPES } from "@/lib/post-types";
 import { SITE_URL } from "@/lib/seo";
+import {
+  getSummariesByLocale,
+  getAllSummaryTags,
+  paginateSummariesByTag,
+  paginateSummariesByType,
+  getSummariesByType,
+} from "@/lib/post-summaries";
+import { POSTS_PER_PAGE } from "@/lib/blog-constants";
 
 export const prerender = true;
 
@@ -68,7 +75,7 @@ export function GET() {
       }),
     );
 
-    const posts = getAllPosts(locale);
+    const posts = getSummariesByLocale(locale);
     const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 
     for (let page = 2; page <= totalPages; page += 1) {
@@ -94,7 +101,7 @@ export function GET() {
       );
     }
 
-    const tags = getAllTags(locale);
+    const tags = getAllSummaryTags(locale);
     for (const tag of tags) {
       const encoded = encodeURIComponent(tag);
       const baseTagUrl = `${SITE_URL}${prefix}/blog/tag/${encoded}/`;
@@ -107,7 +114,7 @@ export function GET() {
         }),
       );
 
-      const tagPagination = paginatePostsByTag(locale, tag, 1);
+      const tagPagination = paginateSummariesByTag(locale, tag, 1);
       for (let page = 2; page <= tagPagination.totalPages; page += 1) {
         entries.push(
           buildUrlEntry({
@@ -131,7 +138,7 @@ export function GET() {
         }),
       );
 
-      const typePagination = paginatePostsByType(locale, type, 1);
+      const typePagination = paginateSummariesByType(locale, type, 1);
       for (let page = 2; page <= typePagination.totalPages; page += 1) {
         entries.push(
           buildUrlEntry({

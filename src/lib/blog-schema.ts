@@ -34,7 +34,9 @@ function mapPostTypeToSchemaTypes(type: BlogPost["type"]) {
   return ["BlogPosting", "SocialMediaPosting"] as const;
 }
 
-export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPost[]) {
+type BlogPreview = Pick<BlogPost, "url" | "title" | "type" | "tags" | "publishedAt" | "updatedAt" | "image">;
+
+export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPreview[]) {
   const canonical = buildCanonicalUrl(locale, "/blog/");
   const inLanguage = localeToBcp47[locale] ?? locale;
   const hero = contentByLocale[locale].blog;

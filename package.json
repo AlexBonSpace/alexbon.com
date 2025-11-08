@@ -11,7 +11,12 @@
     "astro": "astro",
     "algolia:sync": "node scripts/push-algolia.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "cache:build": "node scripts/build-cache.mjs",
+    "sync:updated-at": "node scripts/sync-updated-at.mjs",
+    "predev": "npm run cache:build",
+    "prebuild": "npm run sync:updated-at -- --check && npm run cache:build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.7",
@@ -36,7 +41,10 @@
     "@testing-library/user-event": "^14.6.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
     "happy-dom": "^20.0.10",
+    "husky": "^9.1.7",
     "jsonfeed-schema": "^0.5.0",
     "tailwindcss": "^4.1.15",
     "vitest": "^4.0.8",

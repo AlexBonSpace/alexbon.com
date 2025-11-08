@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { getAllTags, getPostsForTag, paginatePostsByTag } from "@/lib/blog";
+import { getAllSummaryTags, getSummariesForTag, paginateSummariesByTag } from "@/lib/post-summaries";
 import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, localeToBcp47 } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
@@ -12,7 +12,7 @@ import { toExplorerPosts } from "@/lib/blog-explorer";
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; tag: string } }> = [];
   for (const locale of locales) {
-    for (const tag of getAllTags(locale)) {
+    for (const tag of getAllSummaryTags(locale)) {
       paths.push({ params: { locale, tag: encodeURIComponent(tag) } });
     }
   }
@@ -28,7 +28,7 @@ if (!localeParam || !locales.includes(localeParam) || !rawTag) {
 
 const locale = localeParam;
 const tag = decodeURIComponent(rawTag);
-const pagination = paginatePostsByTag(locale, tag, 1);
+const pagination = paginateSummariesByTag(locale, tag, 1);
 
 if (pagination.totalCount === 0) {
   return notFound();
@@ -39,7 +39,7 @@ const title = translate(messages, "Tag.listingTitle", { tag });
 const description = translate(messages, "Tag.listingDescription", { tag, count: pagination.totalCount });
 const basePath = `/blog/tag/${encodeURIComponent(tag)}`;
 const canonical = buildCanonicalUrl(locale, `${basePath}/`);
-const availableLocales = locales.filter((candidate) => getPostsForTag(candidate, tag).length > 0);
+const availableLocales = locales.filter((candidate) => getSummariesForTag(candidate, tag).length > 0);
 const languageAlternates = buildLanguageAlternates(
   availableLocales.reduce<Record<Locale, string>>((acc, candidate) => {
     acc[candidate] = `${basePath}/`;

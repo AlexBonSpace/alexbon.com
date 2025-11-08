@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+CHANGED_MD=$(git diff --name-only --cached -- '*.mdx')
+
+if [ -n "$CHANGED_MD" ]; then
+  echo "[husky] syncing updatedAt for staged MDX files"
+  node scripts/sync-updated-at.mjs $CHANGED_MD
+  git add $CHANGED_MD
+fi

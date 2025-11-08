@@ -72,7 +72,13 @@ export default defineConfig({
     },
   },
   session: {
-    driver: "memory",
+    driver: "cookie",
+    name: "alexbon-session",
+    secret: process.env.ASTRO_SESSION_SECRET ?? "development-session-secret-change-me",
+    cookie: {
+      sameSite: "lax",
+      secure: true,
+    },
   },
   integrations: [react(), mdx()],
   vite: {

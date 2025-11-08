@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { getAllTags, getPostsForTag, paginatePostsByTag } from "@/lib/blog";
+import { getAllSummaryTags, paginateSummariesByTag } from "@/lib/post-summaries";
 import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, localeToBcp47 } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
@@ -12,8 +12,8 @@ import { toExplorerPosts } from "@/lib/blog-explorer";
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; tag: string; page: string } }> = [];
   for (const locale of locales) {
-    for (const tag of getAllTags(locale)) {
-      const pagination = paginatePostsByTag(locale, tag, 1);
+    for (const tag of getAllSummaryTags(locale)) {
+      const pagination = paginateSummariesByTag(locale, tag, 1);
       for (let page = 2; page <= pagination.totalPages; page += 1) {
         paths.push({
           params: { locale, tag: encodeURIComponent(tag), page: String(page) },
@@ -35,7 +35,7 @@ if (!localeParam || !locales.includes(localeParam) || !rawTag || !rawPage || Num
 
 const locale = localeParam;
 const tag = decodeURIComponent(rawTag);
-const pagination = paginatePostsByTag(locale, tag, pageNumber);
+const pagination = paginateSummariesByTag(locale, tag, pageNumber);
 
 if (pagination.totalCount === 0 || pageNumber > pagination.totalPages) {
   return notFound();
@@ -45,7 +45,7 @@ const messages = messagesByLocale[locale] as MessageDictionary;
 const basePath = `/blog/tag/${encodeURIComponent(tag)}`;
 const canonical = buildCanonicalUrl(locale, pageNumber === 1 ? `${basePath}/` : `${basePath}/page/${pageNumber}/`);
 const availableLocales = locales.filter((candidate) => {
-  const info = paginatePostsByTag(candidate, tag, 1);
+  const info = paginateSummariesByTag(candidate, tag, 1);
   return info.totalCount > 0 && pageNumber <= info.totalPages;
 });
 const languageAlternates =

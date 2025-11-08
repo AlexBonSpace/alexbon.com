@@ -3,7 +3,7 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import { getPostsByLocale, paginatePosts } from "@/lib/blog";
+import { paginateSummaries, getSummariesByLocale } from "@/lib/post-summaries";
 import {
   buildBlogCollectionJsonLd,
   buildBlogBreadcrumbJsonLd,
@@ -27,8 +27,8 @@ if (!localeParam || !locales.includes(localeParam)) {
 
 const locale = localeParam;
 const hero = contentByLocale[locale].blog;
-const allPosts = getPostsByLocale(locale);
-const firstPage = paginatePosts(locale, 1);
+const allPosts = getSummariesByLocale(locale);
+const firstPage = paginateSummaries(locale, 1);
 const pagePosts = toExplorerPosts(firstPage.items, locale);
 const meta = getBlogIndexMetadata(locale);
 const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumbJsonLd(locale)];

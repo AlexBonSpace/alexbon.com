@@ -4,7 +4,7 @@ import SearchApp from "@/components/search/SearchApp";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { contentByLocale } from "@/content";
 import { locales, type Locale } from "@/i18n/config";
-import { getPostsByLocale } from "@/lib/blog";
+import { getSummariesByLocale } from "@/lib/post-summaries";
 import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
@@ -26,7 +26,7 @@ if (!resolvedLocale) {
 
 const locale = resolvedLocale;
 const hero = contentByLocale[locale].blog;
-const posts = getPostsByLocale(locale);
+const posts = getSummariesByLocale(locale);
 const meta = getBlogIndexMetadata(locale, "/search/");
 const jsonLd = [buildBlogCollectionJsonLd(locale, posts), buildBlogBreadcrumbJsonLd(locale)];
 const messages = messagesByLocale[locale] as MessageDictionary;
