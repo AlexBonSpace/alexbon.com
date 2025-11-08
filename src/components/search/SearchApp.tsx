@@ -118,7 +118,7 @@ function HitCard({ hit, readMore }: { hit: HighlightableHit; readMore: string })
         <h3 className="sr-only">
           <HighlightedText value={highlightedTitle} />
         </h3>
-        <p className="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
+        <p className="whitespace-pre-line text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-strong">
           {highlightedSnippet ? <HighlightedText value={highlightedSnippet} /> : hit.title}{" "}
           <a
             href={canonicalHref}
@@ -151,7 +151,7 @@ function HitCard({ hit, readMore }: { hit: HighlightableHit; readMore: string })
           </a>
         </h3>
         {highlightedSnippet ? (
-          <p className="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-primary">
+          <p className="whitespace-pre-line text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
             <HighlightedText value={highlightedSnippet} />
           </p>
         ) : null}

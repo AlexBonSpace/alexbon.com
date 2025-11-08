@@ -131,7 +131,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
           >
             {typeLabel}
           </a>
-          <h1 class={`text-balance text-[clamp(2.2rem,6vw,3.4rem)] font-semibold leading-tight text-strong${post.type === "note" ? " sr-only" : ""}`}>
+          <h1 class={`text-center text-[clamp(2.2rem,4.5vw,2.9rem)] font-semibold leading-tight text-strong${post.type === "note" ? " sr-only" : ""}`}>
             {post.title}
           </h1>
           <div class="flex flex-wrap gap-3 text-sm text-muted">
@@ -160,7 +160,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
 
           <div class="flex flex-col gap-10 lg:flex-row">
           <div class="flex-1">
-            <div class="prose prose-article max-w-none text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed">
+            <div class="prose prose-article max-w-none text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed">
               <Content />
             </div>
           </div>
@@ -232,7 +232,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                       </a>
                     </div>
                 <h3 class="sr-only">{item.title}</h3>
-                <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-strong">
+                <p class="whitespace-pre-line text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-strong">
                   {snippet}
                 </p>
                 <div>
@@ -264,7 +264,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                       {item.title}
                     </a>
                   </h3>
-                  <p class="whitespace-pre-line text-[clamp(1.1rem,3.2vw,1.3rem)] leading-relaxed text-primary">
+                  <p class="whitespace-pre-line text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                     {snippet}
                   </p>
                 </div>
