@@ -27,6 +27,8 @@
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^12.6.10",
+    "@csstools/css-parser-algorithms": "^3.0.5",
+    "@csstools/css-tokenizer": "^3.0.4",
     "@tailwindcss/postcss": "^4.1.15",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^6.9.1",
