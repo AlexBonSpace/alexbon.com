@@ -33,6 +33,8 @@
 - `npm run dev` – Astro dev server with SSR on Cloudflare shim.
 - `npm run build` – Cloudflare SSR bundle + prerendered feeds/sitemap (run before syncing Algolia or deploying).
 - `npm run preview` – local preview of the SSR build.
+- `npm run test` – executes the Vitest suite (unit helpers + future component tests).
+- `npm run test:watch` – watch mode for the Vitest suite during development.
 - `npm run algolia:sync` – optional; parses `dist/*/feed-full.json`, diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
 - `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
