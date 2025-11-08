@@ -20,6 +20,7 @@
 **Key Behaviors**
 - “Only [locale]” routing: each locale lives under its own prefix (`/ua/…`, `/ru/…`, `/en/…`). The bare root `/` 308-redirects to `/ua/`, and locale roots redirect to the local blog index.
 - Blog listings and pagination render server-side from local content (no Algolia dependency). `PostGrid` consumes `paginatePosts` results.
+- Updated timestamps: `updatedAt` in frontmatter is optional; when it’s missing we derive the value during build via `git log -1` (`src/lib/git-metadata.ts`) and fall back to `publishedAt` if git history is unavailable. Cache lives only for the build process.
 - Language menu & browser prompt use `navigationAlternatePaths` to deep-link translated slugs.
 - Theme preference stored in cookie + localStorage (`ALEXBON_THEME`).
 - `/[locale]/search/` renders SSR fallback with recent posts, `robots="noindex, follow"`, and loads the Algolia-powered React app lazily (no request until the user types).

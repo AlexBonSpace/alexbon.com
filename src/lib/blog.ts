@@ -12,6 +12,7 @@ import {
   extractFirstSentence,
   resolveLocaleFromSlug,
 } from "@/lib/content-utils";
+import { getGitLastModifiedDate } from "@/lib/git-metadata";
 import { SITE_URL } from "@/lib/seo";
 
 type PostCollectionEntry = CollectionEntry<"posts">;
@@ -130,7 +131,8 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
       : `${SITE_URL}/${locale}/about/`;
 
   const publishedDate = entry.data.publishedAt;
-  const updatedDate = entry.data.updatedAt ?? entry.data.publishedAt;
+  const gitUpdatedAt = entry.data.updatedAt ? null : getGitLastModifiedDate(entry.id);
+  const updatedDate = entry.data.updatedAt ?? gitUpdatedAt ?? entry.data.publishedAt;
   const publishedAtIso = publishedDate.toISOString();
   const updatedAtIso = updatedDate?.toISOString();
 
