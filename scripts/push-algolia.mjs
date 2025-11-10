@@ -136,7 +136,10 @@ function resolveFeedPathFromUrl(candidate) {
   }
 }
 
-function buildSnippet(text, limit = 350) {
+const MAX_CONTENT_BYTES = 6500;
+const MAX_SNIPPET_CHARS = 350;
+
+function buildSnippet(text, limit = MAX_SNIPPET_CHARS) {
   const normalized = typeof text === 'string' ? text.replace(/\s+/g, ' ').trim() : '';
   if (!normalized) return '';
   if (normalized.length <= limit) return normalized;
@@ -144,6 +147,22 @@ function buildSnippet(text, limit = 350) {
   const lastSpace = sliced.lastIndexOf(' ');
   const base = lastSpace > Math.floor(limit * 0.5) ? sliced.slice(0, lastSpace) : sliced;
   return `${base.trimEnd()}…`;
+}
+
+function trimToBytes(text, byteLimit = MAX_CONTENT_BYTES) {
+  const normalized = typeof text === 'string' ? text : '';
+  if (!normalized) return '';
+  const encoder = new TextEncoder();
+  let bytes = encoder.encode(normalized);
+  if (bytes.length <= byteLimit) {
+    return normalized;
+  }
+  let end = normalized.length;
+  while (bytes.length > byteLimit && end > 0) {
+    end = Math.max(Math.floor(end * 0.9), 1);
+    bytes = encoder.encode(normalized.slice(0, end).trimEnd());
+  }
+  return `${normalized.slice(0, end).trimEnd()}…`;
 }
 
 function mapRecord(locale, item) {
@@ -162,7 +181,7 @@ function mapRecord(locale, item) {
   const typePath =
     (typeof item.type_url === 'string' && item.type_url.trim()) ||
     typeMeta.path;
-  const content = item.content_text ?? '';
+  const content = trimToBytes(item.content_text ?? '');
   const snippet = buildSnippet(content);
   return {
     objectID: `${locale}:${slug}`,
