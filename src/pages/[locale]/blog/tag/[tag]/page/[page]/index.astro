@@ -18,7 +18,7 @@ export function getStaticPaths() {
       const pagination = paginateSummariesByTag(locale, tag, 1);
       for (let page = 2; page <= pagination.totalPages; page += 1) {
         paths.push({
-          params: { locale, tag: encodeURIComponent(tag), page: String(page) },
+          params: { locale, tag, page: String(page) },
         });
       }
     }

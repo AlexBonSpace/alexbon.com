@@ -88,15 +88,62 @@ async function saveCache(localesManifest) {
 }
 
 async function readFeed(locale) {
-  const feedPath = FEED_PATHS[locale];
-  try {
-    const raw = await fs.readFile(feedPath, 'utf8');
-    const data = JSON.parse(raw);
-    return data.items ?? [];
-  } catch (error) {
-    console.warn(`Warning: unable to read feed for locale "${locale}" at ${feedPath}. ${error.message}`);
+  const basePath = FEED_PATHS[locale];
+  if (!basePath) {
+    console.warn(`Warning: no feed path configured for locale "${locale}".`);
     return [];
   }
+
+  const items = [];
+  const visited = new Set();
+  let currentPath = basePath;
+
+  while (currentPath && !visited.has(currentPath)) {
+    visited.add(currentPath);
+    try {
+      const raw = await fs.readFile(currentPath, 'utf8');
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.items)) {
+        items.push(...data.items);
+      }
+      if (!data.next_url) {
+        break;
+      }
+      const nextPath = resolveFeedPathFromUrl(data.next_url);
+      if (!nextPath || visited.has(nextPath)) {
+        break;
+      }
+      currentPath = nextPath;
+    } catch (error) {
+      console.warn(`Warning: unable to read feed page for locale "${locale}" at ${currentPath}. ${error.message}`);
+      break;
+    }
+  }
+
+  return items;
+}
+
+function resolveFeedPathFromUrl(candidate) {
+  if (typeof candidate !== 'string' || candidate.length === 0) {
+    return null;
+  }
+
+  try {
+    const url = new URL(candidate);
+    return path.join(distDir, url.pathname.replace(/^\/+/, ''));
+  } catch {
+    return path.join(distDir, candidate.replace(/^\/+/, ''));
+  }
+}
+
+function buildSnippet(text, limit = 350) {
+  const normalized = typeof text === 'string' ? text.replace(/\s+/g, ' ').trim() : '';
+  if (!normalized) return '';
+  if (normalized.length <= limit) return normalized;
+  const sliced = normalized.slice(0, limit);
+  const lastSpace = sliced.lastIndexOf(' ');
+  const base = lastSpace > Math.floor(limit * 0.5) ? sliced.slice(0, lastSpace) : sliced;
+  return `${base.trimEnd()}…`;
 }
 
 function mapRecord(locale, item) {
@@ -116,9 +163,7 @@ function mapRecord(locale, item) {
     (typeof item.type_url === 'string' && item.type_url.trim()) ||
     typeMeta.path;
   const content = item.content_text ?? '';
-  const summarySnippet = typeof item.summary === 'string' && item.summary.trim().length > 0 ? item.summary.trim() : '';
-  const snippetSource = summarySnippet || content;
-  const snippet = snippetSource;
+  const snippet = buildSnippet(content);
   return {
     objectID: `${locale}:${slug}`,
     locale,

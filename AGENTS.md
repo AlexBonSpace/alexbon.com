@@ -4,7 +4,7 @@
 - Astro 5 running in server mode with the Cloudflare Pages adapter (`@astrojs/cloudflare`).
 - React islands handle interactivity (navbar, search page, theme toggle) marked with `client:*`.
 - Tailwind CSS v4 + custom tokens in `src/styles/globals.css`.
-- Algolia is optional: used only for interactive search; indexing happens via `scripts/push-algolia.mjs` that reads locale feeds from `dist/*/feed-full.json`.
+- Algolia is optional: used only for interactive search; indexing happens via `scripts/push-algolia.mjs` that reads locale feeds from `dist/*/feed-full*.json`.
 - Content sources:
   - Markdown/MDX pulled via Astro Content collections (`src/content`).
   - Translation-aware helpers in `src/lib/pages.ts` and `src/lib/blog.ts`.
@@ -28,7 +28,7 @@
 - Language menu & browser prompt use `navigationAlternatePaths` to deep-link translated slugs.
 - Theme preference stored in cookie + localStorage (`ALEXBON_THEME`).
 - `/[locale]/search/` renders SSR fallback with recent posts, `robots="noindex, follow"`, and loads the Algolia-powered React app lazily (no request until the user types).
-- Sitemap + feeds (`/sitemap.xml.ts`, `/feed.xml.ts`, `/feed-full.json.ts`) имеют `export const prerender = true` и читают данные из build-кеша, поэтому Cloudflare отдаёт статические файлы без SSR-нагрузки. RSS остаётся с HTML-контентом, но собирается во время билда.
+- Sitemap + feeds (`/sitemap.xml.ts`, `/feed.xml.ts`, `/feed-full.json.ts`, `/feed-full-page-[page].json.ts`) имеют `export const prerender = true` и читают данные из build-кеша, поэтому Cloudflare отдаёт статические файлы без SSR-нагрузки. RSS остаётся с HTML-контентом, но собирается во время билда, а `feed-full*.json` — плоский текст, разбитый на страницы по 500 записей и отсортированный по `date_modified`.
 - Shared 404 handling: `src/lib/http.ts` returns the HTML from `src/components/system/not-found.html`, the same markup served by `src/pages/404.astro`, so SSR fallbacks show the branded error page.
 
 **Commands**
@@ -38,7 +38,7 @@
 - `npm run cache:build` – regenerate `src/lib/.cache/post-summaries.json` (runs automatically before dev/build; rerun manually if content changes mid-session).
 - `npm run test` – executes the Vitest suite (unit helpers + future component tests).
 - `npm run test:watch` – watch mode for the Vitest suite during development.
-- `npm run algolia:sync` – optional; parses `dist/*/feed-full.json`, diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
+- `npm run algolia:sync` – optional; parses all `dist/*/feed-full*.json` pages (follow `next_url`), diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
 - `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
 

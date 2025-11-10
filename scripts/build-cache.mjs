@@ -137,8 +137,8 @@ async function main() {
     const fileSlug = slugSegments[slugSegments.length - 1];
     const type = resolveType(collection, parsed.data.type);
 
-    const plainTextFull = ensurePlainText(parsed.content);
-    const plainText = limitTextLength(plainTextFull, MAX_TEXT_LENGTH);
+  const plainTextFull = ensurePlainText(parsed.content);
+  const plainText = limitTextLength(plainTextFull, MAX_TEXT_LENGTH);
     const description = (parsed.data.description ?? "").trim() || createDescription(plainText, 160);
     const summary = extractFirstSentence(plainText) || description;
     const cardSnippet = buildCardSnippet(type, plainTextFull, parsed.data.cardSnippet);
@@ -155,6 +155,7 @@ async function main() {
       : [];
 
     const translationGroup = (parsed.data.translationGroup ?? "").trim() || fileSlug;
+    const license = typeof parsed.data.license === "string" ? parsed.data.license.trim() : "";
     const url = `/${locale}/blog/${fileSlug}/`;
     const canonical =
       (parsed.data.canonical ?? "").trim() ||
@@ -170,6 +171,7 @@ async function main() {
       summary,
       cardSnippet,
       plainText,
+      plainTextFull,
       searchContent,
       tags,
       url,
@@ -177,6 +179,7 @@ async function main() {
       publishedAt,
       updatedAt,
       translationGroup,
+      license,
     });
   }
 

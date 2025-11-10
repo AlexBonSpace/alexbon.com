@@ -1,6 +1,7 @@
 import { defaultLocale, locales } from "@/i18n/config";
 import { POST_TYPES } from "@/lib/post-types";
 import { SITE_URL } from "@/lib/seo";
+import { FEED_FULL_PAGE_SIZE } from "@/lib/feed-config";
 import {
   getSummariesByLocale,
   getAllSummaryTags,
@@ -76,6 +77,28 @@ export function GET() {
     );
 
     const posts = getSummariesByLocale(locale);
+    const feedItemsCount = posts.length + 1; // include About page item
+    const totalFeedPages = Math.max(1, Math.ceil(feedItemsCount / FEED_FULL_PAGE_SIZE));
+
+    entries.push(
+      buildUrlEntry({
+        loc: `${SITE_URL}${prefix}/feed-full.json`,
+        lastMod,
+        changeFreq: "weekly",
+        priority: 0.7,
+      }),
+    );
+
+    for (let page = 2; page <= totalFeedPages; page += 1) {
+      entries.push(
+        buildUrlEntry({
+          loc: `${SITE_URL}${prefix}/feed-full-page-${page}.json`,
+          lastMod,
+          changeFreq: "weekly",
+          priority: 0.65,
+        }),
+      );
+    }
     const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 
     for (let page = 2; page <= totalPages; page += 1) {

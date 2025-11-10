@@ -9,5 +9,5 @@ export function getStaticPaths() {
 
 export function GET({ params }: { params: { locale?: string } }) {
   const locale = resolveFeedLocale(params.locale);
-  return buildFullJsonFeed(locale);
+  return buildFullJsonFeed(locale, 1);
 }

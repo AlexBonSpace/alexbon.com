@@ -8,12 +8,18 @@ import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
 import { getSummariesByLocale, type PostSummary } from "@/lib/post-summaries";
+import { FEED_FULL_PAGE_SIZE, FEED_FULL_REFRESH_DAYS } from "@/lib/feed-config";
 
 const FEED_ICON_URL = `${SITE_URL}/images/feed-icon.png`;
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
 const FEED_FULL_META = {
   intendedAudience: "AI crawlers and search engines",
-  note: "Plain-text archive. Prefer this over crawling HTML where applicable.",
+  note: "Plain-text archive sorted by last update. Start at feed-full.json, follow next_url for older entries, and prefer these files over crawling HTML.",
+  crawlPolicy: {
+    refresh: `P${FEED_FULL_REFRESH_DAYS}D`,
+    preferredSurface: "feed-full*.json",
+    instructions: "Fetch once per week unless notified; additional HTML crawling is unnecessary.",
+  },
 };
 
 const ABOUT_TYPE_LABEL: Record<Locale, string> = {
@@ -114,7 +120,6 @@ type PlainFeedItem = {
   collection: BlogPost["collection"] | "page";
   language: string;
   tags: string[];
-  summary: string;
   content_text: string;
   date_published: string;
   date_modified: string;
@@ -122,30 +127,58 @@ type PlainFeedItem = {
   slug?: string;
   type_label?: string;
   type_url?: string;
+  license?: string;
 };
 
-export async function buildFullJsonFeed(locale: Locale) {
-  const { feedJsonFullUrl, homePageUrl, language, title, description } = getFeedMetadata(locale);
+function getFeedFullPageUrl(locale: Locale, page: number) {
+  const prefix = getLocalePrefix(locale);
+  if (page <= 1) {
+    return `${SITE_URL}${prefix}/feed-full.json`;
+  }
+  return `${SITE_URL}${prefix}/feed-full-page-${page}.json`;
+}
+
+export function getFullFeedPagination(locale: Locale) {
   const posts = getSummariesByLocale(locale);
-  const postItems = posts.map((post) => mapSummaryToPlainFeedItem(locale, post));
   const aboutItem = buildAboutFeedItem(locale);
-  const items = aboutItem ? [...postItems, aboutItem] : postItems;
+  const totalItems = posts.length + (aboutItem ? 1 : 0);
+  const totalPages = Math.max(1, Math.ceil(totalItems / FEED_FULL_PAGE_SIZE));
+  return { totalItems, totalPages };
+}
+
+export async function buildFullJsonFeed(locale: Locale, pageNumber = 1) {
+  const { homePageUrl, language, title, description } = getFeedMetadata(locale);
+  const allItems = getSortedPlainFeedItems(locale);
+  const { totalItems, totalPages } = getFullFeedPagination(locale);
+  const currentPage = Math.min(Math.max(1, pageNumber), totalPages);
+  const start = (currentPage - 1) * FEED_FULL_PAGE_SIZE;
+  const end = start + FEED_FULL_PAGE_SIZE;
+  const pageItems = allItems.slice(start, end);
+  const feedUrl = getFeedFullPageUrl(locale, currentPage);
+  const nextUrl = currentPage < totalPages ? getFeedFullPageUrl(locale, currentPage + 1) : undefined;
+  const previousUrl = currentPage > 1 ? getFeedFullPageUrl(locale, currentPage - 1) : undefined;
 
   const feed = {
     version: "https://jsonfeed.org/version/1.1",
     title,
     home_page_url: homePageUrl,
-    feed_url: feedJsonFullUrl,
+    feed_url: feedUrl,
     language,
     description,
     authors: [buildFeedAuthor(locale, { url: SITE_URL })],
     icon: FEED_ICON_URL,
     favicon: `${SITE_URL}/favicon.ico`,
+    next_url: nextUrl,
+    previous_url: previousUrl,
     _meta: {
       ...FEED_FULL_META,
-      itemCount: items.length,
+      itemCount: pageItems.length,
+      totalItems,
+      page: currentPage,
+      totalPages,
+      pageSize: FEED_FULL_PAGE_SIZE,
     },
-    items,
+    items: pageItems,
   } as const;
 
   const payload = JSON.stringify(feed, null, 2);
@@ -280,12 +313,21 @@ async function mapPostsToFeedItems(locale: Locale, limit: number): Promise<FeedI
   );
 }
 
+function getSortedPlainFeedItems(locale: Locale): PlainFeedItem[] {
+  const posts = getSummariesByLocale(locale);
+  const postItems = posts.map((post) => mapSummaryToPlainFeedItem(locale, post));
+  const aboutItem = buildAboutFeedItem(locale);
+  const combined = aboutItem ? [...postItems, aboutItem] : postItems;
+  return combined.sort(sortByLastModifiedDesc);
+}
+
 function mapSummaryToPlainFeedItem(locale: Locale, post: PostSummary): PlainFeedItem {
   const canonicalUrl = ensureAbsoluteUrl(post.canonical || `${SITE_URL}${post.url}`);
   const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
   const typePath = buildPostTypePath(locale, post.type);
   const typeUrl = ensureAbsoluteUrl(typePath);
-  const snippet = (post.cardSnippet || post.summary || post.description || "").trim();
+  const contentText = post.plainTextFull || post.plainText || "";
+  const license = post.license?.trim() || LICENSE_URL;
 
   return {
     id: canonicalUrl,
@@ -295,14 +337,14 @@ function mapSummaryToPlainFeedItem(locale: Locale, post: PostSummary): PlainFeed
     collection: post.collection,
     language: postLanguage,
     tags: post.tags,
-    summary: snippet,
-    content_text: post.plainText || "",
+    content_text: contentText,
     date_published: post.publishedAt,
     date_modified: post.updatedAt ?? post.publishedAt,
     image: post.image?.trim(),
     slug: post.slug,
     type_label: getPostTypeLabel(locale, post.type),
     type_url: typeUrl,
+    license,
   };
 }
 
@@ -313,7 +355,6 @@ function buildAboutFeedItem(locale: Locale): PlainFeedItem | null {
   const canonical = buildCanonicalUrl(locale, "/about/");
   const language = localeToBcp47[locale] ?? locale;
   const timestamps = ABOUT_PAGE_TIMESTAMPS[locale] ?? ABOUT_PAGE_TIMESTAMPS[defaultLocale];
-  const summary = content.metaDescription ?? content.tagline;
   const contentText = buildAboutContentText(locale);
 
   return {
@@ -324,13 +365,13 @@ function buildAboutFeedItem(locale: Locale): PlainFeedItem | null {
     collection: "page",
     language,
     tags: [],
-    summary,
     content_text: contentText,
     date_published: timestamps.published,
     date_modified: timestamps.modified,
     slug: "about",
     type_label: ABOUT_TYPE_LABEL[locale],
     type_url: canonical,
+    license: LICENSE_URL,
   };
 }
 
@@ -528,4 +569,18 @@ function buildFeedAuthor(
   }
 
   return author;
+}
+
+function sortByLastModifiedDesc(a: PlainFeedItem, b: PlainFeedItem) {
+  const aTime = new Date(a.date_modified || a.date_published).getTime();
+  const bTime = new Date(b.date_modified || b.date_published).getTime();
+  if (aTime !== bTime) {
+    return bTime - aTime;
+  }
+  const aPublished = new Date(a.date_published).getTime();
+  const bPublished = new Date(b.date_published).getTime();
+  if (aPublished !== bPublished) {
+    return bPublished - aPublished;
+  }
+  return (a.slug ?? a.url).localeCompare(b.slug ?? b.url);
 }

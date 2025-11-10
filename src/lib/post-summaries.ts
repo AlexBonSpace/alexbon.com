@@ -12,6 +12,7 @@ export type PostSummary = {
   summary: string;
   cardSnippet: string;
   plainText: string;
+  plainTextFull: string;
   searchContent: string;
   tags: string[];
   url: string;
@@ -19,6 +20,7 @@ export type PostSummary = {
   publishedAt: string;
   updatedAt: string;
   translationGroup: string;
+  license?: string;
 };
 
 type Paginated<T> = {

@@ -32,6 +32,13 @@ Other scripts:
 
 Рекомендованный деплой-порядок: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
 
+## 🤖 AI feeds
+
+- `/{locale}/feed-full*.json` files are plain-text JSON Feed archives sorted by `date_modified`, limited to 500 entries per page, and chained with `next_url`.
+- Crawlers should start with `feed-full.json` and keep following `next_url` until it disappears; no HTML crawling is required for AI ingestion.
+- Each feed item carries the full `content_text`, canonical metadata, tags, and type info; `authors` and `license` live in the feed header to minimize per-item duplication.
+- The feeds refresh weekly; rerun `npm run cache:build && npm run build` before syncing Algolia or deploying.
+
 ## 🗂️ Project structure
 
 ```
@@ -50,7 +57,7 @@ Other scripts:
 └── astro.config.mjs        # Astro + Cloudflare adapter config
 ```
 
-Algolia feeds (`dist/*/feed-full.json`) are consumed by `scripts/push-algolia.mjs`. The script diffs records locally and supports `--full` to force a full reindex.
+Algolia feeds (`dist/*/feed-full*.json`) are consumed by `scripts/push-algolia.mjs`. The script diffs records locally and supports `--full` to force a full reindex, following `next_url` pointers to read every page.
 
 ### Content timestamps
 
