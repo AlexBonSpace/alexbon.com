@@ -38,9 +38,9 @@ const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumb
 const messages = messagesByLocale[locale] as MessageDictionary;
 
 const introCopyByLocale: Record<Locale, string> = {
-  ua: "Мене звати Алекс Бон. Це простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише віддзеркалення.",
-  ru: "Меня зовут Алекс Бон. А это пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
-  en: "My name is Alex Bon. This is a space to see yourself. The stories, narratives, and single lines living here are only reflections.",
+  ua: "Мене звати Алек Бон. Я психолог і письменник з України. У світі, сповненому шуму, я пишу тихі історії. Щоб ви могли почути себе.",
+  ru: "Меня зовут Алек Бон. Я психолог и писатель из Украины. В мире, полном шума, я пишу тихие истории. Чтобы вы могли услышать себя.",
+  en: "My name is Alec Bon. I am a psychologist and writer from Ukraine. In a world full of noise, I write quiet stories so you can hear yourself.",
 };
 const introCopy = hero.heroDescription ? null : introCopyByLocale[locale];
 

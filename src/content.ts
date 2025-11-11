@@ -250,7 +250,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       badge: "Отражения",
       heroTitle: "Отражения",
       heroDescription:
-        "Меня зовут Алек Бон. Я психолог, а это просто место, чтобы выдохнуть и разобраться, пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
+        "Меня зовут Алек Бон. Я психолог и писатель из Украины. В мире, полном шума, я пишу тихие истории. Чтобы вы могли услышать себя.",
     },
   },
   ua: {
@@ -383,7 +383,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       badge: "Відображення",
       heroTitle: "Відображення",
       heroDescription:
-        "Мене звати Алекс Бон. Я психолог, а це — просто місце, щоб видихнути й розібратися, простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише відображення",
+        "Мене звати Алек Бон. Я психолог і письменник з України. У світі, сповненому шуму, я пишу тихі історії. Щоб ви могли почути себе.",
     },
   },
   en: {
@@ -502,7 +502,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       badge: "Reflections",
       heroTitle: "Reflections",
       heroDescription:
-        "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this lighthouse to see yourself. The stories you find here are reflections.",
+        "My name is Alec Bon. I am a psychologist and writer from Ukraine. In a world full of noise, I write quiet stories so you can hear yourself.",
     },
   },
 };
