@@ -5,7 +5,7 @@ import { contentByLocale } from "@/content";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE, PERSON_JOB_TITLES, PERSON_KNOWS_ABOUT, localeToBcp47 } from "@/lib/seo";
 import { notFound } from "@/lib/http";
-import { buildAuthorPersonJsonLd } from "@/lib/content-utils";
+import { AUTHOR_SAME_AS, buildAuthorPersonJsonLd } from "@/lib/content-utils";
 
 export const prerender = true;
 
@@ -27,7 +27,6 @@ const content = contentByLocale[locale];
 const canonical = buildCanonicalUrl(locale, "/about/");
 const languageAlternates = buildLanguageAlternates("/about/", { locales });
 const personJsonLd = buildAuthorPersonJsonLd(locale);
-const mastodonProfile = "https://github.com/AlexBonSpace/alexbon.com";
 const profileJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -45,7 +44,7 @@ const profileJsonLd = {
     alternateName: ["Alex Bon"],
     jobTitle: PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale],
     description: content.metaDescription,
-    sameAs: [mastodonProfile],
+    sameAs: Array.from(AUTHOR_SAME_AS),
     knowsAbout: PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale],
     worksFor: {
       "@type": "Organization",
