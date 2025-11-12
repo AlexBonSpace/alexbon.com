@@ -1,0 +1,14 @@
+---
+interface Props {
+  text: string;
+  className?: string;
+}
+
+const { text, className = "" } = Astro.props as Props;
+const [primary, ...rest] = text.split("\n");
+const reflection = rest.length > 0 ? rest.join(" ") : primary;
+---
+<h1 class={`reflection-title ${className}`}>
+  <span class="reflection-title__text">{primary}</span>
+  <span class="reflection-title__reflection" aria-hidden="true">{reflection}</span>
+</h1>
