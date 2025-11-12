@@ -249,8 +249,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
+      metaTitle: "Отражения - короткие психологические рассказы и истории | Психолог Алекс Бон",
       heroDescription:
-        "Меня зовут Алек Бон. Я психолог и писатель из Украины. В мире, полном шума, я пишу тихие истории. Чтобы вы могли услышать себя.",
+        "Меня зовут Алекс Бон. Я психолог и писатель из Украины. В мире, полном шума, я пишу тихие истории. Чтобы вы могли услышать себя.",
     },
   },
   ua: {
@@ -382,8 +383,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
+      metaTitle: "Відображення — короткі психологічні розповіді та історії | Психолог Алекс Бон",
       heroDescription:
-        "Мене звати Алек Бон. Я психолог і письменник з України. У світі, сповненому шуму, я пишу тихі історії. Щоб ви могли почути себе.",
+        "Мене звати Алекс Бон. Я психолог і письменник з України. У світі, сповненому шуму, я пишу тихі історії. Щоб ви могли почути себе.",
     },
   },
   en: {
@@ -501,8 +503,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",
+      metaTitle: "Reflections — short psychological stories | Psychologist Alex Bon",
       heroDescription:
-        "My name is Alec Bon. I am a psychologist and writer from Ukraine. In a world full of noise, I write quiet stories so you can hear yourself.",
+        "My name is Alex Bon. I am a psychologist and writer from Ukraine. In a world full of noise, I write quiet stories so you can hear yourself.",
     },
   },
 };

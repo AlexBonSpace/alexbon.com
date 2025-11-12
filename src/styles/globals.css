@@ -432,6 +432,7 @@ body {
     color: color-mix(in srgb, var(--color-text-primary) 92%, transparent);
   }
 
+
   .shadow-card {
     box-shadow: var(--shadow-card);
   }

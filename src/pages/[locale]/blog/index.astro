@@ -38,13 +38,6 @@ const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumb
 
 const messages = messagesByLocale[locale] as MessageDictionary;
 
-const introCopyByLocale: Record<Locale, string> = {
-  ua: "Мене звати Алек Бон. Я психолог і письменник з України. У світі, сповненому шуму, я пишу тихі історії. Щоб ви могли почути себе.",
-  ru: "Меня зовут Алек Бон. Я психолог и писатель из Украины. В мире, полном шума, я пишу тихие истории. Чтобы вы могли услышать себя.",
-  en: "My name is Alec Bon. I am a psychologist and writer from Ukraine. In a world full of noise, I write quiet stories so you can hear yourself.",
-};
-const introCopy = hero.heroDescription ? null : introCopyByLocale[locale];
-
 const readMoreRaw = translate(messages, "Blog.readMore");
 const readMoreLabel =
   readMoreRaw === "Blog.readMore"
@@ -65,7 +58,7 @@ const prefix = `/${locale}`;
 ---
 <SiteLayout
   locale={locale}
-  title={hero.heroTitle}
+  title={hero.metaTitle || hero.heroTitle}
   description={hero.heroDescription || undefined}
   canonical={meta.canonical}
   languageAlternates={meta.alternates}
@@ -74,7 +67,7 @@ const prefix = `/${locale}`;
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <HeroReflection title={hero.heroTitle} description={hero.heroDescription} introCopy={introCopy} />
+      <HeroReflection title={hero.heroTitle} description={hero.heroDescription} />
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
