@@ -13,6 +13,7 @@ import { messagesByLocale } from "@/lib/messages";
 import { notFound } from "@/lib/http";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { toExplorerPosts } from "@/lib/blog-explorer";
+import HeroReflection from "@/components/HeroReflection.astro";
 
 export const prerender = true;
 
@@ -73,24 +74,12 @@ const prefix = `/${locale}`;
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section class="section-card-strong flex flex-col gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
-        <span class="badge-soft mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
-          {hero.badge}
-        </span>
-        <h1 class="w-full text-center text-[clamp(2.4rem,6.5vw,3.8rem)] font-semibold leading-tight text-strong">
-          {hero.heroTitle}
-        </h1>
-        {hero.heroDescription ? (
-          <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.3rem)] leading-relaxed text-primary">
-            {hero.heroDescription}
-          </p>
-        ) : null}
-        {introCopy ? (
-          <p class="mx-auto max-w-3xl text-[clamp(1.05rem,3.2vw,1.2rem)] leading-relaxed text-primary/90">
-            {introCopy}
-          </p>
-        ) : null}
-      </section>
+      <HeroReflection
+        badge={hero.badge}
+        title={hero.heroTitle}
+        description={hero.heroDescription}
+        introCopy={introCopy}
+      />
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">

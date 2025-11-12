@@ -383,6 +383,53 @@ body {
     box-shadow: var(--shadow-card);
   }
 
+  .hero-reflection {
+    position: relative;
+  }
+
+  .hero-reflection__title-wrap {
+    position: relative;
+    width: 100%;
+    min-height: clamp(8rem, 22vw, 16rem);
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
+  .hero-reflection__title,
+  .hero-reflection__mirror {
+    display: block;
+    font-size: clamp(3.5rem, 11vw, 9rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--color-text-strong);
+    text-transform: none;
+  }
+
+  .hero-reflection__mirror {
+    transform: scaleY(-1);
+    opacity: 0.58;
+    filter: blur(0.8px);
+    mix-blend-mode: multiply;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+  }
+
+  .hero-reflection__description,
+  .hero-reflection__intro {
+    font-size: clamp(1.0625rem, 3.1vw, 1.3rem);
+    line-height: 1.7;
+    color: var(--color-text-primary);
+  }
+
+  .hero-reflection__intro {
+    color: color-mix(in srgb, var(--color-text-primary) 92%, transparent);
+  }
+
   .shadow-card {
     box-shadow: var(--shadow-card);
   }

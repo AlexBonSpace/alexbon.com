@@ -1,0 +1,39 @@
+---
+interface Props {
+  badge?: string;
+  title: string;
+  description?: string | null;
+  introCopy?: string | null;
+  className?: string;
+}
+
+const { badge, title, description, introCopy, className = "" } = Astro.props as Props;
+---
+<section
+  class={`hero-reflection section-card-strong flex flex-col items-center gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10 ${className}`}
+>
+  {badge ? (
+    <span class="hero-reflection__badge badge-soft inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
+      {badge}
+    </span>
+  ) : null}
+
+  <div class="hero-reflection__title-wrap" aria-label={title}>
+    <h1 class="hero-reflection__title">{title}</h1>
+    <span class="hero-reflection__mirror" aria-hidden="true">
+      {title}
+    </span>
+  </div>
+
+  {description ? (
+    <p class="hero-reflection__description mx-auto max-w-3xl">
+      {description}
+    </p>
+  ) : null}
+
+  {introCopy ? (
+    <p class="hero-reflection__intro mx-auto max-w-3xl">
+      {introCopy}
+    </p>
+  ) : null}
+</section>
