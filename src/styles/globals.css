@@ -177,6 +177,8 @@ body {
   letter-spacing: 0.01em;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
+  font-size-adjust: 0.52;
+  font-synthesis: none;
 }
 
 .tracking-\[0\.35em\] {
@@ -402,7 +404,7 @@ body {
   .hero-reflection__title,
   .hero-reflection__mirror {
     display: block;
-    font-size: clamp(3.5rem, 11vw, 9rem);
+    font-size: clamp(3rem, 9vw, 7.5rem);
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1;
