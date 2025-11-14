@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "astro";
 
-const redirectEntries: Array<[string, string]> = [
+export const redirectEntries: Array<[string, string]> = [
   ["/de/", "/ua/blog/"],
   ["/pl/", "/ua/blog/"],
   ["/blog/single-player/", "/en/blog/"],
@@ -31,7 +31,7 @@ function safeDecode(value: string): string {
   }
 }
 
-function normalizePathname(pathname: string): string {
+export function normalizePathname(pathname: string): string {
   let normalized = safeDecode(pathname.trim());
   if (!normalized.startsWith("/")) {
     normalized = `/${normalized}`;
@@ -50,6 +50,12 @@ const buildDestination = (origin: string, targetPath: string) =>
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   const url = new URL(context.request.url);
+  const isFileRequest = fileLikePattern.test(url.pathname.split("/").pop() ?? "");
+  if (!isFileRequest && url.pathname !== "/" && !url.pathname.endsWith("/")) {
+    const slashUrl = new URL(url);
+    slashUrl.pathname = `${url.pathname}/`;
+    return context.redirect(slashUrl.toString(), 308);
+  }
   const lookupKey = normalizePathname(url.pathname);
   const target = redirectMap.get(lookupKey);
 

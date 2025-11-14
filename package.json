@@ -16,7 +16,9 @@
     "predev": "npm run cache:build",
     "prebuild": "npm run cache:build",
     "postbuild": "node scripts/normalize-routes.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "verify:seo": "node scripts/verify-seo.mjs",
+    "verify": "npm run test && npm run build && npm run verify:seo"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.10",

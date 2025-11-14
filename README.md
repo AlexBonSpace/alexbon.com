@@ -28,9 +28,17 @@ Other scripts:
 | `npm run preview`        | Preview the production build locally                                        |
 | `npm run cache:build`    | Rebuild `src/lib/.cache/post-summaries.json` (auto-runs in `predev/prebuild`)|
 | `npm run test`           | Vitest suite                                                                |
+| `npm run verify:seo`     | Validate `dist/sitemap.xml` (requires a fresh `npm run build`)              |
+| `npm run verify`         | Runs tests, does a production build, and finally executes `verify:seo`      |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
 
 Рекомендованный деплой-порядок: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
+
+## 🧪 Automated checks
+
+- `npm run test` exercises helpers around content cleanup, localized URL builders, and middleware normalization.
+- `npm run verify:seo` parses `dist/sitemap.xml` to ensure only canonical HTML routes are published (no feeds, search, or JSON endpoints) and that every locale has coverage.
+- `npm run verify` combines the Vitest suite, a production build, and the sitemap check so you can run a single smoke-test before deploying.
 
 ## 🤖 AI feeds
 
@@ -53,6 +61,7 @@ Other scripts:
 │   └── styles/             # Tailwind config and global styles
 ├── scripts/
 │   ├── push-algolia.mjs    # Sync feeds with Algolia (incremental)
+│   ├── verify-seo.mjs      # Ensures sitemap output has only canonical URLs
 │   └── start-dev.sh        # Dev bootstrap (cache cleanup + server)
 └── astro.config.mjs        # Astro + Cloudflare adapter config
 ```

@@ -81,5 +81,16 @@ export function getLocaleFromPathname(pathname: string): Locale | null {
 }
 
 export function buildLocalizedPath(pathname: string, locale: Locale): string {
-  return buildLocalizedPathFromSeo(locale, pathname);
+  if (!pathname.startsWith("/")) {
+    return pathname;
+  }
+
+  const segments = pathname.split("/").filter(Boolean);
+  while (segments.length > 0 && normalizeLocale(segments[0]) !== null) {
+    segments.shift();
+  }
+
+  const basePath = segments.length > 0 ? `/${segments.join("/")}` : "/";
+  const localized = buildLocalizedPathFromSeo(locale, basePath);
+  return localized.endsWith("/") ? localized : `${localized}/`;
 }
