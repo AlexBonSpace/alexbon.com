@@ -1,4 +1,5 @@
 import { locales, type Locale } from "@/i18n/config";
+import { buildLocalizedPath as buildLocalizedPathFromSeo } from "@/lib/seo";
 export { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from "@/lib/preferences";
 export const LOCALE_HEADER = "x-user-locale";
 
@@ -80,20 +81,5 @@ export function getLocaleFromPathname(pathname: string): Locale | null {
 }
 
 export function buildLocalizedPath(pathname: string, locale: Locale): string {
-  if (!pathname.startsWith("/")) {
-    return pathname;
-  }
-
-  const segments = pathname.split("/").filter(Boolean);
-  while (segments.length > 0 && normalizeLocale(segments[0]) !== null) {
-    segments.shift();
-  }
-
-  const baseSegments = [locale, ...segments];
-  if (baseSegments.length === 0) {
-    return "/";
-  }
-
-  const path = `/${baseSegments.join("/")}`;
-  return path.endsWith("/") ? path : `${path}/`;
+  return buildLocalizedPathFromSeo(locale, pathname);
 }
