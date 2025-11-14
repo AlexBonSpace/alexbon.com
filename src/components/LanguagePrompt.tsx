@@ -47,22 +47,11 @@ type LanguagePromptProps = {
   alternatePaths?: Partial<Record<Locale, string>>;
 };
 
-function stripLocaleFromPath(pathname: string): string {
-  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  const segments = normalized.split("/").filter(Boolean);
-  const first = segments[0];
-  if (first && locales.includes(first as Locale)) {
-    return `/${segments.slice(1).join("/")}` || "/";
-  }
-  return normalized || "/";
-}
-
 export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths }: LanguagePromptProps) {
   const providerLocale = useLocale();
   const [suggestedLocale, setSuggestedLocale] = useState<Locale | null>(null);
 
   const searchPart = currentSearch.startsWith("?") ? currentSearch : currentSearch ? `?${currentSearch}` : "";
-  const basePath = useMemo(() => stripLocaleFromPath(currentPath || "/"), [currentPath]);
 
   const currentLocale = useMemo(() => {
     if (providerLocale !== defaultLocale) {
@@ -118,7 +107,7 @@ export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths
     if (storedLocale) {
       if (storedLocale !== currentLocale) {
         const overridePath = alternatePaths?.[storedLocale];
-        const targetPath = overridePath ?? buildLocalizedPath(basePath || "/", storedLocale);
+        const targetPath = overridePath ?? buildLocalizedPath("/", storedLocale);
         const destination = `${targetPath}${searchPart}`;
         persistLocalePreference(storedLocale);
         window.location.replace(destination);
@@ -142,12 +131,12 @@ export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths
     }
 
     setSuggestedLocale(candidate);
-  }, [alternatePaths, basePath, currentLocale, searchPart]);
+  }, [alternatePaths, currentLocale, searchPart]);
 
   const switchLocale = useCallback(
     (locale: Locale) => {
       const overridePath = alternatePaths?.[locale];
-      const targetPath = overridePath ?? buildLocalizedPath(basePath || "/", locale);
+      const targetPath = overridePath ?? buildLocalizedPath("/", locale);
       const destination = `${targetPath}${searchPart}`;
       setSuggestedLocale(null);
       persistLocalePreference(locale);
@@ -155,7 +144,7 @@ export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths
         window.location.href = destination;
       }
     },
-    [alternatePaths, basePath, searchPart],
+    [alternatePaths, searchPart],
   );
 
   const dismiss = useCallback(() => {

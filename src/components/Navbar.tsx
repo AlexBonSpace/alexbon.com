@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "@/contexts/i18n-context";
 import { languageLinks, type LocaleKey } from "@/content";
-import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { buildLocalizedPath } from "@/i18n/locale-utils";
 import { persistLocalePreference } from "@/i18n/client";
@@ -15,16 +14,6 @@ interface NavbarProps {
   currentPath: string;
   currentSearch?: string;
   alternatePaths?: Partial<Record<LocaleKey, string>>;
-}
-
-function stripLocaleFromPath(pathname: string): string {
-  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  const segments = normalized.split("/").filter(Boolean);
-  const first = segments[0];
-  if (first && locales.includes(first as Locale)) {
-    return `/${segments.slice(1).join("/")}` || "/";
-  }
-  return normalized || "/";
 }
 
 export function Navbar({
@@ -44,7 +33,6 @@ export function Navbar({
   const currentLanguage = languageLinks.find((link) => link.locale === activeLocale) ?? languageLinks[0];
   const alternateLanguages = languageLinks.filter((link) => link.locale !== activeLocale);
 
-  const basePath = useMemo(() => stripLocaleFromPath(currentPath || "/"), [currentPath]);
   const searchSuffix = currentSearch && currentSearch !== "?" ? (currentSearch.startsWith("?") ? currentSearch : `?${currentSearch}`) : "";
 
   const buildHref = (path: string) => {
@@ -59,9 +47,7 @@ export function Navbar({
   ];
 
   const buildLocaleHref = (targetLocale: LocaleKey) => {
-    const alternatePath = alternatePaths?.[targetLocale];
-    const rawPath = alternatePath ? stripLocaleFromPath(alternatePath) : basePath;
-    const localized = buildLocalizedPath(rawPath || "/", targetLocale);
+    const localized = alternatePaths?.[targetLocale] ?? buildLocalizedPath("/", targetLocale);
     return `${localized}${searchSuffix}`;
   };
 

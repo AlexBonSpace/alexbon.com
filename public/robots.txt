@@ -2,6 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.alexbon.com/sitemap.xml
-Sitemap: https://www.alexbon.com/en/feed-full.json
-Sitemap: https://www.alexbon.com/ru/feed-full.json
-Sitemap: https://www.alexbon.com/ua/feed-full.json

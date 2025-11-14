@@ -12,7 +12,7 @@ import {
 } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { buildBreadcrumbJsonLd } from "@/lib/blog";
-import { buildCanonicalUrl, buildLanguageAlternates } from "@/lib/seo";
+import { buildCanonicalUrl, buildLanguageAlternates, DEFAULT_POST_IMAGE } from "@/lib/seo";
 import { formatDate } from "@/lib/datetime";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
@@ -79,12 +79,14 @@ const openGraph = {
   site_name: brandName,
   published_time: post.publishedAt,
   modified_time: post.updatedAt ?? post.publishedAt,
+  image: post.image ?? DEFAULT_POST_IMAGE,
 };
 
 const twitter = {
   card: "summary_large_image",
   title: post.title,
   description: post.description ?? undefined,
+  image: post.image ?? DEFAULT_POST_IMAGE,
 };
 
 const jsonLd = [post.jsonLd, buildBreadcrumbJsonLd(locale, post)];

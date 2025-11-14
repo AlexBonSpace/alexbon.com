@@ -5,7 +5,7 @@ import JsonLd from "@/components/JsonLd.astro";
 import NavigationShell from "@/components/NavigationShell";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { contentByLocale, languageLinks } from "@/content";
-import { SITE_URL, localeToBcp47 } from "@/lib/seo";
+import { SITE_URL, localeToBcp47, hreflangToLocale, DEFAULT_POST_IMAGE } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { DEFAULT_THEME, isThemeId } from "@/lib/themes";
 import type { MessageDictionary } from "@/i18n/translator";
@@ -70,22 +70,63 @@ function stripLocaleFromPath(pathname: string): string {
   return normalized || "/";
 }
 
+function ensureAbsolutePath(pathname: string): string {
+  if (!pathname) {
+    return "/";
+  }
+  return pathname.startsWith("/") ? pathname : `/${pathname}`;
+}
+
+function resolveLocalizedNavigationPath(targetLocale: Locale, override: string): string {
+  const normalized = ensureAbsolutePath(override);
+  if (normalized === "/") {
+    return `/${targetLocale}/`;
+  }
+  if (normalized.startsWith(`/${targetLocale}/`)) {
+    return normalized.endsWith("/") ? normalized : `${normalized}/`;
+  }
+  return buildLocalizedPath(normalized, targetLocale);
+}
+
 const basePath = stripLocaleFromPath(currentPath);
-const autoNavigationAlternates = locales.reduce<Partial<Record<Locale, string>>>((acc, candidate) => {
-  acc[candidate] = buildLocalizedPath(basePath, candidate);
+const localesWithLocalizedPath = new Set<Locale>([locale]);
+if (languageAlternates) {
+  for (const key of Object.keys(languageAlternates)) {
+    const mappedLocale = hreflangToLocale[key];
+    if (mappedLocale) {
+      localesWithLocalizedPath.add(mappedLocale);
+    }
+  }
+}
+
+if (navigationAlternatePaths) {
+  for (const key of Object.keys(navigationAlternatePaths)) {
+    if (locales.includes(key as Locale)) {
+      localesWithLocalizedPath.add(key as Locale);
+    }
+  }
+}
+
+const navigationPaths = locales.reduce<Record<Locale, string>>((acc, candidate) => {
+  const overridePath = navigationAlternatePaths?.[candidate];
+  if (overridePath) {
+    acc[candidate] = resolveLocalizedNavigationPath(candidate, overridePath);
+    return acc;
+  }
+  if (localesWithLocalizedPath.has(candidate)) {
+    acc[candidate] = buildLocalizedPath(basePath, candidate);
+    return acc;
+  }
+  acc[candidate] = `/${candidate}/`;
   return acc;
-}, {});
+}, {} as Record<Locale, string>);
+
 const searchSuffix =
   currentSearch && currentSearch !== "?"
     ? currentSearch.startsWith("?")
       ? currentSearch
       : `?${currentSearch}`
     : "";
-
-const navigationPaths = {
-  ...autoNavigationAlternates,
-  ...(navigationAlternatePaths ?? {}),
-};
 
 const FULL_FEED_TITLES: Record<Locale, string> = {
   ua: "Alex Bon — повний архів — AI-friendly JSON",
@@ -121,7 +162,7 @@ const baseFeedLinks: FeedLink[] = [
 
 const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) => {
   const localeKey = linkLocale as Locale;
-  const localizedPath = navigationPaths[localeKey] ?? buildLocalizedPath(basePath, localeKey);
+  const localizedPath = navigationPaths[localeKey] ?? buildLocalizedPath("/", localeKey);
   const href = `${localizedPath}${searchSuffix}`.replace(/\?$/, "");
   return {
     label,
@@ -175,6 +216,56 @@ const structuredData = {
   "@context": "https://schema.org",
   "@graph": [websiteJsonLd, dataFeedJsonLd, ...additionalJsonLd],
 };
+
+const fallbackTitle = title ?? content.metaTitle ?? content.brandName;
+const fallbackDescription = description ?? content.metaDescription ?? content.tagline ?? "";
+const fallbackCanonical = canonical ?? `${SITE_URL}/${locale}/`;
+
+const baseOpenGraph: Record<string, string> = {
+  type: "website",
+  title: fallbackTitle,
+  description: fallbackDescription,
+  url: fallbackCanonical,
+  site_name: content.brandName,
+  image: DEFAULT_POST_IMAGE,
+};
+
+const resolvedOpenGraph = (() => {
+  const merged: Record<string, string> = { ...baseOpenGraph };
+  if (openGraph) {
+    for (const [key, value] of Object.entries(openGraph)) {
+      if (typeof value === "string" && value.trim().length > 0) {
+        merged[key] = value;
+      }
+    }
+    if (!openGraph.image) {
+      merged.image = baseOpenGraph.image;
+    }
+  }
+  return merged;
+})();
+
+const baseTwitter: Record<string, string> = {
+  card: "summary_large_image",
+  title: fallbackTitle,
+  description: fallbackDescription,
+  image: resolvedOpenGraph.image,
+};
+
+const resolvedTwitter = (() => {
+  const merged: Record<string, string> = { ...baseTwitter };
+  if (twitter) {
+    for (const [key, value] of Object.entries(twitter)) {
+      if (typeof value === "string" && value.trim().length > 0) {
+        merged[key] = value;
+      }
+    }
+    if (!twitter.image) {
+      merged.image = baseTwitter.image;
+    }
+  }
+  return merged;
+})();
 
 const robotsContent =
   typeof robots === "string" && robots.trim()
@@ -254,12 +345,12 @@ const FONT_STYLESHEET =
     {feedLinks.map((link) => (
       <link rel={link.rel ?? "alternate"} type={link.type} title={link.title} href={link.href} hrefLang={link.hreflang} />
     ))}
-    {openGraph
-      ? Object.entries(openGraph).map(([key, value]) =>
-          value ? <meta property={`og:${key}`} content={value} /> : null,
-        )
-      : null}
-    {twitter ? Object.entries(twitter).map(([key, value]) => (value ? <meta name={`twitter:${key}`} content={value} /> : null)) : null}
+    {Object.entries(resolvedOpenGraph).map(([key, value]) =>
+      value ? <meta property={`og:${key}`} content={value} /> : null,
+    )}
+    {Object.entries(resolvedTwitter).map(([key, value]) =>
+      value ? <meta name={`twitter:${key}`} content={value} /> : null,
+    )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link rel="preload" href={FONT_STYLESHEET} as="style" />

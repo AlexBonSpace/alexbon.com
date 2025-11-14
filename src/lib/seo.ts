@@ -2,11 +2,15 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 
 export const SITE_URL = "https://www.alexbon.com";
 
-const hreflangMap: Record<Locale, string> = {
+export const localeToHreflang: Record<Locale, string> = {
   ua: "uk-UA",
   ru: "ru-RU",
   en: "en",
 };
+
+export const hreflangToLocale: Record<string, Locale> = Object.fromEntries(
+  Object.entries(localeToHreflang).map(([locale, hreflang]) => [hreflang, locale as Locale]),
+) as Record<string, Locale>;
 
 export const localeToBcp47: Record<Locale, string> = {
   ua: "uk",
@@ -52,35 +56,48 @@ export function buildLanguageAlternates(
   pathOrMap: string | Partial<Record<Locale, string>>,
   options: { locales?: Locale[] } = {},
 ): Record<string, string> {
-  const allowedLocales = options.locales
-    ? options.locales.filter((locale) => locales.includes(locale))
-    : locales.slice();
-
-  if (!allowedLocales.includes(defaultLocale)) {
-    allowedLocales.push(defaultLocale);
-  }
+  const allowedLocales =
+    options.locales && options.locales.length > 0
+      ? options.locales.filter((locale): locale is Locale => locales.includes(locale))
+      : locales.slice();
 
   const uniqueLocales = Array.from(new Set(allowedLocales));
   const languages: Record<string, string> = {};
 
   for (const locale of uniqueLocales) {
-    const candidatePath =
-      typeof pathOrMap === "string"
-        ? pathOrMap
-        : pathOrMap[locale] ?? pathOrMap[defaultLocale];
+    const candidatePath = typeof pathOrMap === "string" ? pathOrMap : pathOrMap[locale];
     if (!candidatePath) {
       continue;
     }
     const normalized = normalizePath(candidatePath);
-    const hreflang = hreflangMap[locale];
+    const hreflang = localeToHreflang[locale];
     if (!hreflang) continue;
     languages[hreflang] = `${SITE_URL}${buildLocalizedPath(locale, normalized)}`;
   }
 
-  const defaultPath =
-    typeof pathOrMap === "string"
-      ? pathOrMap
-      : pathOrMap[defaultLocale] ?? "/";
-  languages["x-default"] = `${SITE_URL}${buildLocalizedPath(defaultLocale, normalizePath(defaultPath))}`;
+  const resolveDefaultLocale = () => {
+    if (typeof pathOrMap === "string") {
+      return defaultLocale;
+    }
+
+    if (pathOrMap[defaultLocale]) {
+      return defaultLocale;
+    }
+
+    return uniqueLocales.find((candidate) => Boolean(pathOrMap[candidate]));
+  };
+
+  const defaultLocaleForX = resolveDefaultLocale();
+  if (defaultLocaleForX) {
+    const defaultPath =
+      typeof pathOrMap === "string"
+        ? pathOrMap
+        : pathOrMap[defaultLocaleForX] ?? "/";
+    languages["x-default"] = `${SITE_URL}${buildLocalizedPath(
+      defaultLocaleForX,
+      normalizePath(defaultPath),
+    )}`;
+  }
+
   return languages;
 }

@@ -1,7 +1,6 @@
 import { defaultLocale, locales } from "@/i18n/config";
 import { POST_TYPES } from "@/lib/post-types";
 import { SITE_URL } from "@/lib/seo";
-import { FEED_FULL_PAGE_SIZE } from "@/lib/feed-config";
 import {
   getSummariesByLocale,
   getAllSummaryTags,
@@ -66,40 +65,18 @@ export function GET() {
       }),
     );
 
-    const searchUrl = `${SITE_URL}${prefix}/search/`;
-    entries.push(
-      buildUrlEntry({
-        loc: searchUrl,
-        lastMod,
-        changeFreq: "weekly",
-        priority: locale === defaultLocale ? 0.75 : 0.7,
-      }),
-    );
-
     const posts = getSummariesByLocale(locale);
-    const feedItemsCount = posts.length + 1; // include About page item
-    const totalFeedPages = Math.max(1, Math.ceil(feedItemsCount / FEED_FULL_PAGE_SIZE));
+    const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 
+    const aboutUrl = `${SITE_URL}${prefix}/about/`;
     entries.push(
       buildUrlEntry({
-        loc: `${SITE_URL}${prefix}/feed-full.json`,
+        loc: aboutUrl,
         lastMod,
-        changeFreq: "weekly",
-        priority: 0.7,
+        changeFreq: "monthly",
+        priority: locale === defaultLocale ? 0.82 : 0.78,
       }),
     );
-
-    for (let page = 2; page <= totalFeedPages; page += 1) {
-      entries.push(
-        buildUrlEntry({
-          loc: `${SITE_URL}${prefix}/feed-full-page-${page}.json`,
-          lastMod,
-          changeFreq: "weekly",
-          priority: 0.65,
-        }),
-      );
-    }
-    const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
 
     for (let page = 2; page <= totalPages; page += 1) {
       entries.push(

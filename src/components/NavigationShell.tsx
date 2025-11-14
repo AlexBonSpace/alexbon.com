@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { I18nProvider } from "@/contexts/i18n-context";
 import { Navbar } from "@/components/Navbar";
@@ -40,21 +41,23 @@ export function NavigationShell({
         : `?${currentSearch}`
       : "";
 
-  const stripLocaleFromPath = (pathname: string): string => {
-    const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
-    const segments = normalized.split("/").filter(Boolean);
-    const first = segments[0];
-    if (first && locales.includes(first as Locale)) {
-      return `/${segments.slice(1).join("/")}` || "/";
-    }
-    return normalized || "/";
-  };
-
-  const basePath = stripLocaleFromPath(currentPath || "/");
+  const resolvedAlternatePaths = useMemo(
+    () =>
+      locales.reduce<Record<Locale, string>>((acc, candidate) => {
+        const providedPath = alternatePaths?.[candidate];
+        if (providedPath) {
+          acc[candidate] = providedPath;
+          return acc;
+        }
+        acc[candidate] = buildLocalizedPath("/", candidate);
+        return acc;
+      }, {} as Record<Locale, string>),
+    [alternatePaths],
+  );
 
   const fallbackLanguageLinks = languageLinks.map(({ label, locale: linkLocale }) => {
     const localeKey = linkLocale as Locale;
-    const localizedPath = alternatePaths?.[localeKey] ?? buildLocalizedPath(basePath, localeKey);
+    const localizedPath = resolvedAlternatePaths[localeKey] ?? buildLocalizedPath("/", localeKey);
     const href = `${localizedPath}${searchSuffix}`.replace(/\?$/, "");
     const isActive = localeKey === locale;
     return { label, href, isActive, locale: localeKey };
@@ -85,13 +88,13 @@ export function NavigationShell({
           tagline={tagline}
           currentPath={currentPath}
           currentSearch={currentSearch}
-          alternatePaths={alternatePaths}
+          alternatePaths={resolvedAlternatePaths}
         />
         {showPrompt ? (
           <LanguagePrompt
             currentPath={currentPath}
             currentSearch={currentSearch}
-            alternatePaths={alternatePaths}
+            alternatePaths={resolvedAlternatePaths}
           />
         ) : null}
         <noscript dangerouslySetInnerHTML={{ __html: noscriptMarkup }} />
