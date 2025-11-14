@@ -190,7 +190,6 @@ const websiteJsonLd = {
   name: content.brandName,
   description: content.metaDescription,
   inLanguage: localeToBcp47[locale] ?? locale,
-  distribution: [feedDownloadNode],
   potentialAction: {
     "@type": "SearchAction",
     target: `${SITE_URL}/${locale}/search/?q={search_term_string}`,
