@@ -65,6 +65,17 @@ const starSlots = Array.from({ length: 5 }, (_, index) => index);
 const hasHeroParagraphs = content.hero.paragraphs.length > 0;
 const doorContacts = content.door?.cta?.contacts ?? [];
 const doorCtaText = content.door?.cta?.text ?? "";
+
+const reflectionsLinkByLocale = {
+  ru: "https://www.alexbon.com/ru/blog/",
+  ua: "https://www.alexbon.com/ua/blog/",
+} as const;
+
+const reflectionsLabelByLocale = {
+  ru: '"Отражения"',
+  ua: '"Відображення"',
+} as const;
+
 ---
 {isEnglish ? (
   <div lang={lang} class="relative min-h-screen overflow-hidden bg-surface text-strong">
@@ -242,9 +253,35 @@ const doorCtaText = content.door?.cta?.text ?? "";
               aria-hidden="true"
             />
           </div>
-          {content.introduction.paragraphs.map((paragraph) => (
-            <p>{paragraph}</p>
-          ))}
+          {content.introduction.paragraphs.map((paragraph) => {
+            if (content.locale === "ru" && paragraph.includes(reflectionsLabelByLocale.ru)) {
+              const [before, after] = paragraph.split(reflectionsLabelByLocale.ru);
+              return (
+                <p>
+                  {before}
+                  <a href={reflectionsLinkByLocale.ru} class="text-strong underline-offset-4 hover:underline">
+                    {reflectionsLabelByLocale.ru}
+                  </a>
+                  {after}
+                </p>
+              );
+            }
+
+            if (content.locale === "ua" && paragraph.includes(reflectionsLabelByLocale.ua)) {
+              const [before, after] = paragraph.split(reflectionsLabelByLocale.ua);
+              return (
+                <p>
+                  {before}
+                  <a href={reflectionsLinkByLocale.ua} class="text-strong underline-offset-4 hover:underline">
+                    {reflectionsLabelByLocale.ua}
+                  </a>
+                  {after}
+                </p>
+              );
+            }
+
+            return <p>{paragraph}</p>;
+          })}
           {content.introduction.highlight ? (
             <>
               <span
