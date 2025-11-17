@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import fg from "fast-glob";
-import matter from "gray-matter";
+import yaml from "js-yaml";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -15,6 +15,7 @@ const MAX_TEXT_LENGTH = 300;
 
 const { default: astroConfig } = await import("../astro.config.mjs");
 const LOCALES = new Set(astroConfig?.i18n?.locales ?? ["ua", "ru", "en"]);
+const FRONTMATTER_PATTERN = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/;
 
 const ensurePlainText = (raw) =>
   raw
@@ -119,6 +120,32 @@ function limitTextLength(text, limit = MAX_TEXT_LENGTH) {
   return `${slice}…`;
 }
 
+function parseFrontmatter(raw, relativePath) {
+  const normalized = raw.replace(/^\uFEFF/, "");
+  const match = normalized.match(FRONTMATTER_PATTERN);
+  if (!match) {
+    return {
+      data: {},
+      content: normalized,
+    };
+  }
+
+  let data = {};
+  try {
+    const parsed = yaml.load(match[1]) ?? {};
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      data = parsed;
+    } else {
+      throw new Error("frontmatter must be an object");
+    }
+  } catch (error) {
+    throw new Error(`[cache] Failed to parse frontmatter in ${relativePath}: ${error.message}`);
+  }
+
+  const content = normalized.slice(match[0].length);
+  return { data, content };
+}
+
 async function main() {
   const files = await fg("**/*.mdx", { cwd: POSTS_DIR });
   const summaries = [];
@@ -126,7 +153,7 @@ async function main() {
   for (const relativeFile of files) {
     const absolute = path.join(POSTS_DIR, relativeFile);
     const raw = await readFile(absolute, "utf8");
-    const parsed = matter(raw);
+    const parsed = parseFrontmatter(raw, relativeFile);
     const segments = relativeFile.split(path.sep);
     const locale = segments[0];
     if (!LOCALES.has(locale)) {
@@ -137,8 +164,8 @@ async function main() {
     const fileSlug = slugSegments[slugSegments.length - 1];
     const type = resolveType(collection, parsed.data.type);
 
-  const plainTextFull = ensurePlainText(parsed.content);
-  const plainText = limitTextLength(plainTextFull, MAX_TEXT_LENGTH);
+    const plainTextFull = ensurePlainText(parsed.content);
+    const plainText = limitTextLength(plainTextFull, MAX_TEXT_LENGTH);
     const description = (parsed.data.description ?? "").trim() || createDescription(plainText, 160);
     const summary = extractFirstSentence(plainText) || description;
     const cardSnippet = buildCardSnippet(type, plainTextFull, parsed.data.cardSnippet);
