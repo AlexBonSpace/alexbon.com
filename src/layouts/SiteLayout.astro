@@ -172,6 +172,11 @@ const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) 
   };
 });
 
+const RU_FOOTER_SOCIAL_LINKS = [
+  { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
+  { label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" },
+] as const;
+
 const feedFullUrl = `${SITE_URL}/${locale}/feed-full.json`;
 const feedDownloadNode = {
   "@type": "DataDownload",
@@ -375,20 +380,42 @@ const FONT_STYLESHEET =
       showPrompt={locale === defaultLocale}
     />
     <slot />
-    <nav class="language-links language-links--footer" aria-label="Languages">
-      <ul class="language-links__list">
-        {languageSwitcherLinks.map((link) => (
-          <li class="language-links__item" key={link.locale}>
-            <a
-              href={link.href}
-              class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
-              aria-current={link.isActive ? "page" : undefined}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <footer class="site-footer" aria-label="Footer">
+      <div class="site-footer__link-blocks">
+        <nav class="language-links language-links--footer" aria-label="Languages">
+          <ul class="language-links__list">
+            {languageSwitcherLinks.map((link) => (
+              <li class="language-links__item" key={link.locale}>
+                <a
+                  href={link.href}
+                  class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
+                  aria-current={link.isActive ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        {locale === "ru" ? (
+          <nav class="language-links language-links--footer" aria-label="Социальные сети">
+            <ul class="language-links__list">
+              {RU_FOOTER_SOCIAL_LINKS.map((link) => (
+                <li class="language-links__item" key={link.href}>
+                  <a
+                    href={link.href}
+                    class="language-links__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
+      </div>
+    </footer>
   </body>
 </html>

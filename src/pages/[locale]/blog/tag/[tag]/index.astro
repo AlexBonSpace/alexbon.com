@@ -2,24 +2,14 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { getAllSummaryTags, getSummariesForTag, paginateSummariesByTag } from "@/lib/post-summaries";
+import { getSummariesForTag, paginateSummariesByTag } from "@/lib/post-summaries";
 import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, localeToBcp47 } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { notFound } from "@/lib/http";
 import { toExplorerPosts } from "@/lib/blog-explorer";
 
-export const prerender = true;
-
-export function getStaticPaths() {
-  const paths: Array<{ params: { locale: string; tag: string } }> = [];
-  for (const locale of locales) {
-    for (const tag of getAllSummaryTags(locale)) {
-      paths.push({ params: { locale, tag } });
-    }
-  }
-  return paths;
-}
+export const prerender = false;
 
 const localeParam = Astro.params.locale?.toLowerCase() as Locale | undefined;
 const rawTag = Astro.params.tag;

@@ -1,7 +1,6 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import LicenseBlock from "@/components/blog/LicenseBlock.astro";
-import SocialFollowBlock from "@/components/blog/SocialFollowBlock.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
 import {
@@ -168,9 +167,6 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
             </div>
           </div>
         </div>
-
-        {locale === "ru" && <SocialFollowBlock />}
-
         <LicenseBlock locale={locale} />
       </article>
     </div>

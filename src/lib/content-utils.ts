@@ -141,10 +141,6 @@ export const AUTHOR_SAME_AS = [
   `${SITE_URL}/ua/about/`,
   "https://github.com/AlexBonSpace/alexbon.com",
   "https://www.facebook.com/AlexBonSpace",
-  "https://x.com/AlexBonSpace",
-  "https://t.me/AlexBonSpace",
-  "https://medium.com/@AlexBonSpace",
-  "https://alexbonspace.substack.com/",
 ] as const;
 
 export function createPlainText(raw: string): string {

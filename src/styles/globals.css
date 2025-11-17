@@ -262,6 +262,23 @@ body {
   color: var(--color-accent-contrast);
 }
 
+.site-footer {
+  padding: 0 1rem;
+}
+
+.site-footer__link-blocks {
+  margin: 3rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  max-width: min(100%, 60rem);
+}
+
+.site-footer__link-blocks .language-links {
+  margin: 0;
+}
+
 .text-nav-heading {
   color: var(--color-nav-text);
 }
