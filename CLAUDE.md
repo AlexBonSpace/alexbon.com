@@ -6,10 +6,10 @@ Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. M
 ## Technology Stack
 - **Framework**: Astro 5 with server-side rendering
 - **Deployment**: Cloudflare Pages adapter (`@astrojs/cloudflare`)
-- **Styling**: Tailwind CSS v4 with custom design tokens
-- **Interactivity**: React islands for navbar, search, theme toggle
-- **Content**: MDX via Astro Content Collections
-- **Search**: Optional Algolia integration for interactive search
+- **Styling**: Tailwind CSS v4 with custom design tokens in `src/styles/globals.css`
+- **Interactivity**: React islands (navbar, search page, theme toggle) marked with `client:*` directives
+- **Content**: MDX via Astro Content Collections with translation-aware helpers in `src/lib/pages.ts` and `src/lib/blog.ts`
+- **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
 - **Testing**: Vitest with happy-dom
 
 ## Project Structure
@@ -18,7 +18,8 @@ src/
 ├── components/           # React/Astro components
 │   ├── blog/            # Blog-specific components
 │   ├── search/          # Search functionality
-│   └── system/          # System pages (404, etc.)
+│   ├── system/          # System pages (404, etc.)
+│   └── NavigationShell.tsx  # Hosts navbar + language prompt
 ├── content/             # MDX content collections
 │   └── posts/           # Organized by locale then type
 │       ├── en/          # English content
@@ -26,47 +27,93 @@ src/
 │       └── ua/          # Ukrainian content (default)
 ├── lib/                 # Core utilities
 │   ├── .cache/         # Generated build cache (never edit manually)
-│   └── ...             # Blog helpers, SEO, feeds
-├── pages/              # File-based routing
+│   ├── pages.ts        # Translation-aware page helpers
+│   ├── blog.ts         # Blog data helpers
+│   └── http.ts         # Shared 404 handling
+├── pages/              # File-based routing (/, /about, /blog, /search, feeds, sitemap)
 ├── contexts/           # React contexts (theme, i18n)
-├── messages/           # Translation dictionaries
-└── styles/             # Global CSS and tokens
+├── messages/           # Translation dictionaries (JSON)
+└── styles/             # Global CSS and Tailwind tokens
 ```
 
 ## Key Features & Behaviors
+
+### Routing & Redirects
 - **Locale-first routing**: All content under locale prefixes (`/ua/`, `/ru/`, `/en/`)
-- **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json`
-- **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes
-- **Session management**: Cookie-based with `ASTRO_SESSION_SECRET` for production
+- Root `/` performs 308 redirect to `/ua/` (default locale)
+- Locale roots redirect to their blog index
+- Trailing slashes enforced via 308 redirects in middleware
+- Language menu uses `navigationAlternatePaths` for deep-linking translated slugs
+
+### Caching & Performance
+- **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
+- Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
+- Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker
+
+### Content Management
+- **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)
+- Content types: `article`, `note`, `story`
+- Translation groups link content across locales
+
+### Session & Theme
+- **Session management**: Lightweight cookie driver; set `ASTRO_SESSION_SECRET` (e.g., `openssl rand -base64 32`) in production for secure signing
 - **Theme persistence**: Stored in both cookie and localStorage (`ALEXBON_THEME`)
-- **Search**: SSR fallback with lazy Algolia app loading
-- **Feeds**: Prerendered RSS/JSON feeds with pagination
+
+### Search
+- `/[locale]/search/` renders SSR fallback with recent posts and `robots="noindex, follow"`
+- Loads Algolia-powered React app lazily (no request until user types)
+
+### Feeds & SEO
+- **RSS feeds**: Prerendered with HTML content at `/[locale]/feed.xml`
+- **JSON feeds**: Full-text feeds paginated at 500 records per page (`/[locale]/feed-full.json`, `/[locale]/feed-full-page-[page].json`)
+- Sitemap prerendered with `export const prerender = true`
+- Structured data via JSON-LD for blog collections and breadcrumbs
+
+### Mobile & Typography
+- Mobile layout uses full-width (`w-full`) containers with padding (not `w-[92%]`)
+- Story/article text uses larger clamp: `clamp(1.1rem, 3vw, 1.2rem)`
+
+### Error Handling
+- Shared 404: `src/lib/http.ts` returns branded error page from `src/components/system/not-found.html`
+- Same markup served by `src/pages/404.astro` and SSR fallbacks
+
+### Social & Metadata
+- `rel=me` and `sameAs` point to GitHub (`https://github.com/AlexBonSpace/alexbon.com`)
+- Mastodon links removed from head metadata and content defaults
 
 ## Development Commands
 ```bash
-npm run dev          # Start dev server with SSR
-npm run build        # Build for production
-npm run test         # Run Vitest suite
-npm run test:watch   # Watch mode testing
-npm run verify       # Full verification (test + build + SEO check)
-npm run cache:build  # Regenerate post summaries cache
+# Development
+npm run dev           # Start Astro dev server with SSR on Cloudflare shim
+npm run cache:build   # Regenerate src/lib/.cache/post-summaries.json (runs automatically in dev/build)
+
+# Testing & Verification
+npm run test          # Execute Vitest suite (unit helpers + component tests)
+npm run test:watch    # Watch mode for Vitest during development
+npm run verify:seo    # Check built sitemap for banned URLs/duplicates/trailing slashes (requires build first)
+npm run verify        # Run full suite: test + build + verify:seo
+
+# Build & Deployment
+npm run build         # Build Cloudflare SSR bundle + prerendered feeds/sitemap
+npm run preview       # Local preview of the SSR build
+npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
+
+# Algolia (Optional)
+npm run algolia:sync         # Incremental sync: push only changed records to Algolia
+npm run algolia:sync -- --full  # Full reindex: replace entire Algolia index
 ```
 
 ## Content Management
 - All content in `src/content/posts/{locale}/{type}/`
-- Types: `articles`, `notes`, `stories`
+- Types: `article`, `note`, `story` (singular in frontmatter)
 - Use translation groups for linked content across locales
 - Cache regenerates automatically on build, manually via `npm run cache:build`
 
-## SEO & Performance
-- Prerendered sitemap and feeds
-- Structured data with JSON-LD
-- Mobile-first responsive design
-- Full-width containers with consistent padding
-
-## Optional Features
-- **Algolia Search**: Configured via `scripts/push-algolia.mjs`
-- **Incremental sync**: Tracks changes in `scripts/.algolia-cache.json`
+## Algolia Search (Optional)
+- **Indexing**: `scripts/push-algolia.mjs` reads all `dist/*/feed-full*.json` pages (follows `next_url`)
+- **Incremental mode**: Maintains manifest at `scripts/.algolia-cache.json` (gitignored); only pushes changed/removed records
+- **Full mode** (`--full` flag): Replaces entire index via `replaceAllObjects` and rebuilds manifest
+- Requires Algolia API keys in environment variables
 
 ## Analysis Instructions for Claude
 **Always perform deep technical analysis:**
