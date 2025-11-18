@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { I18nProvider } from "@/contexts/i18n-context";
 import { Navbar } from "@/components/Navbar";
@@ -35,23 +35,22 @@ export function NavigationShell({
   showPrompt = false,
 }: NavigationShellProps) {
   const searchSuffix =
-    currentSearch && currentSearch !== "?"
-      ? currentSearch.startsWith("?")
-        ? currentSearch
-        : `?${currentSearch}`
-      : "";
+    currentSearch && currentSearch !== "?" ? (currentSearch.startsWith("?") ? currentSearch : `?${currentSearch}`) : "";
 
   const resolvedAlternatePaths = useMemo(
     () =>
-      locales.reduce<Record<Locale, string>>((acc, candidate) => {
-        const providedPath = alternatePaths?.[candidate];
-        if (providedPath) {
-          acc[candidate] = providedPath;
+      locales.reduce<Record<Locale, string>>(
+        (acc, candidate) => {
+          const providedPath = alternatePaths?.[candidate];
+          if (providedPath) {
+            acc[candidate] = providedPath;
+            return acc;
+          }
+          acc[candidate] = buildLocalizedPath("/", candidate);
           return acc;
-        }
-        acc[candidate] = buildLocalizedPath("/", candidate);
-        return acc;
-      }, {} as Record<Locale, string>),
+        },
+        {} as Record<Locale, string>,
+      ),
     [alternatePaths],
   );
 

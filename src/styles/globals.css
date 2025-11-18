@@ -168,14 +168,20 @@ html.js .js-only {
 html {
   background: var(--background);
   color: var(--color-text-primary);
-  font-family: var(--font-base), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-base),
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 body {
   font-size: clamp(1.05rem, 1.8vw, 1.125rem);
   line-height: 1.7;
   letter-spacing: 0.01em;
-  font-feature-settings: "kern" 1, "liga" 1;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1;
   text-rendering: optimizeLegibility;
   font-size-adjust: 0.52;
   font-synthesis: none;
@@ -246,7 +252,10 @@ body {
   font-weight: 600;
   text-decoration: none;
   color: var(--color-nav-muted);
-  transition: color 150ms ease, background-color 150ms ease, transform 150ms ease;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
 }
 
 .language-links__link:hover,
@@ -340,7 +349,9 @@ body {
   width: 1.5rem;
   flex-shrink: 0;
   border-radius: 9999px;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0 0 3px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 @layer utilities {
@@ -448,7 +459,6 @@ body {
   .hero-reflection__intro {
     color: color-mix(in srgb, var(--color-text-primary) 92%, transparent);
   }
-
 
   .shadow-card {
     box-shadow: var(--shadow-card);

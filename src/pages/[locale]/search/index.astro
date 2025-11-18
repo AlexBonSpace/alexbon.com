@@ -42,10 +42,7 @@ const resolvedIndexName =
 
 const hasAlgolia = Boolean(appId && searchApiKey && resolvedIndexName);
 
-const searchQuery =
-  Astro.url.searchParams.get("search") ??
-  Astro.url.searchParams.get("q") ??
-  "";
+const searchQuery = Astro.url.searchParams.get("search") ?? Astro.url.searchParams.get("q") ?? "";
 
 const fallbackStrings = {
   ua: {
@@ -138,6 +135,7 @@ const heroDescription = pick("Search.heroDescription", localeFallback.heroDescri
 
 const latestPosts = toExplorerPosts(posts.slice(0, 12), locale);
 ---
+
 <SiteLayout
   locale={locale}
   title={pageTitle}
@@ -150,7 +148,9 @@ const latestPosts = toExplorerPosts(posts.slice(0, 12), locale);
 >
   <main class="relative z-10 flex flex-col gap-8 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section class="section-card-strong flex flex-col gap-4 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10">
+      <section
+        class="section-card-strong flex flex-col gap-4 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10"
+      >
         <h1 class="text-balance text-[clamp(2.1rem,6vw,3.4rem)] font-semibold leading-tight text-strong">
           {heroTitle}
         </h1>
@@ -161,60 +161,65 @@ const latestPosts = toExplorerPosts(posts.slice(0, 12), locale);
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      {hasAlgolia ? (
-        <SearchApp
-          client:load
-          appId={appId as string}
-          searchApiKey={searchApiKey as string}
-          indexName={resolvedIndexName as string}
-          locale={locale}
-          initialQuery={searchQuery}
-          copy={searchCopy}
-        />
-      ) : (
-        <div class="blog-card flex flex-col gap-3 rounded-[2rem] border border-soft p-6 text-center text-primary shadow-card sm:p-8">
-          <p class="text-lg font-semibold text-strong">
-            {locale === "en"
-              ? "Interactive search is temporarily unavailable."
-              : locale === "ru"
-                ? "Интерактивный поиск временно недоступен."
-                : "Інтерактивний пошук тимчасово недоступний."}
-          </p>
-          <p class="text-sm text-muted">
-            {locale === "en"
-              ? "Browse the latest posts below or try again later."
-              : locale === "ru"
-                ? "Просмотрите свежие материалы ниже или попробуйте позже."
-                : "Перегляньте свіжі матеріали нижче або спробуйте пізніше."}
-          </p>
-        </div>
-      )}
+      {
+        hasAlgolia ? (
+          <SearchApp
+            client:load
+            appId={appId as string}
+            searchApiKey={searchApiKey as string}
+            indexName={resolvedIndexName as string}
+            locale={locale}
+            initialQuery={searchQuery}
+            copy={searchCopy}
+          />
+        ) : (
+          <div class="blog-card flex flex-col gap-3 rounded-[2rem] border border-soft p-6 text-center text-primary shadow-card sm:p-8">
+            <p class="text-lg font-semibold text-strong">
+              {locale === "en"
+                ? "Interactive search is temporarily unavailable."
+                : locale === "ru"
+                  ? "Интерактивный поиск временно недоступен."
+                  : "Інтерактивний пошук тимчасово недоступний."}
+            </p>
+            <p class="text-sm text-muted">
+              {locale === "en"
+                ? "Browse the latest posts below or try again later."
+                : locale === "ru"
+                  ? "Просмотрите свежие материалы ниже или попробуйте позже."
+                  : "Перегляньте свіжі матеріали нижче або спробуйте пізніше."}
+            </p>
+          </div>
+        )
+      }
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section class="section-card flex flex-col gap-4 rounded-[2rem] border border-soft/70 bg-surface/80 p-6 text-sm text-primary shadow-card sm:p-8">
+      <section
+        class="section-card flex flex-col gap-4 rounded-[2rem] border border-soft/70 bg-surface/80 p-6 text-sm text-primary shadow-card sm:p-8"
+      >
         <h2 class="text-[clamp(1.8rem,4.5vw,2.4rem)] font-semibold leading-tight text-strong">
-          {locale === "en"
-            ? "Fresh from the blog"
-            : locale === "ru"
-              ? "Свежие материалы блога"
-              : "Свіжі матеріали блогу"}
+          {
+            locale === "en"
+              ? "Fresh from the blog"
+              : locale === "ru"
+                ? "Свежие материалы блога"
+                : "Свіжі матеріали блогу"
+          }
         </h2>
         <p>
-          {locale === "en"
-            ? "We curate the latest entries here so you always have something to read, even without search."
-            : locale === "ru"
-              ? "Мы собрали самые свежие записи, чтобы вам было что почитать даже без поиска."
-              : "Ми зібрали найсвіжіші записи, щоб вам було що почитати навіть без пошуку."}
+          {
+            locale === "en"
+              ? "We curate the latest entries here so you always have something to read, even without search."
+              : locale === "ru"
+                ? "Мы собрали самые свежие записи, чтобы вам было что почитать даже без поиска."
+                : "Ми зібрали найсвіжіші записи, щоб вам було що почитати навіть без пошуку."
+          }
         </p>
       </section>
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <PostGrid
-        posts={latestPosts}
-        readMoreLabel={readMoreLabel}
-      />
+      <PostGrid posts={latestPosts} readMoreLabel={readMoreLabel} />
     </div>
   </main>
 </SiteLayout>

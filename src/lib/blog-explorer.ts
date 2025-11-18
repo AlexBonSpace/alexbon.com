@@ -31,7 +31,10 @@ export function buildSnippet(text: string, maxLength = 300) {
   }
   let composed = segments[0];
   for (let i = 0; i < segments.length; i += 1) {
-    composed = segments.slice(0, i + 1).join(" ").trim();
+    composed = segments
+      .slice(0, i + 1)
+      .join(" ")
+      .trim();
     if (composed.length > maxLength) {
       const trimmed = composed.slice(0, maxLength);
       const lastSpace = trimmed.lastIndexOf(" ");

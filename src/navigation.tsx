@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef } from "react";
@@ -34,10 +34,7 @@ type LinkProps = Omit<AnchorProps, "href"> & {
   locale?: Locale;
 };
 
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
-  { href, locale, children, ...rest },
-  ref,
-) {
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link({ href, locale, children, ...rest }, ref) {
   const activeLocale = useLocale();
   const targetLocale = locale ?? activeLocale;
   const localizedHref = localizeHref(href, targetLocale);

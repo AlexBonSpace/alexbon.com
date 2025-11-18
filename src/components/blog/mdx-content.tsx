@@ -2,9 +2,7 @@ import * as runtime from "react/jsx-runtime";
 import type { ImgHTMLAttributes } from "react";
 
 const sharedComponents = {
-  Image: (props: ImgHTMLAttributes<HTMLImageElement>) => (
-    <img loading="lazy" decoding="async" {...props} />
-  ),
+  Image: (props: ImgHTMLAttributes<HTMLImageElement>) => <img loading="lazy" decoding="async" {...props} />,
 };
 
 const useMDXComponent = (code: string) => {

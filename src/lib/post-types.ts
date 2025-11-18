@@ -12,52 +12,43 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   article: {
     ru: {
       label: "Карты внутреннего мира",
-      description:
-        "Глубокие статьи о психологии, осознанности и устройстве нашего сознания. Материалов: {count}.",
+      description: "Глубокие статьи о психологии, осознанности и устройстве нашего сознания. Материалов: {count}.",
     },
     ua: {
       label: "Карти внутрішнього світу",
-      description:
-        "Глибокі статті про психологію, усвідомленість і будову нашої свідомості. Матеріалів: {count}.",
+      description: "Глибокі статті про психологію, усвідомленість і будову нашої свідомості. Матеріалів: {count}.",
     },
     en: {
       label: "Inner World Maps",
-      description:
-        "In-depth essays on psychology, mindfulness, and how the mind works. Entries: {count}.",
+      description: "In-depth essays on psychology, mindfulness, and how the mind works. Entries: {count}.",
     },
   },
   story: {
     ru: {
       label: "Истории-зеркала",
-      description:
-        "Художественные рассказы и психологические притчи о встрече с собой. Материалов: {count}.",
+      description: "Художественные рассказы и психологические притчи о встрече с собой. Материалов: {count}.",
     },
     ua: {
       label: "Історії-дзеркала",
-      description:
-        "Художні оповідання та психологічні притчі про зустріч із собою. Матеріалів: {count}.",
+      description: "Художні оповідання та психологічні притчі про зустріч із собою. Матеріалів: {count}.",
     },
     en: {
       label: "Mirror Stories",
-      description:
-        "Literary stories and psychological parables about meeting yourself. Entries: {count}.",
+      description: "Literary stories and psychological parables about meeting yourself. Entries: {count}.",
     },
   },
   note: {
     ru: {
       label: "Искры и проблески",
-      description:
-        "Короткие заметки и афоризмы, которые помогают увидеть привычное по-новому. Материалов: {count}.",
+      description: "Короткие заметки и афоризмы, которые помогают увидеть привычное по-новому. Материалов: {count}.",
     },
     ua: {
       label: "Іскри й проблиски",
-      description:
-        "Короткі нотатки й афоризми, що допомагають побачити звичне по-новому. Матеріалів: {count}.",
+      description: "Короткі нотатки й афоризми, що допомагають побачити звичне по-новому. Матеріалів: {count}.",
     },
     en: {
       label: "Sparks and Glimmers",
-      description:
-        "Short notes and aphorisms that help you see the familiar in a new light. Entries: {count}.",
+      description: "Short notes and aphorisms that help you see the familiar in a new light. Entries: {count}.",
     },
   },
 };
@@ -104,12 +95,7 @@ export function getPostTypePageTitle(locale: Locale, type: PostType, page: numbe
   return `${label} — страница ${formattedPage}`;
 }
 
-export function getPostTypePageDescription(
-  locale: Locale,
-  type: PostType,
-  count: number,
-  page: number,
-): string {
+export function getPostTypePageDescription(locale: Locale, type: PostType, count: number, page: number): string {
   const base = getPostTypeDescription(locale, type, count);
   const formattedPage = formatCount(locale, page);
   if (locale === "en") {

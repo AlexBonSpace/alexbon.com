@@ -52,6 +52,18 @@ const CARD_SNIPPET_LIMIT = 350;
 
 type PostType = "note" | "article" | "story";
 
+/**
+ * Intelligently truncates text to a limit without cutting words mid-way
+ *
+ * Strategy:
+ * 1. Normalize whitespace first (multiple spaces → single space)
+ * 2. If text fits, return as-is
+ * 3. Cut at last space before limit (if found past 50% mark)
+ * 4. Otherwise, hard cut at limit (avoids super short results)
+ *
+ * Example: truncateToBoundary("Hello world from Alex", 15)
+ * → "Hello world" (cuts at space, not "Hello world fr...")
+ */
 function truncateToBoundary(text: string, limit: number): string {
   const normalized = text.replace(/\s+/g, " ").trim();
   if (!normalized) return "";
@@ -59,6 +71,8 @@ function truncateToBoundary(text: string, limit: number): string {
 
   const sliced = normalized.slice(0, limit);
   const lastSpace = sliced.lastIndexOf(" ");
+  // Only cut at word boundary if it's past halfway point
+  // (avoids cases like "Hello..." when limit is 50)
   if (lastSpace > Math.floor(limit * 0.5)) {
     return sliced.slice(0, lastSpace).trimEnd();
   }
@@ -95,7 +109,10 @@ function resolveCollection(segment: string | undefined): "articles" | "notes" | 
   return "notes";
 }
 
-function resolveType(collection: "articles" | "notes" | "stories", candidate: string | undefined): "article" | "note" | "story" {
+function resolveType(
+  collection: "articles" | "notes" | "stories",
+  candidate: string | undefined,
+): "article" | "note" | "story" {
   if (collection === "articles") return "article";
   if (collection === "stories") return "story";
   if (candidate === "article" || candidate === "story") {
@@ -120,9 +137,7 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
   const cardSnippet = buildCardSnippet(type, plainText, cardSnippetOverride);
   const translationGroup = (entry.data.translationGroup ?? "").trim() || fileSlug;
   const authorDisplay = entry.data.authorDisplay ?? AUTHOR_DISPLAY_BY_LOCALE;
-  const authorSameAs = Array.from(
-    new Set([...(entry.data.authorSchema?.sameAs ?? []), ...AUTHOR_SAME_AS]),
-  );
+  const authorSameAs = Array.from(new Set([...(entry.data.authorSchema?.sameAs ?? []), ...AUTHOR_SAME_AS]));
   const rawAuthorUrl = (entry.data.authorUrl ?? "").trim();
   const authorUrl =
     rawAuthorUrl && rawAuthorUrl !== "https://alexbon.com" && rawAuthorUrl !== "https://alexbon.com/"
@@ -130,8 +145,7 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
       : `${SITE_URL}/${locale}/about/`;
 
   const publishedDate = entry.data.publishedAt;
-  const summaryUpdatedDate =
-    summaryMetadata?.updatedAt !== undefined ? new Date(summaryMetadata.updatedAt) : null;
+  const summaryUpdatedDate = summaryMetadata?.updatedAt !== undefined ? new Date(summaryMetadata.updatedAt) : null;
   const normalizedSummaryUpdatedDate =
     summaryUpdatedDate && !Number.isNaN(summaryUpdatedDate.getTime()) ? summaryUpdatedDate : null;
   const updatedDate = entry.data.updatedAt ?? normalizedSummaryUpdatedDate ?? entry.data.publishedAt;
@@ -292,6 +306,20 @@ export function getAllTags(locale: Locale): string[] {
   return Array.from(tags.keys()).sort((a, b) => a.localeCompare(b, locale === "en" ? "en" : "ru"));
 }
 
+/**
+ * Calculates relevance score between a post and reference tags
+ * Used for "related posts" feature - shows posts with similar topics
+ *
+ * Scoring logic:
+ * - First tag match = 2 points (most important/primary topic)
+ * - Other tag matches = 1 point each
+ * - Bonus: +0.1 per each shared tag (rewards more overlap)
+ *
+ * Example:
+ * Post tags: ["psychology", "relationships", "growth"]
+ * Reference: ["psychology", "growth"]
+ * Score: 2 (first match) + 1 (growth) + 0.2 (2 shared) = 3.2
+ */
 function computeTagScore(postTags: string[], referenceTags: string[]): number {
   if (postTags.length === 0 || referenceTags.length === 0) {
     return 0;
@@ -300,9 +328,11 @@ function computeTagScore(postTags: string[], referenceTags: string[]): number {
   const referenceSet = new Set(referenceTags);
   let score = 0;
 
+  // Score each reference tag found in the post
   for (let index = 0; index < referenceTags.length; index += 1) {
     const tag = referenceTags[index];
     if (postTags.includes(tag)) {
+      // First tag is worth more (it's the primary topic)
       score += index === 0 ? 2 : 1;
     }
   }
@@ -311,7 +341,7 @@ function computeTagScore(postTags: string[], referenceTags: string[]): number {
     return 0;
   }
 
-  // Small bonus for shared tags beyond the first occurrences.
+  // Add small bonus for tag overlap (rewards posts with many shared tags)
   let extras = 0;
   for (const tag of postTags) {
     if (referenceSet.has(tag)) {
@@ -381,12 +411,7 @@ export function paginatePostsByTag(locale: Locale, tag: string, page: number, pa
   };
 }
 
-export function paginatePostsByType(
-  locale: Locale,
-  type: BlogPost["type"],
-  page: number,
-  pageSize = POSTS_PER_PAGE,
-) {
+export function paginatePostsByType(locale: Locale, type: BlogPost["type"], page: number, pageSize = POSTS_PER_PAGE) {
   const collection = getPostsByType(locale, type);
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
@@ -449,10 +474,6 @@ export function getPostTranslations(locale: Locale, slug: string): Map<Locale, B
   return new Map(group);
 }
 
-export function getPostTranslation(
-  locale: Locale,
-  slug: string,
-  targetLocale: Locale,
-): BlogPost | undefined {
+export function getPostTranslation(locale: Locale, slug: string, targetLocale: Locale): BlogPost | undefined {
   return getPostTranslations(locale, slug).get(targetLocale);
 }

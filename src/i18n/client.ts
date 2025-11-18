@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import type { Locale } from "@/i18n/config";
 import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from "@/i18n/locale-utils";

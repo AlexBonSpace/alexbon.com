@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -7,7 +7,7 @@ import { THEME_COOKIE, THEME_COOKIE_MAX_AGE } from "@/lib/preferences";
 
 interface ThemeContextValue {
   theme: ThemeId;
-  setTheme: (theme: ThemeId) => void;
+  setTheme: (_theme: ThemeId) => void;
   themes: typeof themes;
 }
 
@@ -17,13 +17,7 @@ const ThemeContext = createContext<ThemeContextValue>({
   themes,
 });
 
-export function ThemeProvider({
-  initialTheme,
-  children,
-}: {
-  initialTheme: ThemeId;
-  children: ReactNode;
-}) {
+export function ThemeProvider({ initialTheme, children }: { initialTheme: ThemeId; children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>(() => {
     if (typeof window === "undefined") {
       return initialTheme;

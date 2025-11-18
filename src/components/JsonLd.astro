@@ -10,4 +10,5 @@ const payload = JSON.stringify(json.length === 1 ? json[0] : json)
   .replace(/>/g, "\\u003e")
   .replace(/&/g, "\\u0026");
 ---
-<script type="application/ld+json" is:inline set:html={payload}></script>
+
+<script type="application/ld+json" is:inline set:html={payload} />

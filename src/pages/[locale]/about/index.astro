@@ -3,7 +3,15 @@ import AboutPage from "@/components/about/AboutPage.astro";
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import { contentByLocale } from "@/content";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
-import { buildCanonicalUrl, buildLanguageAlternates, SITE_URL, ABOUT_HERO_IMAGE, PERSON_JOB_TITLES, PERSON_KNOWS_ABOUT, localeToBcp47 } from "@/lib/seo";
+import {
+  buildCanonicalUrl,
+  buildLanguageAlternates,
+  SITE_URL,
+  ABOUT_HERO_IMAGE,
+  PERSON_JOB_TITLES,
+  PERSON_KNOWS_ABOUT,
+  localeToBcp47,
+} from "@/lib/seo";
 import { notFound } from "@/lib/http";
 import { AUTHOR_SAME_AS, buildAuthorPersonJsonLd } from "@/lib/content-utils";
 
@@ -56,6 +64,7 @@ const profileJsonLd = {
   },
 };
 ---
+
 <SiteLayout
   locale={locale}
   title={content.metaTitle}
