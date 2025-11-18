@@ -169,8 +169,6 @@ async function main() {
     const description = (parsed.data.description ?? "").trim() || createDescription(plainText, 160);
     const summary = extractFirstSentence(plainText) || description;
     const cardSnippet = buildCardSnippet(type, plainTextFull, parsed.data.cardSnippet);
-    const searchContentFull = createSearchContent(parsed.content);
-    const searchContent = limitTextLength(searchContentFull, MAX_TEXT_LENGTH);
 
     const publishedAt = new Date(parsed.data.publishedAt).toISOString();
     const gitTimestamp = getGitTimestamp(path.relative(ROOT, absolute));
@@ -198,8 +196,6 @@ async function main() {
       summary,
       cardSnippet,
       plainText,
-      plainTextFull,
-      searchContent,
       tags,
       url,
       canonical,
