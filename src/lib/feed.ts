@@ -208,7 +208,6 @@ export async function buildRssFeed(locale: Locale) {
   const rssItems = items
     .map((item) => {
       const pubDate = new Date(item.date_published).toUTCString();
-      const updated = new Date(item.date_modified).toUTCString();
       const categories = item.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("");
       const author = item.authors[0];
       const descriptionCdata = escapeCdata(item.summary);
@@ -474,7 +473,10 @@ function buildAboutContentText(locale: Locale): string {
   return createPlainText(segments.join("\n\n"));
 }
 
-async function renderPostHtml(container: AstroContainerInstance, renderResult: Awaited<ReturnType<BlogPost["render"]>>) {
+async function renderPostHtml(
+  container: AstroContainerInstance,
+  renderResult: Awaited<ReturnType<BlogPost["render"]>>,
+) {
   const { Content } = renderResult;
   return container.renderToString(Content, { routeType: "page" });
 }
@@ -536,7 +538,9 @@ function buildFeedAuthor(
   const authorDisplay = Object.fromEntries(
     locales.map((candidateLocale) => [
       candidateLocale,
-      displayMap[candidateLocale] ?? AUTHOR_DISPLAY_BY_LOCALE[candidateLocale] ?? AUTHOR_DISPLAY_BY_LOCALE[defaultLocale],
+      displayMap[candidateLocale] ??
+        AUTHOR_DISPLAY_BY_LOCALE[candidateLocale] ??
+        AUTHOR_DISPLAY_BY_LOCALE[defaultLocale],
     ]),
   ) as Record<Locale, string>;
 

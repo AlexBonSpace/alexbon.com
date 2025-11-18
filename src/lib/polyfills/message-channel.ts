@@ -1,13 +1,13 @@
 // Polyfill MessageChannel for Cloudflare Workers where it may be missing.
 if (typeof globalThis.MessageChannel === "undefined") {
-  type MessageHandler = ((event: { data: unknown }) => void) | null;
+  type MessageHandler = ((_event: { data: unknown }) => void) | null;
 
   class PolyfillPort {
     onmessage: MessageHandler = null;
     private peer?: PolyfillPort;
 
     // Keep TypeScript happy when compiled to JS.
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+
     start() {}
 
     close() {
@@ -42,6 +42,5 @@ if (typeof globalThis.MessageChannel === "undefined") {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any).MessageChannel = PolyfillMessageChannel;
 }

@@ -11,6 +11,9 @@ Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. M
 - **Content**: MDX via Astro Content Collections with translation-aware helpers in `src/lib/pages.ts` and `src/lib/blog.ts`
 - **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
 - **Testing**: Vitest with happy-dom
+- **Code Quality**: ESLint + Prettier with automatic formatting
+- **Git Hooks**: Husky pre-commit hooks (lint, test, security audit)
+- **CI/CD**: GitHub Actions for automated checks on push
 
 ## Project Structure
 ```
@@ -77,6 +80,14 @@ src/
 - Shared 404: `src/lib/http.ts` returns branded error page from `src/components/system/not-found.html`
 - Same markup served by `src/pages/404.astro` and SSR fallbacks
 
+### Security
+- **Headers**: Comprehensive security headers in `src/middleware.ts`
+  - Content-Security-Policy: Protects against XSS, allows scripts from self and Algolia
+  - X-Frame-Options: DENY (prevents clickjacking)
+  - X-Content-Type-Options: nosniff (prevents MIME-type confusion)
+  - Referrer-Policy: strict-origin-when-cross-origin
+  - Permissions-Policy: Restricts camera, microphone, geolocation
+
 ### Social & Metadata
 - `rel=me` and `sameAs` point to GitHub (`https://github.com/AlexBonSpace/alexbon.com`)
 - Mastodon links removed from head metadata and content defaults
@@ -87,11 +98,17 @@ src/
 npm run dev           # Start Astro dev server with SSR on Cloudflare shim
 npm run cache:build   # Regenerate src/lib/.cache/post-summaries.json (runs automatically in dev/build)
 
+# Code Quality
+npm run lint          # Run ESLint to check for code issues
+npm run lint:fix      # Run ESLint and automatically fix issues
+npm run format        # Format all code with Prettier
+npm run format:check  # Check if code is formatted correctly
+
 # Testing & Verification
 npm run test          # Execute Vitest suite (unit helpers + component tests)
 npm run test:watch    # Watch mode for Vitest during development
 npm run verify:seo    # Check built sitemap for banned URLs/duplicates/trailing slashes (requires build first)
-npm run verify        # Run full suite: test + build + verify:seo
+npm run verify        # Run full suite: audit + test + build + verify:seo
 
 # Build & Deployment
 npm run build         # Build Cloudflare SSR bundle + prerendered feeds/sitemap
@@ -102,6 +119,31 @@ npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
 npm run algolia:sync         # Incremental sync: push only changed records to Algolia
 npm run algolia:sync -- --full  # Full reindex: replace entire Algolia index
 ```
+
+## Automation & CI/CD
+
+### Pre-commit Hooks (Husky)
+Automatically run before every `git commit`:
+- ✅ Lint check (`npm run lint`)
+- ✅ Test suite (`npm run test`)
+- ✅ Security audit (`npm audit --audit-level=high`)
+
+If any check fails, the commit is blocked until issues are resolved.
+
+### GitHub Actions CI
+Automatically triggered on push to `main`, `master`, or `claude/**` branches:
+- Code linting and formatting checks
+- Full test suite
+- Production build
+- SEO validation
+- Bundle size verification (<5MB for worker)
+- Security audit
+
+### VS Code Integration
+Auto-formatting configured in `.vscode/settings.json`:
+- Format on save with Prettier
+- Auto-fix ESLint issues on save
+- Recommended extensions listed in settings
 
 ## Content Management
 - All content in `src/content/posts/{locale}/{type}/`

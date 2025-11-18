@@ -13,11 +13,14 @@ export function formatDate(date: Date, locale: Locale, options?: Intl.DateTimeFo
   let formatter = formatterCache.get(key);
 
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat(localeMap[locale], options ?? {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    formatter = new Intl.DateTimeFormat(
+      localeMap[locale],
+      options ?? {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      },
+    );
     formatterCache.set(key, formatter);
   }
 

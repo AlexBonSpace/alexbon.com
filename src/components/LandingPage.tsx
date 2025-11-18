@@ -104,7 +104,7 @@ function IconStar({ className = "", ...props }: IconProps) {
   );
 }
 
-const detailIcons: Record<DetailIconKey, (props: IconProps) => ReactElement> = {
+const detailIcons: Record<DetailIconKey, (_props: IconProps) => ReactElement> = {
   video: IconVideo,
   donate: IconDonate,
   lock: IconLock,
@@ -115,17 +115,11 @@ export function LandingPage({ content }: LandingPageProps) {
   return (
     <div lang={lang} className="relative min-h-screen overflow-hidden text-strong bg-surface">
       <div className="relative z-20">
-        <Navbar
-          activeLocale={content.locale}
-          brandName={content.brandName}
-          tagline={content.tagline}
-        />
+        <Navbar activeLocale={content.locale} brandName={content.brandName} tagline={content.tagline} />
       </div>
 
       <main className="relative z-10 flex flex-col gap-6 pb-12 pt-6 sm:gap-8 sm:pt-8">
-        <Section
-          className="relative isolate overflow-hidden rounded-[2.5rem] section-card border border-soft px-6 py-10 text-center shadow-card sm:px-10"
-        >
+        <Section className="relative isolate overflow-hidden rounded-[2.5rem] section-card border border-soft px-6 py-10 text-center shadow-card sm:px-10">
           <div className="relative z-10 flex flex-col items-center gap-6">
             <div className="flex flex-col gap-5 text-center text-[clamp(1.125rem,3vw,1.45rem)] leading-relaxed text-primary md:max-w-4xl">
               {content.hero.paragraphs.map((paragraph) => (
@@ -163,9 +157,7 @@ export function LandingPage({ content }: LandingPageProps) {
                   aria-hidden
                 />
                 <div className="flex flex-col gap-4">
-                  <p className="text-lg font-semibold text-strong">
-                    {content.introduction.highlight.title}
-                  </p>
+                  <p className="text-lg font-semibold text-strong">{content.introduction.highlight.title}</p>
                   {content.introduction.highlight.paragraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
@@ -188,16 +180,12 @@ export function LandingPage({ content }: LandingPageProps) {
           </div>
         </Section>
 
-        <Section
-          className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10"
-        >
+        <Section className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10">
           <div className="flex flex-col gap-4">
             <span className="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted">
               {content.process.heading}
             </span>
-            <p className="text-base leading-relaxed text-primary sm:text-lg">
-              {content.process.intro}
-            </p>
+            <p className="text-base leading-relaxed text-primary sm:text-lg">{content.process.intro}</p>
           </div>
           <ol className="grid gap-6 lg:grid-cols-2">
             {content.process.steps.map((step, index) => (
@@ -231,9 +219,7 @@ export function LandingPage({ content }: LandingPageProps) {
           </ol>
         </Section>
 
-        <Section
-          className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10"
-        >
+        <Section className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10">
           <div className="flex flex-col gap-4">
             <span className="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted">
               {content.details.heading}
@@ -260,9 +246,7 @@ export function LandingPage({ content }: LandingPageProps) {
           </div>
         </Section>
 
-        <Section
-          className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10"
-        >
+        <Section className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10">
           <div className="flex flex-col gap-4">
             <span className="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted">
               {content.faq.heading}
@@ -309,13 +293,9 @@ export function LandingPage({ content }: LandingPageProps) {
           </div>
         </Section>
 
-        <Section
-          className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10"
-        >
+        <Section className="section-card rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm sm:px-10">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <h2 className="text-[clamp(2rem,5vw,2.75rem)] font-semibold text-strong">
-              {content.testimonials.heading}
-            </h2>
+            <h2 className="text-[clamp(2rem,5vw,2.75rem)] font-semibold text-strong">{content.testimonials.heading}</h2>
             <span
               className="hidden h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(240,186,121,0.5)] to-transparent md:block"
               aria-hidden
@@ -409,9 +389,7 @@ export function LandingPage({ content }: LandingPageProps) {
 
         <Section className="items-center">
           <div className="section-card w-full max-w-3xl overflow-hidden rounded-[2.5rem] border border-soft px-6 py-6 text-center shadow-card">
-            <p className="relative z-10 text-base leading-relaxed text-primary sm:text-lg">
-              {content.footerNote}
-            </p>
+            <p className="relative z-10 text-base leading-relaxed text-primary sm:text-lg">{content.footerNote}</p>
           </div>
         </Section>
 

@@ -42,7 +42,9 @@ function TocAnchor({ item, depth }: { item: TocEntry; depth: number }) {
           depth === 1 ? "text-[#2f2b26]" : "pl-4 text-[#5f564d]"
         }`}
       >
-        <span aria-hidden className="text-[#f2993f]">{depth === 1 ? "•" : "–"}</span>
+        <span aria-hidden className="text-[#f2993f]">
+          {depth === 1 ? "•" : "–"}
+        </span>
         <span className="text-[clamp(0.95rem,2.8vw,1rem)]">{item.title}</span>
       </a>
       {item.items && item.items.length > 0 && (

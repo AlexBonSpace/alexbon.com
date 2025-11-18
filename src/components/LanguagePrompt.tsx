@@ -88,7 +88,7 @@ export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths
         if (normalized && locales.includes(normalized)) {
           return normalized;
         }
-      } catch (error) {
+      } catch {
         /* noop */
       }
 
@@ -118,7 +118,11 @@ export function LanguagePrompt({ currentPath, currentSearch = "", alternatePaths
       return;
     }
 
-    const languages = navigator.languages?.length ? navigator.languages : navigator.language ? [navigator.language] : [];
+    const languages = navigator.languages?.length
+      ? navigator.languages
+      : navigator.language
+        ? [navigator.language]
+        : [];
     const detectedLocales = languages
       .map(mapLanguageToLocale)
       .filter((locale): locale is Locale => Boolean(locale && locales.includes(locale)));

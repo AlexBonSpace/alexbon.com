@@ -20,7 +20,7 @@ export function Navbar({
   activeLocale,
   brandName,
   tagline,
-  currentPath,
+  currentPath: _currentPath,
   currentSearch = "",
   alternatePaths,
 }: NavbarProps) {
@@ -33,7 +33,8 @@ export function Navbar({
   const currentLanguage = languageLinks.find((link) => link.locale === activeLocale) ?? languageLinks[0];
   const alternateLanguages = languageLinks.filter((link) => link.locale !== activeLocale);
 
-  const searchSuffix = currentSearch && currentSearch !== "?" ? (currentSearch.startsWith("?") ? currentSearch : `?${currentSearch}`) : "";
+  const searchSuffix =
+    currentSearch && currentSearch !== "?" ? (currentSearch.startsWith("?") ? currentSearch : `?${currentSearch}`) : "";
 
   const buildHref = (path: string) => {
     const localized = buildLocalizedPath(path, activeLocale);
@@ -206,7 +207,10 @@ export function Navbar({
                       className="nav-pill inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-base font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                     >
                       {currentLanguage.label}
-                      <span aria-hidden="true" className={`transition-transform ${isLanguageMenuOpen ? "rotate-180" : "rotate-0"}`}>
+                      <span
+                        aria-hidden="true"
+                        className={`transition-transform ${isLanguageMenuOpen ? "rotate-180" : "rotate-0"}`}
+                      >
                         ▾
                       </span>
                     </button>

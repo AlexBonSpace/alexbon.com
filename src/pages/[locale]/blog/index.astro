@@ -4,11 +4,7 @@ import PostGrid from "@/components/blog/PostGrid.astro";
 import { locales, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
 import { paginateSummaries, getSummariesByLocale } from "@/lib/post-summaries";
-import {
-  buildBlogCollectionJsonLd,
-  buildBlogBreadcrumbJsonLd,
-  getBlogIndexMetadata,
-} from "@/lib/blog-schema";
+import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
 import { messagesByLocale } from "@/lib/messages";
 import { notFound } from "@/lib/http";
 import { translate, type MessageDictionary } from "@/i18n/translator";
@@ -56,6 +52,7 @@ const previousLabel = translate(messages, "Pagination.previous");
 const nextLabel = translate(messages, "Pagination.next");
 const prefix = `/${locale}`;
 ---
+
 <SiteLayout
   locale={locale}
   title={hero.metaTitle || hero.heroTitle}
@@ -74,18 +71,16 @@ const prefix = `/${locale}`;
       <PostGrid
         posts={pagePosts}
         readMoreLabel={readMoreLabel}
-        pagination={
-          firstPage.totalPages > 1
-            ? {
-                currentPage: firstPage.page,
-                totalPages: firstPage.totalPages,
-                basePath: `${prefix}/blog/`,
-                summary: paginationSummary,
-                previousLabel,
-                nextLabel,
-              }
-            : undefined
-        }
+        pagination={firstPage.totalPages > 1
+          ? {
+              currentPage: firstPage.page,
+              totalPages: firstPage.totalPages,
+              basePath: `${prefix}/blog/`,
+              summary: paginationSummary,
+              previousLabel,
+              nextLabel,
+            }
+          : undefined}
       />
     </div>
   </main>

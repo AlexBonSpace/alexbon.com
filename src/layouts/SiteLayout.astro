@@ -7,7 +7,7 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { contentByLocale, languageLinks } from "@/content";
 import { SITE_URL, localeToBcp47, hreflangToLocale, DEFAULT_POST_IMAGE } from "@/lib/seo";
 import { messagesByLocale } from "@/lib/messages";
-import { DEFAULT_THEME, isThemeId } from "@/lib/themes";
+import { DEFAULT_THEME } from "@/lib/themes";
 import type { MessageDictionary } from "@/i18n/translator";
 import { buildLocalizedPath } from "@/i18n/locale-utils";
 import { THEME_COOKIE } from "@/lib/preferences";
@@ -55,7 +55,6 @@ const {
 
 const content = contentByLocale[locale];
 const messages = messagesByLocale[locale] as MessageDictionary;
-let themeCookieValue: string | undefined;
 const initialTheme = DEFAULT_THEME;
 const currentPath = Astro.url.pathname;
 const currentSearch = Astro.url.search;
@@ -65,9 +64,10 @@ function stripLocaleFromPath(pathname: string): string {
   const segments = normalized.split("/").filter(Boolean);
   const first = segments[0];
   if (first && locales.includes(first as Locale)) {
-    return `/${segments.slice(1).join("/")}` || "/";
+    const stripped = segments.slice(1).join("/");
+    return stripped ? `/${stripped}` : "/";
   }
-  return normalized || "/";
+  return normalized ? normalized : "/";
 }
 
 function ensureAbsolutePath(pathname: string): string {
@@ -107,26 +107,25 @@ if (navigationAlternatePaths) {
   }
 }
 
-const navigationPaths = locales.reduce<Record<Locale, string>>((acc, candidate) => {
-  const overridePath = navigationAlternatePaths?.[candidate];
-  if (overridePath) {
-    acc[candidate] = resolveLocalizedNavigationPath(candidate, overridePath);
+const navigationPaths = locales.reduce<Record<Locale, string>>(
+  (acc, candidate) => {
+    const overridePath = navigationAlternatePaths?.[candidate];
+    if (overridePath) {
+      acc[candidate] = resolveLocalizedNavigationPath(candidate, overridePath);
+      return acc;
+    }
+    if (localesWithLocalizedPath.has(candidate)) {
+      acc[candidate] = buildLocalizedPath(basePath, candidate);
+      return acc;
+    }
+    acc[candidate] = `/${candidate}/`;
     return acc;
-  }
-  if (localesWithLocalizedPath.has(candidate)) {
-    acc[candidate] = buildLocalizedPath(basePath, candidate);
-    return acc;
-  }
-  acc[candidate] = `/${candidate}/`;
-  return acc;
-}, {} as Record<Locale, string>);
+  },
+  {} as Record<Locale, string>,
+);
 
 const searchSuffix =
-  currentSearch && currentSearch !== "?"
-    ? currentSearch.startsWith("?")
-      ? currentSearch
-      : `?${currentSearch}`
-    : "";
+  currentSearch && currentSearch !== "?" ? (currentSearch.startsWith("?") ? currentSearch : `?${currentSearch}`) : "";
 
 const FULL_FEED_TITLES: Record<Locale, string> = {
   ua: "Alex Bon — повний архів — AI-friendly JSON",
@@ -211,11 +210,7 @@ const dataFeedJsonLd = {
   distribution: [feedDownloadNode],
   isPartOf: websiteJsonLd["@id"],
 };
-const additionalJsonLd = jsonLd
-  ? Array.isArray(jsonLd)
-    ? jsonLd
-    : [jsonLd]
-  : [];
+const additionalJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [websiteJsonLd, dataFeedJsonLd, ...additionalJsonLd],
@@ -272,11 +267,7 @@ const resolvedTwitter = (() => {
 })();
 
 const robotsContent =
-  typeof robots === "string" && robots.trim()
-    ? robots.trim()
-    : noIndex
-      ? "noindex, nofollow"
-      : null;
+  typeof robots === "string" && robots.trim() ? robots.trim() : noIndex ? "noindex, nofollow" : null;
 
 function escapeForRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -327,7 +318,8 @@ const feedLinks = Array.from(
 const FONT_STYLESHEET =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap&subset=cyrillic";
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang={localeToBcp47[locale] ?? locale}>
   <head>
     <meta charset="utf-8" />
@@ -336,25 +328,37 @@ const FONT_STYLESHEET =
     {description ? <meta name="description" content={description} /> : null}
     {canonical ? <link rel="canonical" href={canonical} /> : null}
     {robotsContent ? <meta name="robots" content={robotsContent} /> : null}
-    {alternates
-      ? Object.entries(alternates).map(([key, value]) => (
-          <link rel="alternate" hrefLang={key} href={value} />
-        ))
-      : null}
-    {languageAlternates
-      ? Object.entries(languageAlternates).map(([key, value]) => (
-          <link rel="alternate" hrefLang={key} href={value} />
-        ))
-      : null}
-    {feedLinks.map((link) => (
-      <link rel={link.rel ?? "alternate"} type={link.type} title={link.title} href={link.href} hrefLang={link.hreflang} />
-    ))}
-    {Object.entries(resolvedOpenGraph).map(([key, value]) =>
-      value ? <meta property={`og:${key}`} content={value} /> : null,
-    )}
-    {Object.entries(resolvedTwitter).map(([key, value]) =>
-      value ? <meta name={`twitter:${key}`} content={value} /> : null,
-    )}
+    {
+      alternates
+        ? Object.entries(alternates).map(([key, value]) => <link rel="alternate" hrefLang={key} href={value} />)
+        : null
+    }
+    {
+      languageAlternates
+        ? Object.entries(languageAlternates).map(([key, value]) => <link rel="alternate" hrefLang={key} href={value} />)
+        : null
+    }
+    {
+      feedLinks.map((link) => (
+        <link
+          rel={link.rel ?? "alternate"}
+          type={link.type}
+          title={link.title}
+          href={link.href}
+          hrefLang={link.hreflang}
+        />
+      ))
+    }
+    {
+      Object.entries(resolvedOpenGraph).map(([key, value]) =>
+        value ? <meta property={`og:${key}`} content={value} /> : null,
+      )
+    }
+    {
+      Object.entries(resolvedTwitter).map(([key, value]) =>
+        value ? <meta name={`twitter:${key}`} content={value} /> : null,
+      )
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link rel="preload" href={FONT_STYLESHEET} as="style" />
@@ -384,37 +388,36 @@ const FONT_STYLESHEET =
       <div class="site-footer__link-blocks">
         <nav class="language-links language-links--footer" aria-label="Languages">
           <ul class="language-links__list">
-            {languageSwitcherLinks.map((link) => (
-              <li class="language-links__item" key={link.locale}>
-                <a
-                  href={link.href}
-                  class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
-                  aria-current={link.isActive ? "page" : undefined}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        {locale === "ru" ? (
-          <nav class="language-links language-links--footer" aria-label="Социальные сети">
-            <ul class="language-links__list">
-              {RU_FOOTER_SOCIAL_LINKS.map((link) => (
-                <li class="language-links__item" key={link.href}>
+            {
+              languageSwitcherLinks.map((link) => (
+                <li class="language-links__item" key={link.locale}>
                   <a
                     href={link.href}
-                    class="language-links__link"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
+                    aria-current={link.isActive ? "page" : undefined}
                   >
                     {link.label}
                   </a>
                 </li>
-              ))}
-            </ul>
-          </nav>
-        ) : null}
+              ))
+            }
+          </ul>
+        </nav>
+        {
+          locale === "ru" ? (
+            <nav class="language-links language-links--footer" aria-label="Социальные сети">
+              <ul class="language-links__list">
+                {RU_FOOTER_SOCIAL_LINKS.map((link) => (
+                  <li class="language-links__item" key={link.href}>
+                    <a href={link.href} class="language-links__link" target="_blank" rel="noopener noreferrer">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null
+        }
       </div>
     </footer>
   </body>

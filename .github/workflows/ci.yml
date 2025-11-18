@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, claude/**]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔒 Security audit
+        run: npm audit --audit-level=high
+
+      - name: 📝 Lint code
+        run: npm run lint
+
+      - name: ✅ Format check
+        run: npm run format:check
+
+      - name: 🧪 Run tests
+        run: npm run test
+
+      - name: 🏗️ Build project
+        run: npm run build
+
+      - name: 🔍 Verify SEO
+        run: npm run verify:seo
+
+      - name: 📊 Bundle size check
+        run: |
+          WORKER_SIZE=$(stat -f%z dist/_worker.js 2>/dev/null || stat -c%s dist/_worker.js)
+          WORKER_MB=$((WORKER_SIZE / 1024 / 1024))
+          echo "Worker bundle size: ${WORKER_MB}MB"
+          if [ $WORKER_MB -gt 5 ]; then
+            echo "❌ Worker bundle too large (${WORKER_MB}MB > 5MB limit)"
+            exit 1
+          fi
+          echo "✅ Worker bundle size is acceptable"

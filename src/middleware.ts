@@ -19,9 +19,7 @@ export const redirectEntries: Array<[string, string]> = [
 
 const fileLikePattern = /\.[^/]+$/;
 
-const redirectMap = new Map<string, string>(
-  redirectEntries.map(([from, to]) => [normalizePathname(from), to]),
-);
+const redirectMap = new Map<string, string>(redirectEntries.map(([from, to]) => [normalizePathname(from), to]));
 
 function safeDecode(value: string): string {
   try {
@@ -45,8 +43,33 @@ export function normalizePathname(pathname: string): string {
   return normalized.endsWith("/") ? normalized.slice(0, -1) : normalized;
 }
 
-const buildDestination = (origin: string, targetPath: string) =>
-  new URL(targetPath, origin).toString();
+const buildDestination = (origin: string, targetPath: string) => new URL(targetPath, origin).toString();
+
+/**
+ * Security headers applied to all responses
+ * Protects against XSS, clickjacking, MIME-sniffing, and other common attacks
+ */
+const securityHeaders = {
+  // Content Security Policy - prevents XSS attacks
+  // Allows scripts from self and Algolia (for search)
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' *.algolia.net *.algolianet.com",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "font-src 'self' data:",
+    "connect-src 'self' *.algolia.net *.algolianet.com",
+    "frame-ancestors 'none'",
+  ].join("; "),
+  // Prevents clickjacking attacks
+  "X-Frame-Options": "DENY",
+  // Prevents MIME-sniffing attacks
+  "X-Content-Type-Options": "nosniff",
+  // Controls referrer information
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  // Disables unwanted browser features
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   const url = new URL(context.request.url);
@@ -73,5 +96,13 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     return context.redirect(destination.toString(), 308);
   }
 
-  return next();
+  // Get response from next handler
+  const response = await next();
+
+  // Apply security headers to response
+  for (const [key, value] of Object.entries(securityHeaders)) {
+    response.headers.set(key, value);
+  }
+
+  return response;
 };

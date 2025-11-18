@@ -18,9 +18,7 @@ export function NotFoundView({ locale, t }: { locale: Locale; t: TranslateFn }) 
     <section className="mx-auto flex w-full max-w-3xl flex-col justify-center gap-8 px-4 py-16 text-[#2f2b26] sm:px-6">
       <header className="flex flex-col gap-4">
         <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#b39c7d]">{t("title")}</p>
-        <h1 className="text-balance text-[clamp(2.6rem,8vw,4rem)] font-semibold leading-tight">
-          {t("line1")}
-        </h1>
+        <h1 className="text-balance text-[clamp(2.6rem,8vw,4rem)] font-semibold leading-tight">{t("line1")}</h1>
       </header>
 
       <section className="flex flex-col gap-3 text-[clamp(1.05rem,3vw,1.3rem)] leading-relaxed text-[#4b4139]">
@@ -30,9 +28,7 @@ export function NotFoundView({ locale, t }: { locale: Locale; t: TranslateFn }) 
       </section>
 
       <section className="flex flex-col gap-4">
-        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#7c6d5d]">
-          {t("prompt")}
-        </p>
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#7c6d5d]">{t("prompt")}</p>
         <nav className="flex flex-col gap-3" aria-label={t("prompt")}>
           {actions.map(({ href, label }) => (
             <Link

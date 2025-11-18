@@ -89,14 +89,8 @@ export function buildLanguageAlternates(
 
   const defaultLocaleForX = resolveDefaultLocale();
   if (defaultLocaleForX) {
-    const defaultPath =
-      typeof pathOrMap === "string"
-        ? pathOrMap
-        : pathOrMap[defaultLocaleForX] ?? "/";
-    languages["x-default"] = `${SITE_URL}${buildLocalizedPath(
-      defaultLocaleForX,
-      normalizePath(defaultPath),
-    )}`;
+    const defaultPath = typeof pathOrMap === "string" ? pathOrMap : (pathOrMap[defaultLocaleForX] ?? "/");
+    languages["x-default"] = `${SITE_URL}${buildLocalizedPath(defaultLocaleForX, normalizePath(defaultPath))}`;
   }
 
   return languages;

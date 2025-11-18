@@ -6,20 +6,12 @@ import {
   getAllSummaryTags,
   paginateSummariesByTag,
   paginateSummariesByType,
-  getSummariesByType,
 } from "@/lib/post-summaries";
 import { POSTS_PER_PAGE } from "@/lib/blog-constants";
 
 export const prerender = true;
 
-type ChangeFreq =
-  | "always"
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "yearly"
-  | "never";
+type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 
 function buildUrlEntry({
   loc,

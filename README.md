@@ -27,18 +27,26 @@ Other scripts:
 | `npm run build`          | Production build (runs `prebuild` → rebuilds cache)                         |
 | `npm run preview`        | Preview the production build locally                                        |
 | `npm run cache:build`    | Rebuild `src/lib/.cache/post-summaries.json` (auto-runs in `predev/prebuild`)|
+| `npm run lint`           | Run ESLint to check code quality                                            |
+| `npm run lint:fix`       | Run ESLint and auto-fix issues                                              |
+| `npm run format`         | Format all code with Prettier                                               |
+| `npm run format:check`   | Check if code is formatted correctly                                        |
 | `npm run test`           | Vitest suite                                                                |
 | `npm run verify:seo`     | Validate `dist/sitemap.xml` (requires a fresh `npm run build`)              |
-| `npm run verify`         | Runs tests, does a production build, and finally executes `verify:seo`      |
+| `npm run verify`         | Runs audit + tests + build + `verify:seo` for complete validation           |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
 
 Рекомендованный деплой-порядок: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
 
 ## 🧪 Automated checks
 
-- `npm run test` exercises helpers around content cleanup, localized URL builders, and middleware normalization.
-- `npm run verify:seo` parses `dist/sitemap.xml` to ensure only canonical HTML routes are published (no feeds, search, or JSON endpoints) and that every locale has coverage.
-- `npm run verify` combines the Vitest suite, a production build, and the sitemap check so you can run a single smoke-test before deploying.
+- `npm run lint` checks code quality with ESLint (TypeScript + Astro rules)
+- `npm run format:check` verifies consistent code formatting with Prettier
+- `npm run test` exercises helpers around content cleanup, localized URL builders, and middleware normalization
+- `npm run verify:seo` parses `dist/sitemap.xml` to ensure only canonical HTML routes are published (no feeds, search, or JSON endpoints) and that every locale has coverage
+- `npm run verify` combines security audit, Vitest suite, production build, and sitemap check for complete validation
+- **Pre-commit hooks** (Husky) automatically run lint, tests, and security audit before each commit
+- **GitHub Actions CI** runs full validation suite on every push to main/master/claude branches
 
 ## 🤖 AI feeds
 

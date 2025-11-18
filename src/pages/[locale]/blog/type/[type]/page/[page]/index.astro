@@ -1,12 +1,11 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
-import { locales, defaultLocale, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import { getSummariesByType, paginateSummariesByType } from "@/lib/post-summaries";
 import {
   buildPostTypePath,
   buildPostTypeRelativePath,
-  getPostTypeDescription,
   getPostTypeLabel,
   getPostTypePageDescription,
   getPostTypePageTitle,
@@ -39,7 +38,15 @@ const rawType = Astro.params.type;
 const rawPage = Astro.params.page;
 const pageNumber = rawPage ? Number.parseInt(rawPage, 10) : NaN;
 
-if (!localeParam || !locales.includes(localeParam) || !rawType || !isValidPostType(rawType) || !rawPage || Number.isNaN(pageNumber) || pageNumber < 1) {
+if (
+  !localeParam ||
+  !locales.includes(localeParam) ||
+  !rawType ||
+  !isValidPostType(rawType) ||
+  !rawPage ||
+  Number.isNaN(pageNumber) ||
+  pageNumber < 1
+) {
   return notFound();
 }
 
@@ -65,10 +72,13 @@ const availableLocales = locales.filter((candidate) => {
 const languageAlternates =
   availableLocales.length > 0
     ? buildLanguageAlternates(
-        availableLocales.reduce<Record<Locale, string>>((acc, candidate) => {
-          acc[candidate] = pageNumber === 1 ? relativePath : `${relativePath}page/${pageNumber}/`;
-          return acc;
-        }, {} as Record<Locale, string>),
+        availableLocales.reduce<Record<Locale, string>>(
+          (acc, candidate) => {
+            acc[candidate] = pageNumber === 1 ? relativePath : `${relativePath}page/${pageNumber}/`;
+            return acc;
+          },
+          {} as Record<Locale, string>,
+        ),
         { locales: availableLocales },
       )
     : undefined;
@@ -92,6 +102,7 @@ const pageSummary = translate(messages, "Pagination.pageSummary", {
 
 const prefix = `/${locale}`;
 ---
+
 <SiteLayout
   locale={locale}
   title={pageTitle}
@@ -101,7 +112,9 @@ const prefix = `/${locale}`;
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 text-sm text-[#4b4139] shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8">
+      <section
+        class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 text-sm text-[#4b4139] shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8"
+      >
         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#7c6d5d]">{label}</p>
         <h1 class="text-[clamp(1.8rem,4.5vw,2.6rem)] font-semibold leading-tight text-[#2f2b26]">
           {pageTitle}

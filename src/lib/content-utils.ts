@@ -61,8 +61,7 @@ const AUTHOR_SERVICE_OFFERS: Record<Locale, Array<Record<string, unknown>>> = {
     {
       "@type": "Service",
       name: "Встреча-знакомство",
-      description:
-        "Бесплатная 20-минутная онлайн встреча, чтобы познакомиться и понять, комфортно ли работать вместе.",
+      description: "Бесплатная 20-минутная онлайн встреча, чтобы познакомиться и понять, комфортно ли работать вместе.",
       serviceType: "Психологическая консультация",
       areaServed: "Worldwide",
       offers: {
@@ -201,10 +200,7 @@ export function buildAuthorReference(
 ) {
   const aboutUrl = overrides.url?.trim() || `${SITE_URL}/${locale}/about/`;
   const displayMap = overrides.display ?? {};
-  const name =
-    displayMap[locale] ??
-    AUTHOR_DISPLAY_BY_LOCALE[locale] ??
-    AUTHOR_DISPLAY_BY_LOCALE[defaultLocale];
+  const name = displayMap[locale] ?? AUTHOR_DISPLAY_BY_LOCALE[locale] ?? AUTHOR_DISPLAY_BY_LOCALE[defaultLocale];
   const reference: Record<string, unknown> = {
     "@type": "Person",
     "@id": aboutUrl,
@@ -241,9 +237,7 @@ export function buildPostJsonLd(
   const path = `/${locale}/blog/${slug}`;
   const image = doc.image ?? DEFAULT_POST_IMAGE;
   const collectionUrl = `${SITE_URL}/${locale}/blog/`;
-  const licenseUrl = doc.license.startsWith("http")
-    ? doc.license
-    : "https://creativecommons.org/licenses/by/4.0/";
+  const licenseUrl = doc.license.startsWith("http") ? doc.license : "https://creativecommons.org/licenses/by/4.0/";
   const inLanguage = localeToBcp47[locale] ?? locale;
   const aboutTags =
     doc.tags && doc.tags.length > 0
@@ -388,9 +382,7 @@ export function buildPageJsonLd(
   locale: Locale,
 ) {
   const path = `/${locale}/${slug}`;
-  const licenseUrl = doc.license.startsWith("http")
-    ? doc.license
-    : "https://creativecommons.org/licenses/by/4.0/";
+  const licenseUrl = doc.license.startsWith("http") ? doc.license : "https://creativecommons.org/licenses/by/4.0/";
 
   return {
     "@context": "https://schema.org",
