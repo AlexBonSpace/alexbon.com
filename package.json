@@ -19,8 +19,8 @@
     "prepare": "husky",
     "verify:seo": "node scripts/verify-seo.mjs",
     "verify": "npm audit --audit-level=high && npm run test && npm run build && npm run verify:seo",
-    "lint": "eslint src --ext .ts,.tsx,.astro",
-    "lint:fix": "eslint src --ext .ts,.tsx,.astro --fix",
+    "lint": "eslint \"src/**/*.{ts,tsx,astro}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,astro}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,astro,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,astro,css,json}\""
   },
