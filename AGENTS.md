@@ -36,13 +36,22 @@
 - `npm run build` – Cloudflare SSR bundle + prerendered feeds/sitemap (run before syncing Algolia or deploying).
 - `npm run preview` – local preview of the SSR build.
 - `npm run cache:build` – regenerate `src/lib/.cache/post-summaries.json` (runs automatically before dev/build; rerun manually if content changes mid-session).
+- `npm run lint` – run ESLint to check code quality.
+- `npm run lint:fix` – run ESLint and automatically fix issues.
+- `npm run format` – format all code with Prettier.
+- `npm run format:check` – check if code is formatted correctly.
 - `npm run test` – executes the Vitest suite (unit helpers + future component tests).
 - `npm run test:watch` – watch mode for the Vitest suite during development.
 - `npm run verify:seo` – check the built sitemap for banned URLs/duplicates/trailing slashes (requires running `npm run build` first).
-- `npm run verify` – runs the Vitest suite, then `npm run build`, then `verify:seo` for a single command smoke-test.
+- `npm run verify` – runs security audit, Vitest suite, build, and `verify:seo` for complete validation.
 - `npm run algolia:sync` – optional; parses all `dist/*/feed-full*.json` pages (follow `next_url`), diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
 - `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
+
+**Automation**
+- Pre-commit hooks (Husky) automatically run lint, tests, and security audit before each commit.
+- GitHub Actions CI runs full validation on every push to main/master/claude branches.
+- VS Code auto-formats code on save (configured in `.vscode/settings.json`).
 
 **Algolia Sync Notes**
 - Incremental mode keeps a manifest at `scripts/.algolia-cache.json` (ignored by git); reruns only push changed/removed records.
