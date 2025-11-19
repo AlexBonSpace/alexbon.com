@@ -352,6 +352,77 @@ function computeTagScore(postTags: string[], referenceTags: string[]): number {
   return score + extras * 0.1;
 }
 
+/**
+ * Finds related posts using intelligent tag matching with fallback
+ *
+ * Algorithm:
+ * 1. Score all posts: +4 points per shared tag, +1 for same type
+ * 2. Sort by score (highest first), then by date (newest first)
+ * 3. If fewer than limit posts found, fill with recent posts of same type
+ *
+ * This ensures the "related posts" block is always populated with relevant content
+ *
+ * @param post - The current post to find related content for
+ * @param limit - Maximum number of related posts to return (default: 4)
+ * @returns Array of related posts, guaranteed to have up to `limit` items
+ *
+ * @example
+ * const related = findRelatedPosts(currentPost, 4);
+ * // Returns 4 posts: best tag matches first, fallback to recent posts of same type
+ */
+export function findRelatedPosts(post: BlogPost, limit = 4): BlogPost[] {
+  const allPosts = getPostsByLocale(post.locale);
+
+  // Score all posts by tag overlap and type match
+  const scored = allPosts
+    .filter((candidate) => candidate.slug !== post.slug)
+    .map((candidate) => {
+      let score = 0;
+
+      // +4 points for each shared tag
+      const sharedTags = post.tags.filter((tag) => candidate.tags.includes(tag));
+      score += sharedTags.length * 4;
+
+      // +1 point for same type (note/article/story)
+      if (candidate.type === post.type) {
+        score += 1;
+      }
+
+      return { post: candidate, score };
+    })
+    .sort((a, b) => {
+      // Sort by score first (higher is better)
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      // For equal scores, prefer newer posts
+      return b.post.publishedDate.getTime() - a.post.publishedDate.getTime();
+    });
+
+  // Take top matches
+  const result = scored.slice(0, limit).map((item) => item.post);
+
+  // Fallback: if we don't have enough posts, fill with recent posts of same type
+  if (result.length < limit) {
+    const needed = limit - result.length;
+    const usedSlugs = new Set(result.map((p) => p.slug));
+
+    const fallback = allPosts
+      .filter(
+        (candidate) =>
+          candidate.slug !== post.slug &&
+          candidate.type === post.type &&
+          !usedSlugs.has(candidate.slug),
+      )
+      .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
+      .slice(0, needed);
+
+    result.push(...fallback);
+  }
+
+  return result;
+}
+
 export function getPostsForTag(locale: Locale, tag: string, options?: { original?: BlogPost }): BlogPost[] {
   const tags = tagsByLocale.get(locale);
   if (!tags) return [];

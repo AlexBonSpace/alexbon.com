@@ -3,7 +3,7 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import LicenseBlock from "@/components/blog/LicenseBlock.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import { getPostBySlug, getPostsByLocale, getPostTranslations, getPostsForTag } from "@/lib/blog";
+import { getPostBySlug, getPostsByLocale, getPostTranslations, findRelatedPosts } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { buildBreadcrumbJsonLd } from "@/lib/blog";
 import { buildCanonicalUrl, buildLanguageAlternates, DEFAULT_POST_IMAGE } from "@/lib/seo";
@@ -44,11 +44,7 @@ if (!post) {
 }
 
 const { Content } = await post.render();
-const siblings = getPostsByLocale(locale);
-const currentIndex = siblings.findIndex((item) => item.slug === post.slug);
-const previous = currentIndex > 0 ? siblings[currentIndex - 1] : undefined;
-const next = currentIndex < siblings.length - 1 ? siblings[currentIndex + 1] : undefined;
-const relatedPosts = post.tags.length > 0 ? getPostsForTag(locale, post.tags[0], { original: post }).slice(0, 4) : [];
+const relatedPosts = findRelatedPosts(post, 4);
 
 const translations = getPostTranslations(locale, post.slug);
 const relativePaths: Partial<Record<Locale, string>> = { [locale]: `/blog/${post.slug}/` };
@@ -92,12 +88,7 @@ const messages = messagesByLocale[locale] as MessageDictionary;
 const typeLabel = getPostTypeLabel(locale, post.type);
 const typeHref = buildPostTypePath(locale, post.type);
 const publishedOn = translate(messages, "Post.publishedOn", { date: formatDate(post.publishedDate, locale) });
-const neighborsHeading = translate(messages, "Post.neighborsHeading");
-const previousLabel = translate(messages, "Post.previous");
-const nextLabel = translate(messages, "Post.next");
-const firstPostLabel = translate(messages, "Post.firstPost");
-const lastPostLabel = translate(messages, "Post.lastPost");
-const moreOnTagLabel = post.tags.length > 0 ? translate(messages, "Post.moreOnTag", { tag: post.tags[0] }) : "";
+const relatedPostsHeading = translate(messages, "Post.relatedPostsHeading");
 const readMoreRaw = translate(messages, "Blog.readMore");
 const readMoreLabel =
   readMoreRaw === "Blog.readMore"
@@ -178,51 +169,11 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
       </article>
     </div>
 
-    <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
-      <section class="section-card flex flex-col gap-6 rounded-[2rem] border border-soft p-6 sm:p-8">
-        <h2 class="text-[clamp(1.6rem,4vw,2.2rem)] font-semibold leading-tight text-strong">
-          {neighborsHeading}
-        </h2>
-        <div class="flex flex-col gap-2 text-sm text-primary">
-          <div class="flex flex-wrap items-center gap-3">
-            <span class="font-semibold text-strong">{previousLabel}</span>
-            {
-              previous ? (
-                <a
-                  href={ensureTrailingSlash(previous.url)}
-                  class="badge-soft inline-flex items-center rounded-full px-4 py-2 transition-colors hover:bg-[#f2993f]/90 hover:text-white"
-                >
-                  {previous.title}
-                </a>
-              ) : (
-                <span class="text-disabled">{firstPostLabel}</span>
-              )
-            }
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <span class="font-semibold text-strong">{nextLabel}</span>
-            {
-              next ? (
-                <a
-                  href={ensureTrailingSlash(next.url)}
-                  class="badge-soft inline-flex items-center rounded-full px-4 py-2 transition-colors hover:bg-[#f2993f]/90 hover:text-white"
-                >
-                  {next.title}
-                </a>
-              ) : (
-                <span class="text-disabled">{lastPostLabel}</span>
-              )
-            }
-          </div>
-        </div>
-      </section>
-    </div>
-
     {
       relatedPosts.length > 0 && (
         <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
           <section class="section-card flex flex-col gap-6 rounded-[2rem] border border-soft p-6 sm:p-8">
-            <h2 class="text-[clamp(1.5rem,3.8vw,2.1rem)] font-semibold leading-tight text-strong">{moreOnTagLabel}</h2>
+            <h2 class="text-[clamp(1.5rem,3.8vw,2.1rem)] font-semibold leading-tight text-strong">{relatedPostsHeading}</h2>
             <div class="grid gap-5 md:grid-cols-2">
               {relatedPosts.map((item) => {
                 const itemUrl = ensureTrailingSlash(item.url);

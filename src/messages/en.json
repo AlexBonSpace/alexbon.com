@@ -57,19 +57,14 @@
     "pageTitle": "“{tag}” — page {page}"
   },
   "Post": {
-    "previous": "Previous:",
-    "next": "Next:",
-    "firstPost": "This is the first post",
-    "lastPost": "This is the latest post",
-    "moreOnTag": "More on “{tag}”",
+    "relatedPostsHeading": "You might be interested",
     "typeNote": "Note",
     "typeArticle": "Article",
     "typeStory": "Story",
     "publishedOn": "Published {date}",
     "updatedOn": "· Updated {date}",
     "tocTitle": "Table of contents",
-    "tocAriaLabel": "Table of contents",
-    "neighborsHeading": "Neighbouring posts"
+    "tocAriaLabel": "Table of contents"
   },
   "ThemeToggle": {
     "light": {
