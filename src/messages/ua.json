@@ -57,19 +57,14 @@
     "pageTitle": "«{tag}» — сторінка {page}"
   },
   "Post": {
-    "previous": "Попередній:",
-    "next": "Наступний:",
-    "firstPost": "Це перший запис",
-    "lastPost": "Це останній запис",
-    "moreOnTag": "Ще на тему «{tag}»",
+    "relatedPostsHeading": "Вам може бути цікаво",
     "typeNote": "Нотатка",
     "typeArticle": "Стаття",
     "typeStory": "Оповідання",
     "publishedOn": "Опубліковано {date}",
     "updatedOn": "· Оновлено {date}",
     "tocTitle": "Зміст",
-    "tocAriaLabel": "Зміст",
-    "neighborsHeading": "Сусідні матеріали"
+    "tocAriaLabel": "Зміст"
   },
   "ThemeToggle": {
     "light": {

@@ -2,6 +2,13 @@ import type { Locale } from "@/i18n/config";
 import summaries from "@/lib/.cache/post-summaries.json";
 import { POSTS_PER_PAGE } from "@/lib/blog-constants";
 
+/**
+ * Minimum number of posts required for a tag to get its own page
+ * Tags with fewer posts are considered "context tags" (shown as text, not links)
+ * Tags with ≥3 posts are "hub tags" (shown as clickable links with dedicated pages)
+ */
+export const MIN_POSTS_FOR_TAG_PAGE = 3;
+
 export type PostSummary = {
   slug: string;
   locale: Locale;
@@ -102,6 +109,29 @@ export function getAllSummaryTags(locale: Locale): string[] {
   const tags = tagsByLocale.get(locale);
   if (!tags) return [];
   return Array.from(tags.keys()).sort((a, b) => a.localeCompare(b, locale === "en" ? "en" : "ru"));
+}
+
+/**
+ * Returns only "hub tags" - tags with enough posts (≥ MIN_POSTS_FOR_TAG_PAGE) to get their own page
+ * This prevents generating thin content pages for tags with only 1-2 posts
+ */
+export function getHubTags(locale: Locale): string[] {
+  const tags = tagsByLocale.get(locale);
+  if (!tags) return [];
+
+  return Array.from(tags.entries())
+    .filter(([, posts]) => posts.length >= MIN_POSTS_FOR_TAG_PAGE)
+    .map(([tag]) => tag)
+    .sort((a, b) => a.localeCompare(b, locale === "en" ? "en" : "ru"));
+}
+
+/**
+ * Checks if a tag is a "hub tag" (has ≥ MIN_POSTS_FOR_TAG_PAGE posts)
+ * Hub tags get clickable links, context tags are shown as plain text
+ */
+export function isHubTag(locale: Locale, tag: string): boolean {
+  const posts = getSummariesForTag(locale, tag);
+  return posts.length >= MIN_POSTS_FOR_TAG_PAGE;
 }
 
 export function getSummariesForTag(locale: Locale, tag: string): PostSummary[] {

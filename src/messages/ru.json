@@ -57,19 +57,14 @@
     "pageTitle": "«{tag}» — страница {page}"
   },
   "Post": {
-    "previous": "Предыдущий:",
-    "next": "Следующий:",
-    "firstPost": "Это первая запись",
-    "lastPost": "Это последняя запись",
-    "moreOnTag": "Ещё по теме «{tag}»",
+    "relatedPostsHeading": "Вам может быть интересно",
     "typeNote": "Заметка",
     "typeArticle": "Статья",
     "typeStory": "Рассказ",
     "publishedOn": "Опубликовано {date}",
     "updatedOn": "· Обновлено {date}",
     "tocTitle": "Оглавление",
-    "tocAriaLabel": "Оглавление",
-    "neighborsHeading": "Соседние материалы"
+    "tocAriaLabel": "Оглавление"
   },
   "ThemeToggle": {
     "light": {
