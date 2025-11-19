@@ -174,7 +174,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
             <h2 class="text-[clamp(1.5rem,3.8vw,2.1rem)] font-semibold leading-tight text-strong">
               {relatedPostsHeading}
             </h2>
-            <div class="grid gap-5 md:grid-cols-2" id="related-posts-grid">
+            <div class="grid gap-5 md:grid-cols-2">
               {relatedPosts.map((item) => {
                 const itemUrl = ensureTrailingSlash(item.url);
                 const itemTypeLabel = getPostTypeLabel(locale, item.type);
@@ -183,7 +183,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
 
                 if (item.type === "note") {
                   return (
-                    <article class="blog-card scroll-reveal flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6">
+                    <article class="blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6">
                       <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
                         <a
                           href={itemTypeHref}
@@ -210,7 +210,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                 }
 
                 return (
-                  <article class="blog-card scroll-reveal flex w-full flex-col gap-5 rounded-[2.25rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-7">
+                  <article class="blog-card flex w-full flex-col gap-5 rounded-[2.25rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-7">
                     <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
                       <a
                         href={itemTypeHref}
@@ -248,63 +248,3 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
     }
   </main>
 </SiteLayout>
-
-<style>
-  .scroll-reveal {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-reveal {
-      opacity: 1;
-      transform: none;
-    }
-  }
-</style>
-
-<script>
-  import { animate, inView, stagger } from "motion";
-
-  function initScrollReveal() {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (prefersReducedMotion) {
-      document.querySelectorAll(".scroll-reveal").forEach((el) => {
-        (el as HTMLElement).style.opacity = "1";
-        (el as HTMLElement).style.transform = "none";
-      });
-      return;
-    }
-
-    // Adaptive animation parameters based on device
-    const isMobile = window.innerWidth < 768;
-    const staggerDelay = isMobile ? 0.05 : 0.1;
-    const animationDuration = isMobile ? 0.5 : 0.6;
-
-    const grid = document.getElementById("related-posts-grid");
-    if (!grid) return;
-
-    const cards = grid.querySelectorAll(".scroll-reveal");
-    if (cards.length === 0) return;
-
-    inView(
-      grid,
-      () => {
-        animate(
-          cards,
-          { opacity: 1, transform: "translateY(0)" },
-          {
-            duration: animationDuration,
-            delay: stagger(staggerDelay, { start: 0 }),
-            easing: [0.22, 1, 0.36, 1],
-          },
-        );
-      },
-      { amount: 0.1 },
-    );
-  }
-
-  initScrollReveal();
-  document.addEventListener("astro:page-load", initScrollReveal);
-</script>
