@@ -43,7 +43,10 @@ src/
 
 ### Routing & Redirects
 - **Locale-first routing**: All content under locale prefixes (`/ua/`, `/ru/`, `/en/`)
-- Root `/` performs 308 redirect to `/ua/` (default locale)
+- **Root `/` uses SSR** for instant locale detection and 308 redirect
+  - Priority: `ALEXBON_LOCALE` cookie → `Accept-Language` header → `ua` fallback
+  - Server-side redirect (no white screen, zero visual delay)
+  - Minimal Worker invocations due to low traffic (<10 visits/day)
 - Locale roots redirect to their blog index
 - Trailing slashes enforced via 308 redirects in middleware
 - Language menu uses `navigationAlternatePaths` for deep-linking translated slugs
@@ -55,8 +58,9 @@ src/
   - Projected at 500 posts: ~870 KB cache → ~2.2 MB total worker bundle (safely under 5MB Cloudflare limit)
   - Worker bundle size: 1.5 MB (138 posts) → ~2.2 MB (500 posts) - minimal growth due to prerendering
   - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
-- **Prerendering strategy**: All content pages use `export const prerender = true`
+- **Prerendering strategy**: Content pages use `export const prerender = true` (except root `/`)
   - Blog posts (`/[locale]/blog/[slug]/`), tag pages, search page - all prerendered as static HTML
+  - Root `/` uses SSR for intelligent locale detection (`resolveRequestLocale`)
   - MDX content NOT included in worker bundle, only metadata cache
   - Worker bundle contains only runtime code + post summaries (~230 KB)
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
