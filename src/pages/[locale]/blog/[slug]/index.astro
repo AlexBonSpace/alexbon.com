@@ -143,10 +143,10 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                     <li>
                       {isHub ? (
                         <a href={tagHref} class="tag-chip inline-flex items-center px-3 py-1 transition-colors">
-                          #{tag}
+                          {tag}
                         </a>
                       ) : (
-                        <span class="tag-chip inline-flex items-center px-3 py-1 opacity-60">#{tag}</span>
+                        <span class="tag-chip inline-flex items-center px-3 py-1 opacity-60">{tag}</span>
                       )}
                     </li>
                   );
