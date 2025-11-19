@@ -12,6 +12,8 @@ import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { notFound } from "@/lib/http";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; slug: string } }> = [];
   for (const locale of locales) {

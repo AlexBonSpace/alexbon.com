@@ -58,13 +58,18 @@ Other scripts:
 
 ## ⚡ Performance optimization
 
-The project uses an optimized caching strategy to stay within Cloudflare's 5MB worker bundle limit:
+The project uses an optimized prerendering + caching strategy to stay within Cloudflare's 5MB worker bundle limit:
 
+- **Prerendering**: All content pages use `export const prerender = true`
+  - Blog posts, tag pages, search page - all prerendered as static HTML at build time
+  - MDX content NOT included in worker bundle, only in static HTML files
+  - Worker bundle: 1.5 MB (138 posts) → ~2.2 MB (500 posts) ✅
 - **Cache** (`src/lib/.cache/post-summaries.json`): Stores only essential metadata (title, description, summary, tags, URLs, dates) - no full post text
   - Current: ~235 KB for 138 posts (~1.7 KB per post)
-  - Projected at 500 posts: ~870 KB cache → ~4.04 MB total worker bundle ✅
+  - Projected at 500 posts: ~870 KB cache (included in worker bundle)
+  - Minimal growth due to prerendering strategy
 - **Feeds** (RSS/JSON): Read full post content directly from MDX during build time using `getPostsByLocale()`, since they're prerendered
-- **Blog pages**: Use cached summaries from worker bundle for fast SSR rendering
+- **File count**: ~1,000 files (138 posts) → ~1,900 files (500 posts) - well under Cloudflare's 20,000 file limit
 
 ## 🗂️ Project structure
 
