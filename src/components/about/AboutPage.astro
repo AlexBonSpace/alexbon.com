@@ -316,9 +316,9 @@ const reflectionsLabelByLocale = {
             </span>
             <p class="text-base leading-relaxed text-primary sm:text-lg">{content.process.intro}</p>
           </div>
-          <ol class="mt-6 grid gap-6 lg:grid-cols-2">
+          <ol class="mt-6 grid gap-6 lg:grid-cols-2" id="process-grid">
             {processSteps.map((step) => (
-              <li class="group blog-card relative overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
+              <li class="group blog-card scroll-reveal relative overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
                 <div class="relative z-10 flex flex-col gap-4">
                   <span class="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-muted">
                     {step.index}
@@ -346,9 +346,9 @@ const reflectionsLabelByLocale = {
               {content.details.heading}
             </span>
           </div>
-          <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="details-grid">
             {content.details.items.map((item) => (
-              <article class="group blog-card relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
+              <article class="group blog-card scroll-reveal relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
                 <div class="relative z-10 flex flex-col gap-4">
                   <span
                     class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f6d7ad] to-[#f1bd78] text-muted shadow-[0_10px_25px_-12px_rgba(110,86,60,0.6)]"
@@ -370,9 +370,9 @@ const reflectionsLabelByLocale = {
               {content.faq.heading}
             </span>
           </div>
-          <div class="mt-6 flex flex-col gap-6">
+          <div class="mt-6 flex flex-col gap-6" id="faq-grid">
             {content.faq.items.map((item) => (
-              <article class="blog-card relative overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1">
+              <article class="blog-card scroll-reveal relative overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1">
                 <span
                   class="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-[#f2c48f] via-[#f6dcb9] to-transparent"
                   aria-hidden="true"
@@ -420,9 +420,9 @@ const reflectionsLabelByLocale = {
           {content.testimonials.intro ? (
             <p class="mt-4 max-w-3xl text-base leading-relaxed text-primary sm:text-lg">{content.testimonials.intro}</p>
           ) : null}
-          <div class="mt-6 grid gap-6 md:grid-cols-2">
+          <div class="mt-6 grid gap-6 md:grid-cols-2" id="testimonials-grid">
             {content.testimonials.items.map((testimonial) => (
-              <article class="group blog-card relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
+              <article class="group blog-card scroll-reveal relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
                 <div
                   class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#f4bd7b] via-[#f7d7a8] to-[#f4bd7b]"
                   aria-hidden="true"
@@ -438,7 +438,7 @@ const reflectionsLabelByLocale = {
               </article>
             ))}
             {content.testimonials.cta ? (
-              <article class="group blog-card relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
+              <article class="group blog-card scroll-reveal relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-soft p-6 transition-all duration-300 hover:-translate-y-1.5">
                 <div
                   class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#f4bd7b] via-[#f7d7a8] to-[#f4bd7b]"
                   aria-hidden="true"
@@ -509,3 +509,63 @@ const reflectionsLabelByLocale = {
     </div>
   )
 }
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import { animate, inView, stagger } from "motion";
+
+  function initScrollReveal() {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      document.querySelectorAll(".scroll-reveal").forEach((el) => {
+        (el as HTMLElement).style.opacity = "1";
+        (el as HTMLElement).style.transform = "none";
+      });
+      return;
+    }
+
+    // Animate different grids on AboutPage
+    const grids = ["process-grid", "details-grid", "faq-grid", "testimonials-grid"];
+
+    grids.forEach((gridId) => {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+
+      const cards = grid.querySelectorAll(".scroll-reveal");
+      if (cards.length === 0) return;
+
+      inView(
+        grid,
+        () => {
+          animate(
+            cards,
+            { opacity: 1, transform: "translateY(0)" },
+            {
+              duration: 0.6,
+              delay: stagger(0.1, { start: 0 }),
+              easing: [0.22, 1, 0.36, 1],
+            },
+          );
+        },
+        { amount: 0.1 },
+      );
+    });
+  }
+
+  initScrollReveal();
+  document.addEventListener("astro:page-load", initScrollReveal);
+</script>
