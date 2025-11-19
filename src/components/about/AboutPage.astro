@@ -512,14 +512,14 @@ const reflectionsLabelByLocale = {
 
 <style>
   .scroll-reveal {
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: no-preference) {
     .scroll-reveal {
-      opacity: 1;
-      transform: none;
+      opacity: 0;
+      transform: translateY(24px);
     }
   }
 </style>
@@ -531,10 +531,6 @@ const reflectionsLabelByLocale = {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion) {
-      document.querySelectorAll(".scroll-reveal").forEach((el) => {
-        (el as HTMLElement).style.opacity = "1";
-        (el as HTMLElement).style.transform = "none";
-      });
       return;
     }
 
@@ -566,7 +562,7 @@ const reflectionsLabelByLocale = {
             },
           );
         },
-        { amount: 0.1 },
+        { amount: 0 },
       );
     });
   }

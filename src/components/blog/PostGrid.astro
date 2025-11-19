@@ -139,14 +139,14 @@ const gridId = `post-grid-${Math.random().toString(36).slice(2, 11)}`;
 
 <style>
   .scroll-reveal {
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: no-preference) {
     .scroll-reveal {
-      opacity: 1;
-      transform: none;
+      opacity: 0;
+      transform: translateY(24px);
     }
   }
 </style>
@@ -158,11 +158,6 @@ const gridId = `post-grid-${Math.random().toString(36).slice(2, 11)}`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion) {
-      // Show all elements immediately for users who prefer reduced motion
-      document.querySelectorAll(".scroll-reveal").forEach((el) => {
-        (el as HTMLElement).style.opacity = "1";
-        (el as HTMLElement).style.transform = "none";
-      });
       return;
     }
 
@@ -191,7 +186,7 @@ const gridId = `post-grid-${Math.random().toString(36).slice(2, 11)}`;
             },
           );
         },
-        { amount: 0.1 },
+        { amount: 0 },
       );
     });
   }
