@@ -3,7 +3,7 @@ import { POST_TYPES } from "@/lib/post-types";
 import { SITE_URL } from "@/lib/seo";
 import {
   getSummariesByLocale,
-  getAllSummaryTags,
+  getHubTags,
   paginateSummariesByTag,
   paginateSummariesByType,
 } from "@/lib/post-summaries";
@@ -93,8 +93,9 @@ export function GET() {
       );
     }
 
-    const tags = getAllSummaryTags(locale);
-    for (const tag of tags) {
+    // Only include "hub tags" (≥3 posts) in sitemap to avoid thin content pages
+    const hubTags = getHubTags(locale);
+    for (const tag of hubTags) {
       const encoded = encodeURIComponent(tag);
       const baseTagUrl = `${SITE_URL}${prefix}/blog/tag/${encoded}/`;
       entries.push(
