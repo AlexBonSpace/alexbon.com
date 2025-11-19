@@ -60,8 +60,9 @@ Other scripts:
 
 The project uses an optimized prerendering + caching strategy to stay within Cloudflare's 5MB worker bundle limit:
 
-- **Prerendering**: All content pages use `export const prerender = true`
+- **Prerendering**: Content pages use `export const prerender = true` (except root `/`)
   - Blog posts, tag pages, search page - all prerendered as static HTML at build time
+  - Root `/` uses SSR for instant locale detection (`resolveRequestLocale`) and smart redirects
   - MDX content NOT included in worker bundle, only in static HTML files
   - Worker bundle: 1.5 MB (138 posts) → ~2.2 MB (500 posts) ✅
 - **Cache** (`src/lib/.cache/post-summaries.json`): Stores only essential metadata (title, description, summary, tags, URLs, dates) - no full post text
