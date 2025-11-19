@@ -11,6 +11,8 @@ import { translate, type MessageDictionary } from "@/i18n/translator";
 import { notFound } from "@/lib/http";
 import { toExplorerPosts } from "@/lib/blog-explorer";
 
+export const prerender = true;
+
 export function getStaticPaths() {
   return locales.map((locale) => ({
     params: { locale },

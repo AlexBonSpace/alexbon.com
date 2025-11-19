@@ -1,21 +1,51 @@
 ---
-import { defaultLocale } from "@/i18n/config";
-import { findPostLocaleBySlug } from "@/lib/blog";
+import { locales, defaultLocale } from "@/i18n/config";
+import { getSummariesByLocale } from "@/lib/post-summaries";
 import { notFound } from "@/lib/http";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { slug: string } }> = [];
+  const allSlugs = new Set<string>();
+
+  for (const locale of locales) {
+    const summaries = getSummariesByLocale(locale);
+    for (const summary of summaries) {
+      allSlugs.add(summary.slug);
+    }
+  }
+
+  for (const slug of allSlugs) {
+    paths.push({ params: { slug } });
+  }
+
+  return paths;
+}
 
 const slugParam = Astro.params.slug;
 if (!slugParam) {
   return notFound();
 }
 
-const matched = findPostLocaleBySlug(slugParam);
+// Find post in any locale
+let targetLocale = defaultLocale;
+let found = false;
 
-if (!matched) {
+for (const locale of locales) {
+  const summaries = getSummariesByLocale(locale);
+  const summary = summaries.find(s => s.slug === slugParam);
+  if (summary) {
+    targetLocale = locale;
+    found = true;
+    break;
+  }
+}
+
+if (!found) {
   return notFound();
 }
 
-const targetLocale = matched.locale ?? defaultLocale;
-const targetSlug = matched.post.slug;
-const target = `/${targetLocale}/blog/${targetSlug}/`;
+const target = `/${targetLocale}/blog/${slugParam}/`;
 return Astro.redirect(target, 308);
 ---
