@@ -3,6 +3,10 @@
 
 echo "🔍 Running pre-commit checks..."
 
+# Автоматическое форматирование кода
+echo "🎨 Formatting code..."
+npm run format || exit 1
+
 # Run linter
 echo "📝 Checking code style..."
 npm run lint || exit 1
