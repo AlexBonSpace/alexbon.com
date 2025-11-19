@@ -50,8 +50,12 @@ src/
 
 ### Caching & Performance
 - **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
+- **Cache optimization**: Only essential metadata stored (title, description, summary, tags, URLs, dates) - no full post text
+  - Current size: ~235 KB for 138 posts (~1.7 KB per post)
+  - Projected at 500 posts: ~870 KB cache → ~4.04 MB total worker bundle (safely under 5MB Cloudflare limit)
+  - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
-- Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker
+- Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
 
 ### Content Management
 - **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)

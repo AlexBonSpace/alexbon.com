@@ -7,7 +7,6 @@ import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS, createPlainText } from "@/lib
 import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
-import { getSummariesByLocale, type PostSummary } from "@/lib/post-summaries";
 import { FEED_FULL_PAGE_SIZE, FEED_FULL_REFRESH_DAYS } from "@/lib/feed-config";
 
 const FEED_ICON_URL = `${SITE_URL}/images/feed-icon.png`;
@@ -139,7 +138,7 @@ function getFeedFullPageUrl(locale: Locale, page: number) {
 }
 
 export function getFullFeedPagination(locale: Locale) {
-  const posts = getSummariesByLocale(locale);
+  const posts = getPostsByLocale(locale);
   const aboutItem = buildAboutFeedItem(locale);
   const totalItems = posts.length + (aboutItem ? 1 : 0);
   const totalPages = Math.max(1, Math.ceil(totalItems / FEED_FULL_PAGE_SIZE));
@@ -287,7 +286,7 @@ async function mapPostsToFeedItems(locale: Locale, limit: number): Promise<FeedI
         guid: canonicalUrl,
         title: post.title,
         content_html: normalizedHtml,
-        content_text: post.plainText || post.searchContent || "",
+        content_text: post.plainText || "",
         summary,
         language: postLanguage,
         date_published: post.publishedAt,
@@ -313,19 +312,19 @@ async function mapPostsToFeedItems(locale: Locale, limit: number): Promise<FeedI
 }
 
 function getSortedPlainFeedItems(locale: Locale): PlainFeedItem[] {
-  const posts = getSummariesByLocale(locale);
-  const postItems = posts.map((post) => mapSummaryToPlainFeedItem(locale, post));
+  const posts = getPostsByLocale(locale);
+  const postItems = posts.map((post) => mapPostToPlainFeedItem(locale, post));
   const aboutItem = buildAboutFeedItem(locale);
   const combined = aboutItem ? [...postItems, aboutItem] : postItems;
   return combined.sort(sortByLastModifiedDesc);
 }
 
-function mapSummaryToPlainFeedItem(locale: Locale, post: PostSummary): PlainFeedItem {
+function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
   const canonicalUrl = ensureAbsoluteUrl(post.canonical || `${SITE_URL}${post.url}`);
   const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
   const typePath = buildPostTypePath(locale, post.type);
   const typeUrl = ensureAbsoluteUrl(typePath);
-  const contentText = post.plainTextFull || post.plainText || "";
+  const contentText = post.plainText || "";
   const license = post.license?.trim() || LICENSE_URL;
 
   return {

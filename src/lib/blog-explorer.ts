@@ -12,12 +12,11 @@ export type ExplorerPostView = {
   snippet: string;
   description: string;
   tags: string[];
-  searchContent: string;
 };
 
 type ExplorerSource = Pick<
   BlogPost,
-  "slug" | "title" | "url" | "type" | "cardSnippet" | "summary" | "description" | "plainText" | "tags" | "searchContent"
+  "slug" | "title" | "url" | "type" | "cardSnippet" | "summary" | "description" | "plainText" | "tags"
 >;
 
 const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
@@ -67,7 +66,6 @@ export function toExplorerPost(post: ExplorerSource, locale: Locale): ExplorerPo
     snippet,
     description: post.description ?? snippet,
     tags: post.tags,
-    searchContent: post.searchContent,
   };
 }
 

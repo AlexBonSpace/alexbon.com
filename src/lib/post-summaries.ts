@@ -12,8 +12,6 @@ export type PostSummary = {
   summary: string;
   cardSnippet: string;
   plainText: string;
-  plainTextFull: string;
-  searchContent: string;
   tags: string[];
   url: string;
   canonical: string;

@@ -53,7 +53,18 @@ Other scripts:
 - `/{locale}/feed-full*.json` files are plain-text JSON Feed archives sorted by `date_modified`, limited to 500 entries per page, and chained with `next_url`.
 - Crawlers should start with `feed-full.json` and keep following `next_url` until it disappears; no HTML crawling is required for AI ingestion.
 - Each feed item carries the full `content_text`, canonical metadata, tags, and type info; `authors` and `license` live in the feed header to minimize per-item duplication.
+- Feeds are **prerendered** during build (`export const prerender = true`) and read full post text directly from MDX files via `getPostsByLocale()`, not from cache.
 - The feeds refresh weekly; rerun `npm run cache:build && npm run build` before syncing Algolia or deploying.
+
+## ⚡ Performance optimization
+
+The project uses an optimized caching strategy to stay within Cloudflare's 5MB worker bundle limit:
+
+- **Cache** (`src/lib/.cache/post-summaries.json`): Stores only essential metadata (title, description, summary, tags, URLs, dates) - no full post text
+  - Current: ~235 KB for 138 posts (~1.7 KB per post)
+  - Projected at 500 posts: ~870 KB cache → ~4.04 MB total worker bundle ✅
+- **Feeds** (RSS/JSON): Read full post content directly from MDX during build time using `getPostsByLocale()`, since they're prerendered
+- **Blog pages**: Use cached summaries from worker bundle for fast SSR rendering
 
 ## 🗂️ Project structure
 
