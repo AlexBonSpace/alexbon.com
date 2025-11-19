@@ -30,7 +30,6 @@
     "algoliasearch": "^5.43.0",
     "astro": "^5.15.8",
     "dotenv": "^17.2.3",
-    "motion": "^12.23.24",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "rehype-autolink-headings": "^7.1.0",
