@@ -70,6 +70,10 @@ The project uses an optimized prerendering + caching strategy to stay within Clo
   - Minimal growth due to prerendering strategy
 - **Feeds** (RSS/JSON): Read full post content directly from MDX during build time using `getPostsByLocale()`, since they're prerendered
 - **File count**: ~1,000 files (138 posts) → ~1,900 files (500 posts) - well under Cloudflare's 20,000 file limit
+- **Routes optimization**: Automatic wildcard-based `_routes.json` generation to stay under Cloudflare's 100-rule limit
+  - `scripts/normalize-routes.mjs` runs after each build (via `postbuild` hook)
+  - 99 individual routes → 24 optimized rules (6 static + 18 wildcards)
+  - Blog posts served from CDN instead of Worker, reducing request count against 100k/day free tier limit
 
 ## 🗂️ Project structure
 
