@@ -166,6 +166,11 @@ const gridId = `post-grid-${Math.random().toString(36).slice(2, 11)}`;
       return;
     }
 
+    // Adaptive animation parameters based on device
+    const isMobile = window.innerWidth < 768;
+    const staggerDelay = isMobile ? 0.05 : 0.1;
+    const animationDuration = isMobile ? 0.5 : 0.6;
+
     // Find all grids
     document.querySelectorAll("[id^='post-grid-']").forEach((grid) => {
       const cards = grid.querySelectorAll(".scroll-reveal");
@@ -180,8 +185,8 @@ const gridId = `post-grid-${Math.random().toString(36).slice(2, 11)}`;
             cards,
             { opacity: 1, transform: "translateY(0)" },
             {
-              duration: 0.6,
-              delay: stagger(0.1, { start: 0 }),
+              duration: animationDuration,
+              delay: stagger(staggerDelay, { start: 0 }),
               easing: [0.22, 1, 0.36, 1],
             },
           );
