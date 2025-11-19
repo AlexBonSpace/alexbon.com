@@ -52,8 +52,13 @@ src/
 - **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
 - **Cache optimization**: Only essential metadata stored (title, description, summary, tags, URLs, dates) - no full post text
   - Current size: ~235 KB for 138 posts (~1.7 KB per post)
-  - Projected at 500 posts: ~870 KB cache → ~4.04 MB total worker bundle (safely under 5MB Cloudflare limit)
+  - Projected at 500 posts: ~870 KB cache → ~2.2 MB total worker bundle (safely under 5MB Cloudflare limit)
+  - Worker bundle size: 1.5 MB (138 posts) → ~2.2 MB (500 posts) - minimal growth due to prerendering
   - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
+- **Prerendering strategy**: All content pages use `export const prerender = true`
+  - Blog posts (`/[locale]/blog/[slug]/`), tag pages, search page - all prerendered as static HTML
+  - MDX content NOT included in worker bundle, only metadata cache
+  - Worker bundle contains only runtime code + post summaries (~230 KB)
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
 
@@ -67,8 +72,9 @@ src/
 - **Theme persistence**: Stored in both cookie and localStorage (`ALEXBON_THEME`)
 
 ### Search
-- `/[locale]/search/` renders SSR fallback with recent posts and `robots="noindex, follow"`
+- `/[locale]/search/` prerendered as static HTML with recent posts and `robots="noindex, follow"`
 - Loads Algolia-powered React app lazily (no request until user types)
+- Uses cached post summaries for fallback content
 
 ### Feeds & SEO
 - **RSS feeds**: Prerendered with HTML content at `/[locale]/feed.xml`
