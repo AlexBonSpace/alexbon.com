@@ -146,9 +146,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                           #{tag}
                         </a>
                       ) : (
-                        <span class="tag-chip inline-flex items-center px-3 py-1 opacity-60">
-                          #{tag}
-                        </span>
+                        <span class="tag-chip inline-flex items-center px-3 py-1 opacity-60">#{tag}</span>
                       )}
                     </li>
                   );
@@ -173,7 +171,9 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
       relatedPosts.length > 0 && (
         <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
           <section class="section-card flex flex-col gap-6 rounded-[2rem] border border-soft p-6 sm:p-8">
-            <h2 class="text-[clamp(1.5rem,3.8vw,2.1rem)] font-semibold leading-tight text-strong">{relatedPostsHeading}</h2>
+            <h2 class="text-[clamp(1.5rem,3.8vw,2.1rem)] font-semibold leading-tight text-strong">
+              {relatedPostsHeading}
+            </h2>
             <div class="grid gap-5 md:grid-cols-2">
               {relatedPosts.map((item) => {
                 const itemUrl = ensureTrailingSlash(item.url);

@@ -409,10 +409,7 @@ export function findRelatedPosts(post: BlogPost, limit = 4): BlogPost[] {
 
     const fallback = allPosts
       .filter(
-        (candidate) =>
-          candidate.slug !== post.slug &&
-          candidate.type === post.type &&
-          !usedSlugs.has(candidate.slug),
+        (candidate) => candidate.slug !== post.slug && candidate.type === post.type && !usedSlugs.has(candidate.slug),
       )
       .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
       .slice(0, needed);
