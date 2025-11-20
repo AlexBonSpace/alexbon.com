@@ -64,13 +64,13 @@ The project uses an optimized prerendering + caching strategy to stay within Clo
   - Blog posts, tag pages, search page - all prerendered as static HTML at build time
   - Root `/` uses SSR for instant locale detection (`resolveRequestLocale`) and smart redirects
   - MDX content NOT included in worker bundle, only in static HTML files
-  - Worker bundle: 1.5 MB (138 posts) → ~2.2 MB (500 posts) ✅
+  - Worker bundle: 1.5 MB (141 posts) → ~2.2 MB (500 posts) ✅
 - **Cache** (`src/lib/.cache/post-summaries.json`): Stores only essential metadata (title, description, summary, tags, URLs, dates) - no full post text
-  - Current: ~235 KB for 138 posts (~1.7 KB per post)
+  - Current: ~241 KB for 141 posts (~1.7 KB per post)
   - Projected at 500 posts: ~870 KB cache (included in worker bundle)
   - Minimal growth due to prerendering strategy
 - **Feeds** (RSS/JSON): Read full post content directly from MDX during build time using `getPostsByLocale()`, since they're prerendered
-- **File count**: ~1,000 files (138 posts) → ~1,900 files (500 posts) - well under Cloudflare's 20,000 file limit
+- **File count**: ~600-1,000 files (141 posts) - well under Cloudflare's 20,000 file limit
 - **Routes optimization**: Automatic wildcard-based `_routes.json` generation to stay under Cloudflare's 100-rule limit
   - `scripts/normalize-routes.mjs` runs after each build (via `postbuild` hook)
   - Uses 24 optimized rules (6 static + 18 wildcards) to minimize routing complexity
