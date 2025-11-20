@@ -36,7 +36,7 @@ Other scripts:
 | `npm run verify`         | Runs audit + tests + build + `verify:seo` for complete validation           |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
 
-Рекомендованный деплой-порядок: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
+Recommended deployment workflow: `npm run cache:build` → `git add/commit` → `npm run build` → `npm run algolia:sync` → `git push`.
 
 ## 🧪 Automated checks
 
@@ -73,7 +73,7 @@ The project uses an optimized prerendering + caching strategy to stay within Clo
 - **File count**: ~1,000 files (138 posts) → ~1,900 files (500 posts) - well under Cloudflare's 20,000 file limit
 - **Routes optimization**: Automatic wildcard-based `_routes.json` generation to stay under Cloudflare's 100-rule limit
   - `scripts/normalize-routes.mjs` runs after each build (via `postbuild` hook)
-  - 99 individual routes → 24 optimized rules (6 static + 18 wildcards)
+  - Uses 24 optimized rules (6 static + 18 wildcards) to minimize routing complexity
   - Blog posts served from CDN instead of Worker, reducing request count against 100k/day free tier limit
 
 ## 🗂️ Project structure
@@ -99,7 +99,7 @@ Algolia feeds (`dist/*/feed-full*.json`) are consumed by `scripts/push-algolia.m
 
 ### Content timestamps
 
-`updatedAt` values in MDX are now maintained manually. Keep them equal to `publishedAt` unless a post really changes — there is no longer an automated sync with git history.
+`updatedAt` values in MDX are maintained manually. Keep them equal to `publishedAt` unless a post materially changes.
 
 ## 🔑 Environment variables
 

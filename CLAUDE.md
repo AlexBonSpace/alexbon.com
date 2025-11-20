@@ -67,10 +67,9 @@ src/
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
 - **Routes optimization**: `scripts/normalize-routes.mjs` runs automatically after build (`postbuild` hook) to optimize `_routes.json`
   - Cloudflare Pages has 100-rule limit for routing configuration
-  - Before: 99 individual exclude entries (one per post/page) - hitting the limit
-  - After: 24 optimized entries (6 static assets + 18 wildcards for localized paths)
+  - Current configuration: 24 optimized entries (6 static assets + 18 wildcards for localized paths)
   - Uses wildcards like `/{locale}/blog/*` instead of individual post routes
-  - Reduces Worker invocations: blog posts now served from CDN, only dynamic routes invoke Worker
+  - Reduces Worker invocations: blog posts served from CDN, only dynamic routes invoke Worker
 
 ### Content Management
 - **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)
