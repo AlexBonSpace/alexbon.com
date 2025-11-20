@@ -8,7 +8,7 @@ Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. M
 - **Deployment**: Cloudflare Pages adapter (`@astrojs/cloudflare`)
 - **Styling**: Tailwind CSS v4 with custom design tokens in `src/styles/globals.css`
 - **Interactivity**: React islands (navbar, search page, theme toggle) marked with `client:*` directives
-- **Content**: MDX via Astro Content Collections with translation-aware helpers in `src/lib/pages.ts` and `src/lib/blog.ts`
+- **Content**: MDX via Astro Content Collections with translation helpers in `src/i18n/` and blog utilities in `src/lib/blog.ts`
 - **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
 - **Testing**: Vitest with happy-dom
 - **Code Quality**: ESLint + Prettier with automatic formatting
@@ -54,9 +54,9 @@ src/
 ### Caching & Performance
 - **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
 - **Cache optimization**: Only essential metadata stored (title, description, summary, tags, URLs, dates) - no full post text
-  - Current size: ~235 KB for 138 posts (~1.7 KB per post)
+  - Current size: ~241 KB for 141 posts (~1.7 KB per post)
   - Projected at 500 posts: ~870 KB cache → ~2.2 MB total worker bundle (safely under 5MB Cloudflare limit)
-  - Worker bundle size: 1.5 MB (138 posts) → ~2.2 MB (500 posts) - minimal growth due to prerendering
+  - Worker bundle size: 1.5 MB (141 posts) → ~2.2 MB (500 posts) - minimal growth due to prerendering
   - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
 - **Prerendering strategy**: Content pages use `export const prerender = true` (except root `/`)
   - Blog posts (`/[locale]/blog/[slug]/`), tag pages, search page - all prerendered as static HTML
@@ -67,10 +67,9 @@ src/
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
 - **Routes optimization**: `scripts/normalize-routes.mjs` runs automatically after build (`postbuild` hook) to optimize `_routes.json`
   - Cloudflare Pages has 100-rule limit for routing configuration
-  - Before: 99 individual exclude entries (one per post/page) - hitting the limit
-  - After: 24 optimized entries (6 static assets + 18 wildcards for localized paths)
+  - Current configuration: 24 optimized entries (6 static assets + 18 wildcards for localized paths)
   - Uses wildcards like `/{locale}/blog/*` instead of individual post routes
-  - Reduces Worker invocations: blog posts now served from CDN, only dynamic routes invoke Worker
+  - Reduces Worker invocations: blog posts served from CDN, only dynamic routes invoke Worker
 
 ### Content Management
 - **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)
@@ -138,6 +137,11 @@ npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
 # Algolia (Optional)
 npm run algolia:sync         # Incremental sync: push only changed records to Algolia
 npm run algolia:sync -- --full  # Full reindex: replace entire Algolia index
+
+# Astro Integrations (AI Agent-Friendly)
+astro add <integration> --yes  # Add Astro integration without interactive prompts
+                               # Perfect for AI agents (Claude Code, Cursor, Copilot)
+                               # Examples: astro add react --yes, astro add tailwind --yes
 ```
 
 ## Automation & CI/CD
