@@ -362,7 +362,6 @@ const FONT_STYLESHEET =
     }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-    <link rel="preload" href={FONT_STYLESHEET} as="style" />
     <link rel="stylesheet" href={FONT_STYLESHEET} media="print" onload="this.media='all'" />
     <noscript>
       <link rel="stylesheet" href={FONT_STYLESHEET} />
@@ -385,6 +384,25 @@ const FONT_STYLESHEET =
       alternatePaths={navigationPaths}
       showPrompt={locale === defaultLocale}
     />
+    <noscript>
+      <nav class="language-links language-links--navbar" aria-label="Languages">
+        <ul class="language-links__list">
+          {
+            languageSwitcherLinks.map((link) => (
+              <li class="language-links__item">
+                <a
+                  href={link.href}
+                  class={`language-links__link${link.isActive ? " language-links__link--active" : ""}`}
+                  aria-current={link.isActive ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </noscript>
     <slot />
     <footer class="site-footer" aria-label="Footer">
       <div class="site-footer__link-blocks">
