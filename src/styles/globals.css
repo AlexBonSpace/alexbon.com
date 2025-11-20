@@ -22,7 +22,7 @@ html.js .js-only {
   --color-nav-text: #2f2b26;
   --color-nav-muted: #374354;
   --color-surface-menu: rgba(255, 255, 255, 0.95);
-  --color-accent: #f2993f;
+  --color-accent: #d67520;
   --color-accent-contrast: #2f2b26;
   --color-indicator: rgba(55, 67, 84, 0.45);
   --color-accent-strong: #2f7f5c;
@@ -96,7 +96,7 @@ html.js .js-only {
   --color-nav-text: #1d2d45;
   --color-nav-muted: #2d4668;
   --color-surface-menu: rgba(225, 239, 255, 0.94);
-  --color-accent: #3d9cff;
+  --color-accent: #0066cc;
   --color-accent-contrast: #0b1d33;
   --color-indicator: rgba(61, 156, 255, 0.45);
   --color-accent-strong: #2078d9;
@@ -133,7 +133,7 @@ html.js .js-only {
   --color-nav-text: #2e2418;
   --color-nav-muted: #3d2e1b;
   --color-surface-menu: rgba(255, 243, 224, 0.94);
-  --color-accent: #f19a3f;
+  --color-accent: #d67520;
   --color-accent-contrast: #2e2418;
   --color-indicator: rgba(241, 154, 63, 0.5);
   --color-accent-strong: #d87d1f;
