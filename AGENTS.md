@@ -54,6 +54,7 @@
 - `npm run algolia:sync` – optional; parses all `dist/*/feed-full*.json` pages (follow `next_url`), diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
 - `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
+- `astro add <integration> --yes` – add Astro integrations without interactive prompts (AI agent-friendly). Examples: `astro add react --yes`, `astro add tailwind --yes`. Perfect for Claude Code, Cursor, Copilot and other AI-assisted development tools.
 
 **Automation**
 - Pre-commit hooks (Husky) automatically run lint, tests, and security audit before each commit.

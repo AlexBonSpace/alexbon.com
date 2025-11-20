@@ -138,6 +138,11 @@ npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
 # Algolia (Optional)
 npm run algolia:sync         # Incremental sync: push only changed records to Algolia
 npm run algolia:sync -- --full  # Full reindex: replace entire Algolia index
+
+# Astro Integrations (AI Agent-Friendly)
+astro add <integration> --yes  # Add Astro integration without interactive prompts
+                               # Perfect for AI agents (Claude Code, Cursor, Copilot)
+                               # Examples: astro add react --yes, astro add tailwind --yes
 ```
 
 ## Automation & CI/CD
