@@ -324,7 +324,7 @@ const reflectionsLabelByLocale = {
                     {step.index}
                   </span>
                   <p class="text-xl font-semibold text-strong">{step.title}</p>
-                  <div class="flex flex-col gap-3 text-base text-primary">
+                  <div class="flex flex-col gap-3 text-base leading-relaxed text-primary sm:text-lg">
                     {step.paragraphs.map((paragraph) => (
                       <p>
                         {paragraph.lead ? <strong>{paragraph.lead}</strong> : null}
@@ -355,7 +355,11 @@ const reflectionsLabelByLocale = {
                     set:html={detailIcons[item.icon]}
                   />
                   <h3 class="text-xl font-semibold text-strong">{item.title}</h3>
-                  <p class="text-base text-primary">{item.description}</p>
+                  <div class="flex flex-col gap-3">
+                    {item.description.split("\n\n").map((paragraph) => (
+                      <p class="text-base leading-relaxed text-primary sm:text-lg">{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}
@@ -378,7 +382,7 @@ const reflectionsLabelByLocale = {
                   aria-hidden="true"
                 />
                 <p class="text-lg font-semibold text-strong">{item.question}</p>
-                <p class="mt-3 text-base text-primary">{item.answer}</p>
+                <p class="mt-3 text-base leading-relaxed text-primary sm:text-lg">{item.answer}</p>
               </article>
             ))}
           </div>
@@ -473,7 +477,7 @@ const reflectionsLabelByLocale = {
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] lg:items-start">
               <div class="grid gap-5">
                 {content.story.paragraphs.map((paragraph) => (
-                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-base leading-relaxed text-primary">
+                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-base leading-relaxed text-primary sm:text-lg">
                     {paragraph}
                   </p>
                 ))}
