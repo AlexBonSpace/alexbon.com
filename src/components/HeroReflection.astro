@@ -20,13 +20,15 @@ const descriptionArray = Array.isArray(description) ? description : description 
     </span>
   </div>
 
-  {descriptionArray.length > 0 ? (
-    <div class="hero-reflection__description mx-auto max-w-3xl text-center leading-tight">
-      {descriptionArray.map((line) => (
-        <p class="m-0">{line}</p>
-      ))}
-    </div>
-  ) : null}
+  {
+    descriptionArray.length > 0 ? (
+      <div class="hero-reflection__description mx-auto max-w-3xl text-center leading-tight">
+        {descriptionArray.map((line) => (
+          <p class="m-0">{line}</p>
+        ))}
+      </div>
+    ) : null
+  }
 
   {introCopy ? <p class="hero-reflection__intro mx-auto max-w-3xl">{introCopy}</p> : null}
 </section>
