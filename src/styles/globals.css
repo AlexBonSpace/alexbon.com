@@ -420,8 +420,8 @@ body {
   .hero-reflection__title-wrap {
     position: relative;
     width: 100%;
-    min-height: clamp(6.5rem, 17.5vw, 13rem);
-    padding-block: clamp(1.2rem, 3.2vw, 2.4rem);
+    min-height: clamp(5.5rem, 15vw, 11rem);
+    padding-block: clamp(0.8rem, 2.5vw, 1.8rem);
     display: flex;
     flex-direction: column;
     align-items: center;

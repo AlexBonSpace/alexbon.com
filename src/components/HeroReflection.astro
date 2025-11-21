@@ -1,16 +1,17 @@
 ---
 interface Props {
   title: string;
-  description?: string | null;
+  description?: string | string[] | null;
   introCopy?: string | null;
   className?: string;
 }
 
 const { title, description, introCopy, className = "" } = Astro.props as Props;
+const descriptionArray = Array.isArray(description) ? description : description ? [description] : [];
 ---
 
 <section
-  class={`hero-reflection section-card-strong flex flex-col items-center gap-6 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10 ${className}`}
+  class={`hero-reflection section-card-strong flex flex-col items-center gap-4 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10 ${className}`}
 >
   <div class="hero-reflection__title-wrap" aria-label={title}>
     <h1 class="hero-reflection__title">{title}</h1>
@@ -19,7 +20,13 @@ const { title, description, introCopy, className = "" } = Astro.props as Props;
     </span>
   </div>
 
-  {description ? <p class="hero-reflection__description mx-auto max-w-3xl">{description}</p> : null}
+  {descriptionArray.length > 0 ? (
+    <div class="hero-reflection__description mx-auto max-w-3xl text-center leading-tight">
+      {descriptionArray.map((line) => (
+        <p class="m-0">{line}</p>
+      ))}
+    </div>
+  ) : null}
 
   {introCopy ? <p class="hero-reflection__intro mx-auto max-w-3xl">{introCopy}</p> : null}
 </section>

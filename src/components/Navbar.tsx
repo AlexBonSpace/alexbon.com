@@ -11,6 +11,7 @@ interface NavbarProps {
   activeLocale: LocaleKey;
   brandName: string;
   tagline: string;
+  taglineSubtext?: string;
   currentPath: string;
   currentSearch?: string;
   alternatePaths?: Partial<Record<LocaleKey, string>>;
@@ -20,6 +21,7 @@ export function Navbar({
   activeLocale,
   brandName,
   tagline,
+  taglineSubtext,
   currentPath: _currentPath,
   currentSearch = "",
   alternatePaths,
@@ -121,13 +123,18 @@ export function Navbar({
       <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
           <div className="flex w-full items-center justify-between gap-3 sm:flex-1">
-            <h1 className="text-pretty text-left text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
+            <h1 className="text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
               <a
                 href={buildHref("/")}
                 aria-label={`${brandName}: ${tagline}`}
-                className="transition-colors hover:text-accent focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-accent/40"
+                className="block transition-colors hover:text-accent focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-accent/40"
               >
-                {tagline}
+                <span className="block">{tagline}</span>
+                {taglineSubtext && (
+                  <span className="block text-[clamp(0.9rem,3vw,1.1rem)] font-normal leading-snug text-nav-heading">
+                    {taglineSubtext}
+                  </span>
+                )}
               </a>
             </h1>
 

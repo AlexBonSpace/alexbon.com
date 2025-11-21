@@ -115,7 +115,7 @@ export function LandingPage({ content }: LandingPageProps) {
   return (
     <div lang={lang} className="relative min-h-screen overflow-hidden text-strong bg-surface">
       <div className="relative z-20">
-        <Navbar activeLocale={content.locale} brandName={content.brandName} tagline={content.tagline} />
+        <Navbar activeLocale={content.locale} brandName={content.brandName} tagline={content.tagline} taglineSubtext={content.taglineSubtext} />
       </div>
 
       <main className="relative z-10 flex flex-col gap-6 pb-12 pt-6 sm:gap-8 sm:pt-8">

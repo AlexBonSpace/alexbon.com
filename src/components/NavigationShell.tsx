@@ -14,6 +14,7 @@ type NavigationShellProps = {
   locale: Locale;
   brandName: string;
   tagline: string;
+  taglineSubtext?: string;
   messages: MessageDictionary;
   initialTheme: ThemeId;
   currentPath: string;
@@ -26,6 +27,7 @@ export function NavigationShell({
   locale,
   brandName,
   tagline,
+  taglineSubtext,
   messages,
   initialTheme,
   currentPath,
@@ -57,6 +59,7 @@ export function NavigationShell({
           activeLocale={locale}
           brandName={brandName}
           tagline={tagline}
+          taglineSubtext={taglineSubtext}
           currentPath={currentPath}
           currentSearch={currentSearch}
           alternatePaths={resolvedAlternatePaths}

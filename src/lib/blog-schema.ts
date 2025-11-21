@@ -4,6 +4,10 @@ import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, buildLanguageAlternate
 import type { BlogPost } from "@/lib/blog";
 import { buildAuthorReference } from "@/lib/content-utils";
 
+function normalizeHeroDescription(description: string | string[]): string {
+  return Array.isArray(description) ? description.join(" ") : description;
+}
+
 const BLOG_LABEL_BY_LOCALE: Record<Locale, string> = {
   ua: "Відображення",
   ru: "Отражения",
@@ -65,7 +69,7 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPreview[]) 
     "@context": "https://schema.org",
     "@type": "Blog",
     name: hero.heroTitle,
-    description: hero.heroDescription,
+    description: normalizeHeroDescription(hero.heroDescription),
     inLanguage,
     url: canonical,
     license: "https://creativecommons.org/licenses/by/4.0/",
@@ -110,7 +114,7 @@ export function getBlogIndexMetadata(locale: Locale, path = "/blog/") {
   const hero = contentByLocale[locale].blog;
   return {
     title: hero.heroTitle,
-    description: hero.heroDescription,
+    description: normalizeHeroDescription(hero.heroDescription),
     canonical: buildCanonicalUrl(locale, path),
     alternates: buildLanguageAlternates(path),
     feeds: {
