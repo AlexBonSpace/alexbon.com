@@ -138,6 +138,9 @@ npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
 npm run algolia:sync         # Incremental sync: push only changed records to Algolia
 npm run algolia:sync -- --full  # Full reindex: replace entire Algolia index
 
+# Content Analysis (For Claude Code)
+npm run tags:analyze      # Analyze all story tags, generate cache with translations and popularity
+
 # Astro Integrations (AI Agent-Friendly)
 astro add <integration> --yes  # Add Astro integration without interactive prompts
                                # Perfect for AI agents (Claude Code, Cursor, Copilot)
@@ -175,6 +178,59 @@ Auto-formatting configured in `.vscode/settings.json`:
 - Use translation groups for linked content across locales
 - Cache regenerates automatically on build, manually via `npm run cache:build`
 
+### Tags Management (For Claude Code)
+When creating new story posts, use consistent tags to create content "hubs":
+
+**Quick Tag Reference:**
+```bash
+npm run tags:analyze  # Generate fresh analysis of all tags with translations
+```
+
+This creates `scripts/.tags-cache.json` (gitignored) containing:
+- All tags sorted by popularity (how many stories use them)
+- Translations across all three locales (RU/UA/EN)
+- Example posts for each tag
+- Total unique story count
+
+**Best Practices:**
+1. **Reuse existing tags** when possible to build thematic clusters
+2. **Check tag cache** before creating new tags: `scripts/.tags-cache.json`
+3. **Focus on psychology**: Tags should reflect internal processes (emotions, conflicts, transformations)
+4. **Avoid generic tags**: Prefer specific psychological concepts over broad terms
+5. **3-5 tags per story**: Enough to categorize without diluting relevance
+
+**Tag Selection Process:**
+```bash
+# 1. Run analysis to see current tags
+npm run tags:analyze
+
+# 2. Check top tags and their translations in console output
+# 3. Reuse high-frequency tags when thematically appropriate
+# 4. Add new tags only if existing ones don't capture the story's core themes
+```
+
+**Example Tag Cache Structure:**
+```json
+{
+  "generatedAt": "2025-11-22T...",
+  "totalTags": 21,
+  "totalStories": 26,
+  "tags": [
+    {
+      "translations": {
+        "ru": "страх близости",
+        "ua": "страх близькості",
+        "en": "fear of intimacy"
+      },
+      "uniqueCount": 4,
+      "examples": [
+        {"title": "Architect of Love", "slug": "arhitektor-lyubvi", "locale": "ru"}
+      ]
+    }
+  ]
+}
+```
+
 ## Algolia Search (Optional)
 - **Indexing**: `scripts/push-algolia.mjs` reads all `dist/*/feed-full*.json` pages (follows `next_url`)
 - **Incremental mode**: Maintains manifest at `scripts/.algolia-cache.json` (gitignored); only pushes changed/removed records
@@ -192,3 +248,9 @@ Auto-formatting configured in `.vscode/settings.json`:
 - For build processes: check package.json scripts, astro.config.mjs, build scripts
 - Never guess - always find the actual code that implements the behavior
 - When analyzing issues, search for ALL instances: `rg -A5 -B5 "pattern"`
+
+**For content creation tasks (new posts):**
+- **ALWAYS run `npm run tags:analyze` first** to get current tag inventory
+- Reference `scripts/.tags-cache.json` for tag translations and popularity
+- Prioritize reusing high-frequency tags to build content hubs
+- If cache is stale (>1 week old), regenerate it before selecting tags

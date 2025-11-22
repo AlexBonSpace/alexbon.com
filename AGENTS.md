@@ -53,6 +53,7 @@
 - `npm run verify` – runs security audit, Vitest suite, build, and `verify:seo` for complete validation.
 - `npm run algolia:sync` – optional; parses all `dist/*/feed-full*.json` pages (follow `next_url`), diffs against `scripts/.algolia-cache.json`, and pushes only changed Algolia records (requires env keys).
 - `npm run algolia:sync -- --full` – optional; force a full Algolia reindex and refresh the cache manifest.
+- `npm run tags:analyze` – analyze all story tags, generate `scripts/.tags-cache.json` with translations and popularity (for AI agents creating content).
 - `npx wrangler pages deploy dist` – deploy to Cloudflare Pages Functions.
 - `astro add <integration> --yes` – add Astro integrations without interactive prompts (AI agent-friendly). Examples: `astro add react --yes`, `astro add tailwind --yes`. Perfect for Claude Code, Cursor, Copilot and other AI-assisted development tools.
 
@@ -64,3 +65,57 @@
 **Algolia Sync Notes**
 - Incremental mode keeps a manifest at `scripts/.algolia-cache.json` (ignored by git); reruns only push changed/removed records.
 - Full mode (`--full`) replaces the entire index via `replaceAllObjects` and rebuilds the manifest, matching the legacy behaviour.
+
+**Tags Management (For AI Agents)**
+When creating new story posts, use consistent tags to build content "hubs":
+
+*Quick Reference:*
+```bash
+npm run tags:analyze  # Generate fresh analysis of all tags with translations
+```
+
+This creates `scripts/.tags-cache.json` (gitignored) containing:
+- All tags sorted by popularity (unique story count)
+- Translations across RU/UA/EN locales
+- Example posts for each tag
+- Total story count
+
+*Best Practices:*
+1. **Run analysis first**: Always execute `npm run tags:analyze` before creating new posts
+2. **Reuse existing tags**: Prioritize high-frequency tags to build thematic clusters
+3. **Check the cache**: Reference `scripts/.tags-cache.json` for tag translations and popularity
+4. **Focus on psychology**: Tags should reflect internal processes (emotions, conflicts, transformations)
+5. **Avoid generic terms**: Prefer specific psychological concepts over broad tags
+6. **3-5 tags per story**: Enough to categorize without diluting relevance
+
+*Tag Selection Workflow:*
+```bash
+# 1. Run analysis
+npm run tags:analyze
+
+# 2. Check console output for top tags with translations
+# 3. Reuse high-frequency tags when thematically appropriate
+# 4. Add new tags only if existing ones don't capture core themes
+```
+
+*Cache Structure Example:*
+```json
+{
+  "generatedAt": "2025-11-22T...",
+  "totalTags": 21,
+  "totalStories": 26,
+  "tags": [
+    {
+      "translations": {
+        "ru": "страх близости",
+        "ua": "страх близькості",
+        "en": "fear of intimacy"
+      },
+      "uniqueCount": 4,
+      "examples": [
+        {"title": "Architect of Love", "slug": "arhitektor-lyubvi", "locale": "ru"}
+      ]
+    }
+  ]
+}
+```

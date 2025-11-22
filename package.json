@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "cache:build": "node scripts/build-cache.mjs",
+    "tags:analyze": "node scripts/analyze-tags.mjs",
     "predev": "npm run cache:build",
     "prebuild": "npm run cache:build",
     "postbuild": "node scripts/normalize-routes.mjs",
