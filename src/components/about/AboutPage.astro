@@ -86,11 +86,11 @@ const reflectionsLabelByLocale = {
           <div class="relative z-10 flex flex-1 flex-col gap-5 text-base leading-relaxed text-primary sm:text-lg">
             {introductionBlocks.map((block, index) =>
               block.type === "paragraph" ? (
-                <p class="text-[clamp(1.05rem,3.1vw,1.28rem)]" key={`paragraph-${index}`}>
+                <p class="text-[clamp(1.1rem,3vw,1.2rem)]" key={`paragraph-${index}`}>
                   {block.text}
                 </p>
               ) : (
-                <ul class="ml-6 list-disc space-y-2 text-[clamp(1.05rem,3.1vw,1.28rem)]" key={`bullet-${index}`}>
+                <ul class="ml-6 list-disc space-y-2 text-[clamp(1.1rem,3vw,1.2rem)]" key={`bullet-${index}`}>
                   {block.items.map((item, itemIndex) => (
                     <li key={itemIndex}>{item}</li>
                   ))}
@@ -120,7 +120,7 @@ const reflectionsLabelByLocale = {
               <h2 class="text-[clamp(2.2rem,5vw,2.75rem)] font-semibold text-strong">{content.story.heading}</h2>
               <div class="flex flex-col gap-4">
                 {content.story.paragraphs.map((paragraph) => (
-                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-[clamp(1.02rem,3vw,1.15rem)] leading-relaxed text-primary">
+                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                     {paragraph}
                   </p>
                 ))}
@@ -147,12 +147,12 @@ const reflectionsLabelByLocale = {
           <section
             class={`rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm section-card ${containerClass} sm:px-10`}
           >
-            <div class="flex flex-col gap-5 text-base leading-relaxed text-primary sm:text-lg">
+            <div class="flex flex-col gap-5 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
               <h2 class="text-[clamp(2.1rem,5vw,2.6rem)] font-semibold text-strong">{content.lighthouse.heading}</h2>
               {content.lighthouse.paragraphs.map((paragraph) => (
                 <p>{paragraph}</p>
               ))}
-              <ul class="ml-4 list-disc space-y-2 text-[clamp(1.02rem,3vw,1.15rem)]">
+              <ul class="ml-4 list-disc space-y-2 text-[clamp(1.1rem,3vw,1.2rem)]">
                 {content.lighthouse.bullets.map((bullet, index) => (
                   <li key={index}>
                     {typeof bullet === "string" ? (
@@ -173,7 +173,7 @@ const reflectionsLabelByLocale = {
                   </li>
                 ))}
               </ul>
-              <p class="text-[clamp(1.05rem,3.2vw,1.2rem)] font-medium text-strong">{content.lighthouse.closing}</p>
+              <p class="text-[clamp(1.1rem,3vw,1.2rem)] font-medium text-strong">{content.lighthouse.closing}</p>
             </div>
           </section>
         ) : null}
@@ -182,13 +182,13 @@ const reflectionsLabelByLocale = {
           <section
             class={`rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm section-card ${containerClass} sm:px-10`}
           >
-            <div class="flex flex-col gap-5 text-base leading-relaxed text-primary sm:text-lg">
+            <div class="flex flex-col gap-5 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
               <h2 class="text-[clamp(2.1rem,5vw,2.6rem)] font-semibold text-strong">{content.door.heading}</h2>
               {content.door.paragraphs.map((paragraph) => (
                 <p>{paragraph}</p>
               ))}
               {doorContacts.length ? (
-                <p class="text-[clamp(1.02rem,3vw,1.15rem)] font-medium text-strong">
+                <p class="text-[clamp(1.1rem,3vw,1.2rem)] font-medium text-strong">
                   {doorCtaText}{" "}
                   {doorContacts.map((contact, index) => (
                     <span key={`door-contact-${index}`}>
@@ -222,7 +222,7 @@ const reflectionsLabelByLocale = {
             class={`relative isolate overflow-hidden rounded-[2.5rem] border border-soft px-6 py-10 text-center shadow-card section-card ${containerClass} sm:px-10`}
           >
             <div class="relative z-10 flex flex-col items-center gap-6">
-              <div class="flex flex-col gap-5 text-center text-[clamp(1.125rem,3vw,1.45rem)] leading-relaxed text-primary md:max-w-4xl">
+              <div class="flex flex-col gap-5 text-center text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary md:max-w-4xl">
                 {content.hero.paragraphs.map((paragraph) => (
                   <p>{paragraph}</p>
                 ))}
@@ -239,7 +239,7 @@ const reflectionsLabelByLocale = {
           id="about"
           class={`relative isolate overflow-hidden rounded-[2.25rem] border border-soft px-6 py-10 text-left shadow-card backdrop-blur-sm section-card ${containerClass} flex flex-col gap-8 lg:flex-row lg:items-center sm:px-10`}
         >
-          <div class="relative z-10 flex flex-1 flex-col gap-6 text-base leading-relaxed text-primary sm:text-lg">
+          <div class="relative z-10 flex flex-1 flex-col gap-6 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
             <div class="flex flex-col gap-3">
               <span class="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-muted">
                 {content.introduction.heading}
@@ -314,7 +314,7 @@ const reflectionsLabelByLocale = {
             <span class="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-muted">
               {content.process.heading}
             </span>
-            <p class="text-base leading-relaxed text-primary sm:text-lg">{content.process.intro}</p>
+            <p class="text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">{content.process.intro}</p>
           </div>
           <ol class="mt-6 grid gap-6 lg:grid-cols-2">
             {processSteps.map((step) => (
@@ -324,7 +324,7 @@ const reflectionsLabelByLocale = {
                     {step.index}
                   </span>
                   <p class="text-xl font-semibold text-strong">{step.title}</p>
-                  <div class="flex flex-col gap-3 text-base leading-relaxed text-primary sm:text-lg">
+                  <div class="flex flex-col gap-3 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                     {step.paragraphs.map((paragraph) => (
                       <p>
                         {paragraph.lead ? <strong>{paragraph.lead}</strong> : null}
@@ -357,7 +357,7 @@ const reflectionsLabelByLocale = {
                   <h3 class="text-xl font-semibold text-strong">{item.title}</h3>
                   <div class="flex flex-col gap-3">
                     {item.description.split("\n\n").map((paragraph) => (
-                      <p class="text-base leading-relaxed text-primary sm:text-lg">{paragraph}</p>
+                      <p class="text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">{paragraph}</p>
                     ))}
                   </div>
                 </div>
@@ -382,7 +382,7 @@ const reflectionsLabelByLocale = {
                   aria-hidden="true"
                 />
                 <p class="text-lg font-semibold text-strong">{item.question}</p>
-                <p class="mt-3 text-base leading-relaxed text-primary sm:text-lg">{item.answer}</p>
+                <p class="mt-3 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">{item.answer}</p>
               </article>
             ))}
           </div>
@@ -477,7 +477,7 @@ const reflectionsLabelByLocale = {
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] lg:items-start">
               <div class="grid gap-5">
                 {content.story.paragraphs.map((paragraph) => (
-                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-base leading-relaxed text-primary sm:text-lg">
+                  <p class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                     {paragraph}
                   </p>
                 ))}
