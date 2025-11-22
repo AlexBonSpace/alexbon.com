@@ -107,27 +107,27 @@ const buildPageHref = (basePath: string, page: number) => {
 
   {
     pagination && pagination.totalPages > 1 ? (
-      <nav class="flex items-center justify-between rounded-full border border-[#eadfcd]/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#3f3831] shadow-[0_18px_48px_-32px_rgba(40,30,20,0.35)]">
+      <nav class="flex items-center justify-between rounded-full border border-soft bg-surface px-4 py-2 text-sm font-semibold text-primary shadow-card">
         {pagination.currentPage > 1 ? (
           <a
             href={buildPageHref(pagination.basePath, pagination.currentPage - 1)}
-            class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-[#f4eadb] hover:text-[#2f2b26]"
+            class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-accent/10 hover:text-accent"
           >
             ← {pagination.previousLabel}
           </a>
         ) : (
-          <span class="cursor-not-allowed rounded-full px-3 py-2 text-[#b2a698] opacity-70">←</span>
+          <span class="cursor-not-allowed rounded-full px-3 py-2 text-disabled opacity-70">←</span>
         )}
-        <span class="text-xs uppercase tracking-[0.3em] text-[#7c6d5d]">{pagination.summary}</span>
+        <span class="text-xs uppercase tracking-[0.3em] text-muted">{pagination.summary}</span>
         {pagination.currentPage < pagination.totalPages ? (
           <a
             href={buildPageHref(pagination.basePath, pagination.currentPage + 1)}
-            class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-[#f4eadb] hover:text-[#2f2b26]"
+            class="flex items-center gap-2 rounded-full px-3 py-2 transition-colors hover:bg-accent/10 hover:text-accent"
           >
             {pagination.nextLabel} →
           </a>
         ) : (
-          <span class="cursor-not-allowed rounded-full px-3 py-2 text-[#b2a698] opacity-70">→</span>
+          <span class="cursor-not-allowed rounded-full px-3 py-2 text-disabled opacity-70">→</span>
         )}
       </nav>
     ) : null
