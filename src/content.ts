@@ -125,7 +125,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "ru",
     brandName: "Алекс Бон",
     tagline: "Просто место, чтобы выдохнуть и разобраться",
-    taglineSubtext: "Короткие рассказы и истории, в которых ты узнаешь себя",
+    taglineSubtext: "Короткие рассказы и истории без фильтров. Чтобы сбить автопилот.",
     metaTitle: "Психолог онлайн Алекс Бон | Человек, который слушает и слышит",
     metaDescription:
       "Меня зовут Алек Бон. Я психолог, а это просто место, чтобы выдохнуть и разобраться, пространство, чтобы увидеть себя. Истории, рассказы, отдельные строки, которые живут здесь, — лишь отражения.",
@@ -259,7 +259,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "ua",
     brandName: "Алекс Бон",
     tagline: "Просто простір, щоб видихнути і розібратися",
-    taglineSubtext: "Короткі розповіді та історії, в яких ти впізнаєш себе",
+    taglineSubtext: "Короткі розповіді та історії без фільтрів. Щоб збити автопілот.",
     metaTitle: "Психолог онлайн Алекс Бон | Людина, яка слухає та чує",
     metaDescription:
       "Мене звати Алекс Бон. Я психолог, а це — просто місце, щоб видихнути й розібратися, простір, щоб побачити себе. Історії, розповіді, окремі рядки, що живуть тут, — лише відображення",
@@ -394,7 +394,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "en",
     brandName: "Alex Bon",
     tagline: "A lighthouse to see yourself",
-    taglineSubtext: "Short stories and tales where you recognize yourself",
+    taglineSubtext: "Short stories and tales without filters. To break the autopilot.",
     metaTitle: "Meet Alex Bon | Keeper of the Lighthouse",
     metaDescription:
       "My name is Alex Bon. I am a writer, a psychologist, and the keeper of this lighthouse to see yourself. The stories you find here are reflections.",

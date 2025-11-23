@@ -84,5 +84,31 @@
       "description": "Gentle sunlit and sandy tones."
     },
     "ariaLabel": "Change color theme"
+  },
+  "Footer": {
+    "quote": "I am an explorer describing what I see. Each text here is a mirror reflecting one facet of human experience; one ray of light falling at a particular angle. This is not the ultimate truth nor a universal diagnosis. There are no final answers here. Only an invitation to reflect.",
+    "disclaimerLink": "Important Notice"
+  },
+  "Disclaimer": {
+    "title": "Important Notice",
+    "section1": {
+      "heading": "1. The Purpose of This Site",
+      "text": "The \"Reflections\" blog and AlexBon.com are spaces for contemplation, sharing experiences, and stories. All materials published here are for informational and educational purposes only. They reflect my personal perspective, my professional experience, and my conclusions."
+    },
+    "section2": {
+      "heading": "2. This Is Not Medical Service",
+      "text": "The texts on this site do not constitute medical, psychiatric, or legal advice. Reading the blog does not replace professional work with a psychologist or psychotherapist. I do not diagnose or prescribe treatment through articles."
+    },
+    "section3": {
+      "heading": "3. Responsibility",
+      "text": "Psychology is an individual science. What worked for one person (or character in a story) may not work for you. By using the materials on this site, you take responsibility for how you apply them.",
+      "disclaimer": "I am not responsible for any direct or indirect consequences arising from the use of information from this site."
+    },
+    "section4": {
+      "heading": "4. Acute Conditions",
+      "text": "If you are in a crisis state, feel a threat to your life or health, or are experiencing an acute mental disorder - please do not attempt to treat yourself by reading blogs (mine or any others).",
+      "action": "Seek emergency help from qualified professionals or emergency services in your country."
+    },
+    "agreement": "By using this site, you express your agreement with the terms set forth above."
   }
 }

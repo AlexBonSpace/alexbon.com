@@ -1,6 +1,8 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import { locales } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
+import { messagesByLocale } from "@/lib/messages";
+import type { MessageDictionary } from "@/i18n/translator";
 
 export const prerender = true;
 
@@ -9,56 +11,62 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params;
+const messages = messagesByLocale[locale] as MessageDictionary;
+
+const navigationAlternatePaths: Partial<Record<Locale, string>> = {
+  ua: "/ua/disclaimer/",
+  ru: "/ru/disclaimer/",
+  en: "/en/disclaimer/",
+};
 ---
 
-<SiteLayout locale={locale} title="Важное уведомление" noIndex={true}>
-  <main class="container mx-auto px-4 py-12 max-w-3xl prose prose-article">
-    <h1>Важное уведомление</h1>
+<SiteLayout
+  locale={locale}
+  title={messages.Disclaimer.title}
+  noIndex={true}
+  navigationAlternatePaths={navigationAlternatePaths}
+>
+  <main
+    class="container mx-auto px-4 py-12 max-w-3xl prose prose-article text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed"
+  >
+    <h1>{messages.Disclaimer.title}</h1>
 
     <section class="space-y-6">
       <div>
-        <h2>1. Суть этого сайта</h2>
+        <h2>{messages.Disclaimer.section1.heading}</h2>
         <p>
-          Блог «Отражения» и сайт AlexBon.com — это пространство для размышлений, обмена опытом и историй. Все
-          материалы, размещенные здесь, носят исключительно информационный и ознакомительный характер. Они отражают мой
-          личный взгляд, мой профессиональный опыт и мои выводы.
+          {messages.Disclaimer.section1.text}
         </p>
       </div>
 
       <div>
-        <h2>2. Это не медицинская услуга</h2>
+        <h2>{messages.Disclaimer.section2.heading}</h2>
         <p>
-          Тексты на этом сайте не являются медицинской, психиатрической или юридической консультацией. Чтение блога не
-          заменяет полноценную работу с психологом или психотерапевтом. Я не ставлю диагнозы и не назначаю лечение через
-          статьи.
+          {messages.Disclaimer.section2.text}
         </p>
       </div>
 
       <div>
-        <h2>3. Ответственность</h2>
+        <h2>{messages.Disclaimer.section3.heading}</h2>
         <p>
-          Психология — наука индивидуальная. То, что сработало для одного человека (или героя рассказа), может не
-          подойти вам. Используя материалы сайта, вы берете на себя ответственность за то, как именно вы будете их
-          применять.
+          {messages.Disclaimer.section3.text}
           <br />
-          Я не несу ответственности за любые прямые или косвенные последствия, возникшие в результате использования информации
-          с этого сайта.
+          {messages.Disclaimer.section3.disclaimer}
         </p>
       </div>
 
       <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg border border-red-100 dark:border-red-900/30">
-        <h2 class="text-red-700 dark:text-red-400 mt-0">4. Острые состояния</h2>
+        <h2 class="text-red-700 dark:text-red-400 mt-0">{messages.Disclaimer.section4.heading}</h2>
         <p>
-          Если вы находитесь в кризисном состоянии, чувствуете угрозу своей жизни или здоровью, или переживаете острое
-          психическое расстройство — пожалуйста, не пытайтесь лечиться чтением блогов (моего или любых других).
+          {messages.Disclaimer.section4.text}
         </p>
         <p class="font-medium">
-          Обратитесь за экстренной помощью к профильным специалистам или в службы спасения в вашей стране.
+          {messages.Disclaimer.section4.action}
         </p>
       </div>
 
       <p class="text-xl font-bold text-center mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-        Используя этот сайт, вы выражаете свое согласие с условиями, изложенными выше.
+        {messages.Disclaimer.agreement}
       </p>
     </section>
   </main>
