@@ -219,7 +219,6 @@ html * {
 }
 
 @keyframes ambient-float {
-
   0%,
   100% {
     transform: translate(0, 0) scale(1);
@@ -257,18 +256,14 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg,
-      var(--color-accent-strong),
-      var(--color-accent));
+  background: linear-gradient(180deg, var(--color-accent-strong), var(--color-accent));
   border-radius: 6px;
   border: 2px solid var(--background);
   transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg,
-      var(--color-accent),
-      var(--color-accent-strong));
+  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-strong));
 }
 
 /* Custom Text Selection */
@@ -542,7 +537,6 @@ button:focus-visible {
     position: relative;
   }
 
-
   .hero-reflection__title-wrap {
     position: relative;
     width: 100%;
@@ -635,9 +629,7 @@ button:focus-visible {
     color: var(--color-accent-strong);
     text-decoration: none;
     position: relative;
-    background-image: linear-gradient(90deg,
-        var(--color-accent-strong),
-        var(--color-accent));
+    background-image: linear-gradient(90deg, var(--color-accent-strong), var(--color-accent));
     background-size: 0% 2px;
     background-position: left bottom;
     background-repeat: no-repeat;
@@ -657,10 +649,12 @@ button:focus-visible {
   }
 
   .button-primary {
-    background-image: linear-gradient(135deg,
-        var(--button-gradient-start),
-        var(--button-gradient-middle),
-        var(--button-gradient-end));
+    background-image: linear-gradient(
+      135deg,
+      var(--button-gradient-start),
+      var(--button-gradient-middle),
+      var(--button-gradient-end)
+    );
     background-size: 200% 200%;
     color: var(--button-text);
     box-shadow: var(--shadow-button);
@@ -676,10 +670,7 @@ button:focus-visible {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,
-        transparent,
-        color-mix(in srgb, white 20%, transparent),
-        transparent);
+    background: linear-gradient(135deg, transparent, color-mix(in srgb, white 20%, transparent), transparent);
     transform: translateX(-100%);
     transition: transform 0.6s ease;
   }
@@ -739,7 +730,6 @@ button:focus-visible {
 }
 
 @keyframes pulse-slow {
-
   0%,
   100% {
     opacity: 0.45;
@@ -753,7 +743,6 @@ button:focus-visible {
 }
 
 @keyframes gradient-shift {
-
   0%,
   100% {
     background-position: 0% 50%;
@@ -764,9 +753,7 @@ button:focus-visible {
   }
 }
 
-
 @keyframes border-glow {
-
   0%,
   100% {
     box-shadow:
