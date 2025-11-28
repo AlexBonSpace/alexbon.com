@@ -7,13 +7,29 @@ Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. M
 - **Framework**: Astro 5 with server-side rendering
 - **Deployment**: Cloudflare Pages adapter (`@astrojs/cloudflare`)
 - **Styling**: Tailwind CSS v4 with custom design tokens in `src/styles/globals.css`
-- **Interactivity**: React islands (navbar, search page, theme toggle) marked with `client:*` directives
+- **Interactivity**: React islands (navbar, search page, theme toggle, reading progress) marked with `client:*` directives
 - **Content**: MDX via Astro Content Collections with translation helpers in `src/i18n/` and blog utilities in `src/lib/blog.ts`
 - **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
 - **Testing**: Vitest with happy-dom
 - **Code Quality**: ESLint + Prettier with automatic formatting
 - **Git Hooks**: Husky pre-commit hooks (lint, test, security audit)
 - **CI/CD**: GitHub Actions for automated checks on push
+
+### React Components (9 active files, ~700 KB in worker bundle for SSR)
+**Interactive UI (on every page):**
+- `NavigationShell.tsx` - Main navigation wrapper with theme/locale contexts
+- `Navbar.tsx` - Navigation menu with mobile support
+- `ThemeToggle.tsx` - Theme switcher (default/dark/sky/sand)
+- `LanguagePrompt.tsx` - Language selector prompt for default locale
+- `ReadingProgress.tsx` - Reading progress bar (client-side only)
+
+**Search functionality:**
+- `SearchApp.tsx` - Algolia-powered search interface
+
+**Contexts & utilities:**
+- `theme-context.tsx` - Theme state management
+- `i18n-context.tsx` - Internationalization context
+- `navigation.tsx` - Navigation helpers
 
 ## Project Structure
 ```
@@ -54,15 +70,16 @@ src/
 ### Caching & Performance
 - **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
 - **Cache optimization**: Only essential metadata stored (title, description, summary, tags, URLs, dates) - no full post text
-  - Current size: ~241 KB for 141 posts (~1.7 KB per post)
-  - Projected at 500 posts: ~870 KB cache → ~2.2 MB total worker bundle (safely under 5MB Cloudflare limit)
-  - Worker bundle size: 1.5 MB (141 posts) → ~2.2 MB (500 posts) - minimal growth due to prerendering
+  - Current size: ~287 KB for 168 posts (~1.7 KB per post)
+  - Projected at 500 posts: ~870 KB cache → ~3.6 MB total worker bundle (safely under 5MB Cloudflare limit)
+  - Worker bundle size: **3.0 MB** (168 posts) → ~3.6 MB (500 posts) - minimal growth due to prerendering
+  - Bundle includes React runtime (~700 KB) required for SSR rendering of interactive components (navigation, search, theme toggle)
   - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
 - **Prerendering strategy**: Content pages use `export const prerender = true` (except root `/`)
   - Blog posts (`/[locale]/blog/[slug]/`), tag pages, search page - all prerendered as static HTML
   - Root `/` uses SSR for intelligent locale detection (`resolveRequestLocale`)
   - MDX content NOT included in worker bundle, only metadata cache
-  - Worker bundle contains only runtime code + post summaries (~230 KB)
+  - Worker bundle contains: runtime code (~2.3 MB including React SSR) + post summaries (~287 KB) + routing (~400 KB)
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
 - **Routes optimization**: `scripts/normalize-routes.mjs` runs automatically after build (`postbuild` hook) to optimize `_routes.json`

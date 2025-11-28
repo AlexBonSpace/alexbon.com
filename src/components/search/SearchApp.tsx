@@ -125,7 +125,7 @@ function HitCard({ hit, readMore }: { hit: HighlightableHit; readMore: string })
             className="inline-flex items-center text-[1.05em] text-accent/80 transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             aria-label={readMore}
           >
-            <span aria-hidden>🦋</span>
+            <span aria-hidden="true">🦋</span>
           </a>
         </p>
       </article>
