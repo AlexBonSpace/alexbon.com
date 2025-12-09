@@ -31,7 +31,7 @@ Other scripts:
 | `npm run lint:fix`       | Run ESLint and auto-fix issues                                              |
 | `npm run format`         | Format all code with Prettier                                               |
 | `npm run format:check`   | Check if code is formatted correctly                                        |
-| `npm run test`           | Vitest suite                                                                |
+| `npm run test`           | Vitest suite (93 tests: locale-utils, blog-utils, feed-utils, seo)          |
 | `npm run verify:seo`     | Validate `dist/sitemap.xml` (requires a fresh `npm run build`)              |
 | `npm run verify`         | Runs audit + tests + build + `verify:seo` for complete validation           |
 | `npm run algolia:sync`   | Push latest feeds to Algolia (run after build; supports `-- --full`)        |
@@ -42,10 +42,10 @@ Recommended deployment workflow: `npm run cache:build` → `git add/commit` → 
 
 - `npm run lint` checks code quality with ESLint (TypeScript + Astro rules)
 - `npm run format:check` verifies consistent code formatting with Prettier
-- `npm run test` exercises helpers around content cleanup, localized URL builders, and middleware normalization
+- `npm run test` runs 93 tests covering locale utilities, blog utilities, feed utilities, and SEO helpers
 - `npm run verify:seo` parses `dist/sitemap.xml` to ensure only canonical HTML routes are published (no feeds, search, or JSON endpoints) and that every locale has coverage
 - `npm run verify` combines security audit, Vitest suite, production build, and sitemap check for complete validation
-- **Pre-commit hooks** (Husky) automatically run lint, tests, and security audit before each commit
+- **Pre-commit hooks** (Husky) automatically run formatting, tests, and security audit before each commit
 - **GitHub Actions CI** runs full validation suite on every push to main/master/claude branches
 
 ## 🤖 AI feeds

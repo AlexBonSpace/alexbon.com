@@ -47,7 +47,7 @@
 - `npm run lint:fix` – run ESLint and automatically fix issues.
 - `npm run format` – format all code with Prettier.
 - `npm run format:check` – check if code is formatted correctly.
-- `npm run test` – executes the Vitest suite (unit helpers + future component tests).
+- `npm run test` – executes the Vitest suite (93 tests: locale-utils, blog-utils, feed-utils, seo).
 - `npm run test:watch` – watch mode for the Vitest suite during development.
 - `npm run verify:seo` – check the built sitemap for banned URLs/duplicates/trailing slashes (requires running `npm run build` first).
 - `npm run verify` – runs security audit, Vitest suite, build, and `verify:seo` for complete validation.
@@ -58,7 +58,7 @@
 - `astro add <integration> --yes` – add Astro integrations without interactive prompts (AI agent-friendly). Examples: `astro add react --yes`, `astro add tailwind --yes`. Perfect for Claude Code, Cursor, Copilot and other AI-assisted development tools.
 
 **Automation**
-- Pre-commit hooks (Husky) automatically run lint, tests, and security audit before each commit.
+- Pre-commit hooks (Husky) automatically run formatting, tests (93 tests), and security audit before each commit.
 - GitHub Actions CI runs full validation on every push to main/master/claude branches.
 - VS Code auto-formats code on save (configured in `.vscode/settings.json`).
 

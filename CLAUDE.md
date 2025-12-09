@@ -10,9 +10,9 @@ Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. M
 - **Interactivity**: React islands (navbar, search page, theme toggle, reading progress) marked with `client:*` directives
 - **Content**: MDX via Astro Content Collections with translation helpers in `src/i18n/` and blog utilities in `src/lib/blog.ts`
 - **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
-- **Testing**: Vitest with happy-dom
+- **Testing**: Vitest with happy-dom (93 tests covering locale utils, blog utils, feed utils, SEO)
 - **Code Quality**: ESLint + Prettier with automatic formatting
-- **Git Hooks**: Husky pre-commit hooks (lint, test, security audit)
+- **Git Hooks**: Husky pre-commit hooks (format, test, security audit)
 - **CI/CD**: GitHub Actions for automated checks on push
 
 ### React Components (9 active files, ~700 KB in worker bundle for SSR)
@@ -141,7 +141,7 @@ npm run format        # Format all code with Prettier
 npm run format:check  # Check if code is formatted correctly
 
 # Testing & Verification
-npm run test          # Execute Vitest suite (unit helpers + component tests)
+npm run test          # Execute Vitest suite (93 tests: locale-utils, blog-utils, feed-utils, seo)
 npm run test:watch    # Watch mode for Vitest during development
 npm run verify:seo    # Check built sitemap for banned URLs/duplicates/trailing slashes (requires build first)
 npm run verify        # Run full suite: audit + test + build + verify:seo
@@ -168,8 +168,8 @@ astro add <integration> --yes  # Add Astro integration without interactive promp
 
 ### Pre-commit Hooks (Husky)
 Automatically run before every `git commit`:
-- ✅ Lint check (`npm run lint`)
-- ✅ Test suite (`npm run test`)
+- ✅ Code formatting (`npm run format`)
+- ✅ Test suite (`npm run test`) — 93 tests
 - ✅ Security audit (`npm audit --audit-level=high`)
 
 If any check fails, the commit is blocked until issues are resolved.

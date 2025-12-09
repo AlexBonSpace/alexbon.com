@@ -9,7 +9,7 @@ import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
 import { FEED_FULL_PAGE_SIZE, FEED_FULL_REFRESH_DAYS } from "@/lib/feed-config";
 
-const FEED_ICON_URL = `${SITE_URL}/images/feed-icon.png`;
+const FEED_ICON_URL = `${SITE_URL}/feed-icon.jpg`;
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
 const FEED_FULL_META = {
   intendedAudience: "AI crawlers and search engines",
@@ -419,30 +419,6 @@ function buildAboutContentText(locale: Locale): string {
 
   push(content.story.heading);
   pushMany(content.story.paragraphs);
-
-  if (content.lighthouse) {
-    push(content.lighthouse.heading);
-    pushMany(content.lighthouse.paragraphs);
-    for (const bullet of content.lighthouse.bullets) {
-      if (typeof bullet === "string") {
-        push(bullet);
-      } else {
-        push(`${bullet.label}${bullet.description ? ` ${bullet.description}` : ""}`);
-      }
-    }
-    push(content.lighthouse.closing);
-  }
-
-  if (content.door) {
-    push(content.door.heading);
-    pushMany(content.door.paragraphs);
-    if (content.door.cta) {
-      push(content.door.cta.text);
-      for (const contact of content.door.cta.contacts) {
-        push(`${contact.label}: ${contact.href}`);
-      }
-    }
-  }
 
   push(content.faq.heading);
   for (const item of content.faq.items) {

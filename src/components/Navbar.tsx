@@ -21,7 +21,7 @@ export function Navbar({
   activeLocale,
   brandName,
   tagline,
-  taglineSubtext,
+  taglineSubtext: _taglineSubtext,
   currentPath: _currentPath,
   currentSearch = "",
   alternatePaths,
@@ -130,11 +130,6 @@ export function Navbar({
                 className="block transition-colors hover:text-accent focus:outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-accent/40"
               >
                 <span className="block">{tagline}</span>
-                {taglineSubtext && (
-                  <span className="block text-[clamp(0.9rem,3vw,1.1rem)] font-normal leading-snug text-nav-heading">
-                    {taglineSubtext}
-                  </span>
-                )}
               </a>
             </h1>
 

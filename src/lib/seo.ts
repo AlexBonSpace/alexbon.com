@@ -19,7 +19,7 @@ export const localeToBcp47: Record<Locale, string> = {
 };
 
 export const ABOUT_HERO_IMAGE = `${SITE_URL}/images/about-portrait-hero.webp`;
-export const DEFAULT_POST_IMAGE = `${SITE_URL}/images/reflection.webp`;
+export const DEFAULT_POST_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export const PERSON_JOB_TITLES: Record<Locale, string[]> = {
   ua: ["Психолог", "Лайф-коуч", "Експерт з усвідомленості та медитації"],

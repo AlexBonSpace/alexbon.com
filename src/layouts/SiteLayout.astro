@@ -173,10 +173,17 @@ const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) 
   };
 });
 
-const RU_FOOTER_SOCIAL_LINKS = [
-  { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
-  { label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" },
-] as const;
+const FOOTER_SOCIAL_LINKS = {
+  ru: [
+    { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
+    { label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" },
+  ],
+  ua: [{ label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" }],
+  en: [
+    { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
+    { label: "X (Twitter)", href: "https://x.com/AlexBonStories" },
+  ],
+} as const;
 
 const feedFullUrl = `${SITE_URL}/${locale}/feed-full.json`;
 const feedDownloadNode = {
@@ -326,6 +333,10 @@ const FONT_STYLESHEET =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     {title ? <title>{title}</title> : null}
     {description ? <meta name="description" content={description} /> : null}
     {canonical ? <link rel="canonical" href={canonical} /> : null}
@@ -447,10 +458,13 @@ const FONT_STYLESHEET =
           </ul>
         </nav>
         {
-          locale === "ru" ? (
-            <nav class="language-links language-links--footer" aria-label="Социальные сети">
+          FOOTER_SOCIAL_LINKS[locale]?.length ? (
+            <nav
+              class="language-links language-links--footer"
+              aria-label={locale === "en" ? "Social links" : locale === "ua" ? "Соціальні мережі" : "Социальные сети"}
+            >
               <ul class="language-links__list">
-                {RU_FOOTER_SOCIAL_LINKS.map((link) => (
+                {FOOTER_SOCIAL_LINKS[locale].map((link) => (
                   <li class="language-links__item" key={link.href}>
                     <a href={link.href} class="language-links__link" target="_blank" rel="noopener noreferrer">
                       {link.label}
