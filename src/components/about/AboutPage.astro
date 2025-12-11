@@ -23,6 +23,19 @@ const reflectionsLabelByLocale = {
   ua: '"Відображення"',
   en: '"Reflections"',
 } as const;
+
+const messengerIcons = {
+  telegram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`,
+  whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
+  viber: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.182.635 6.78.56 9.97c-.075 3.192-.162 9.182 5.63 10.816l.007.001v2.457s-.04.996.62 1.198c.796.243 1.265-.512 2.027-1.33.417-.449.992-1.107 1.426-1.611 3.937.332 6.962-.428 7.307-.537.798-.253 5.316-.84 6.05-6.848.758-6.2-.358-10.118-2.373-11.896l-.001-.001c-.561-.535-2.834-2.139-8.13-2.205-.478-.005-.937-.009-1.725-.012zm.11 1.734c.543.003.98.007 1.425.012 4.513.056 6.389 1.309 6.836 1.711 1.646 1.451 2.58 5.038 1.934 10.327-.598 4.885-4.207 5.266-4.874 5.479-.287.09-2.94.741-6.297.504 0 0-2.494 3.012-3.273 3.793-.121.123-.27.169-.367.147-.137-.03-.175-.175-.174-.385l.02-4.133-.007-.006c-4.712-1.318-4.439-6.238-4.376-8.934.062-2.696.576-4.874 2.004-6.296 1.903-1.76 5.417-2.212 7.149-2.219zm.045 2.133a.533.533 0 00-.533.54.534.534 0 00.534.528c1.477.012 2.731.472 3.728 1.37 1.01.911 1.543 2.156 1.614 3.7.008.152.068.287.17.382a.53.53 0 00.377.147.526.526 0 00.524-.561c-.094-1.885-.76-3.412-1.98-4.513-1.203-1.085-2.752-1.582-4.434-1.593zm-3.318.769c-.197-.01-.42.047-.596.164l-.018.012c-.297.22-.564.48-.8.781a2.26 2.26 0 00-.474.912c-.063.272-.04.542.06.798l.012.027c.281.7.665 1.357 1.08 1.992.577.896 1.279 1.71 2.01 2.494.15.161.3.321.458.474l.016.016.016.016c.154.158.314.307.474.458.784.73 1.598 1.433 2.494 2.01.635.415 1.292.798 1.992 1.08l.027.011c.256.101.527.124.798.06.329-.074.62-.243.912-.473.301-.236.562-.503.781-.8l.012-.018a1.012 1.012 0 00.05-1.083 11.14 11.14 0 00-1.59-1.893l-.006-.003c-.267-.187-.57-.185-.872-.064-.19.076-.378.202-.567.38-.064.06-.133.1-.2.14l-.052.032c-.18.096-.293.14-.37.14-.048 0-.141 0-.377-.138l-.008-.004a11.46 11.46 0 01-1.653-1.164 11.103 11.103 0 01-1.164-1.653l-.004-.008c-.138-.236-.138-.329-.138-.377 0-.077.044-.19.14-.37.01-.02.02-.034.031-.052.04-.067.081-.136.14-.2.18-.19.306-.377.382-.567.12-.302.123-.605-.064-.872l-.003-.006a11.16 11.16 0 00-1.893-1.59.868.868 0 00-.487-.133zm3.476 1.234a.533.533 0 00-.528.54.533.533 0 00.533.527c.775.008 1.37.257 1.826.679.459.423.737 1.016.753 1.772a.532.532 0 00.543.521.531.531 0 00.521-.543c-.023-1.032-.428-1.893-1.084-2.496-.651-.6-1.528-.955-2.564-.994z"/></svg>`,
+} as const;
+
+const stepIcons = {
+  video: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z"/></svg>`,
+  calendar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+  monitor: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
+  building: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>`,
+} as const;
 ---
 
 <div lang={lang} class="relative min-h-screen overflow-hidden bg-surface text-strong">
@@ -96,6 +109,7 @@ const reflectionsLabelByLocale = {
                   rel="noreferrer"
                   class="inline-flex items-center justify-center gap-2 rounded-full bg-[#0C0E10] px-5 py-2.5 text-sm font-semibold text-[#F5F5F5] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1a1d21]"
                 >
+                  {button.icon && <Fragment set:html={messengerIcons[button.icon]} />}
                   {button.label}
                 </a>
               ))}
@@ -132,6 +146,91 @@ const reflectionsLabelByLocale = {
         </div>
       </div>
     </section>
+
+    {
+      content.personalWork ? (
+        <section
+          class={`rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm section-card ${containerClass} sm:px-10`}
+        >
+          <div class="flex flex-col gap-8">
+            <div class="flex flex-col items-center gap-4 text-center lg:items-start lg:text-left">
+              <h2 class="text-[clamp(1.5rem,4vw,2rem)] font-semibold text-strong">{content.personalWork.heading}</h2>
+              <span
+                class="h-px w-24 rounded-full bg-gradient-to-r from-transparent via-[rgba(240,186,121,0.5)] to-transparent"
+                aria-hidden="true"
+              />
+            </div>
+
+            <div class="grid gap-6">
+              {content.personalWork.steps.map((step, index) => (
+                <div class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6">
+                  <div class="mb-3 flex items-center gap-3">
+                    {step.icon && (
+                      <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#e8d5c0] to-[#d4c0a8] text-[#6b5344]">
+                        <Fragment set:html={stepIcons[step.icon]} />
+                      </span>
+                    )}
+                    <p class="text-lg font-semibold text-strong">
+                      {index + 1}. {step.title}
+                    </p>
+                  </div>
+                  <p class="text-[clamp(1rem,2.5vw,1.1rem)] leading-relaxed text-primary">{step.description}</p>
+                  {step.details && step.details.length > 0 ? (
+                    <ul class="mt-4 grid gap-3 pl-1">
+                      {step.details.map((detail) => (
+                        <li class="flex items-start gap-3 text-[clamp(0.95rem,2.5vw,1.05rem)] leading-relaxed text-primary">
+                          {detail.icon && (
+                            <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#f0e6da] text-[#8b7355]">
+                              <Fragment set:html={stepIcons[detail.icon]} />
+                            </span>
+                          )}
+                          <span class="flex-1 flex flex-col gap-1">
+                            <span class="font-medium">{detail.text}</span>
+                            {detail.subtext && (
+                              <span class="text-[clamp(0.9rem,2.3vw,0.95rem)] text-primary">{detail.subtext}</span>
+                            )}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+
+            <div class="flex flex-col items-center gap-4">
+              <p class="text-base leading-relaxed text-primary sm:text-lg">
+                {content.personalWork.reviewsText}{" "}
+                <a
+                  href={content.personalWork.reviewsLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-strong underline-offset-4 hover:underline"
+                >
+                  {content.personalWork.reviewsLink.label}
+                </a>
+              </p>
+
+              {content.invitation.buttons.length > 0 ? (
+                <div class="flex flex-wrap justify-center gap-3 mt-2">
+                  {content.invitation.buttons.map((button) => (
+                    <a
+                      href={button.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      class="inline-flex items-center justify-center gap-2 rounded-full bg-[#0C0E10] px-5 py-2.5 text-sm font-semibold text-[#F5F5F5] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1a1d21]"
+                    >
+                      {button.icon && <Fragment set:html={messengerIcons[button.icon]} />}
+                      {button.label}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      ) : null
+    }
 
     <section
       class={`rounded-[2.25rem] border border-soft px-6 py-10 shadow-card backdrop-blur-sm section-card ${containerClass} sm:px-10`}
@@ -171,42 +270,6 @@ const reflectionsLabelByLocale = {
         </div>
       </div>
     </section>
-
-    {
-      content.locale === "ru" ? (
-        <section class={`${containerClass} flex items-center justify-center`}>
-          <div class="section-card w-full max-w-3xl overflow-hidden rounded-[2.5rem] border border-soft px-6 py-6 text-center shadow-card">
-            <p class="text-base leading-relaxed text-primary sm:text-lg">
-              Отзывы о моей работе как психолога можно посмотреть на{" "}
-              <a
-                href="https://g.page/AlexBon?share"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-strong underline-offset-4 hover:underline"
-              >
-                Google картах &gt;&gt;&gt;
-              </a>
-            </p>
-          </div>
-        </section>
-      ) : content.locale === "ua" ? (
-        <section class={`${containerClass} flex items-center justify-center`}>
-          <div class="section-card w-full max-w-3xl overflow-hidden rounded-[2.5rem] border border-soft px-6 py-6 text-center shadow-card">
-            <p class="text-base leading-relaxed text-primary sm:text-lg">
-              Відгуки про мою роботу як психолога можна подивитися на{" "}
-              <a
-                href="https://g.page/AlexBon?share"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-strong underline-offset-4 hover:underline"
-              >
-                Google картах &gt;&gt;&gt;
-              </a>
-            </p>
-          </div>
-        </section>
-      ) : null
-    }
 
     <section class={`${containerClass} flex items-center justify-center`}>
       <div

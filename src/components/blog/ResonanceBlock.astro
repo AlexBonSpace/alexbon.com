@@ -1,0 +1,42 @@
+---
+import type { Locale } from "@/i18n/config";
+import { messagesByLocale } from "@/lib/messages";
+
+type ResonanceBlockProps = {
+  locale: Locale;
+  className?: string;
+  postType?: "story" | "article" | "note";
+};
+
+const { locale, className = "", postType } = Astro.props as ResonanceBlockProps;
+
+// Only show for stories and articles
+if (postType !== "story" && postType !== "article") {
+  return null;
+}
+
+const messages = messagesByLocale[locale] ?? {};
+const resonance = messages?.Resonance as Record<string, unknown> | undefined;
+const text = resonance?.text as string | undefined;
+const linkText = resonance?.linkText as string | undefined;
+
+if (!text || !linkText) {
+  return null;
+}
+
+const aboutUrl = `/${locale}/about/`;
+---
+
+<aside
+  class={`blog-card flex flex-col gap-3 rounded-3xl border border-soft p-5 text-sm leading-relaxed text-primary ${className}`}
+>
+  <p>
+    {text}
+    <a
+      href={aboutUrl}
+      class="font-semibold text-accent underline decoration-dotted underline-offset-4 transition-colors hover:text-accent"
+    >
+      {linkText}
+    </a>
+  </p>
+</aside>

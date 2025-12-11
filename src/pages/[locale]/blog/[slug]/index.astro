@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import LicenseBlock from "@/components/blog/LicenseBlock.astro";
+import ResonanceBlock from "@/components/blog/ResonanceBlock.astro";
 import { locales, defaultLocale, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
 import { getPostBySlug, getPostsByLocale, getPostTranslations, findRelatedPosts } from "@/lib/blog";
@@ -163,6 +164,7 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
             </div>
           </div>
         </div>
+        <ResonanceBlock locale={locale} postType={post.type} />
         <LicenseBlock locale={locale} />
       </article>
     </div>

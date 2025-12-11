@@ -56,6 +56,7 @@ export interface LandingContent {
     buttons: Array<{
       label: string;
       href: string;
+      icon?: "telegram" | "whatsapp" | "viber";
     }>;
   };
   testimonials: {
@@ -75,6 +76,21 @@ export interface LandingContent {
     image: string;
     imageAlt: string;
     paragraphs: string[];
+  };
+  personalWork?: {
+    heading: string;
+    steps: Array<{
+      title: string;
+      description: string;
+      icon?: "video" | "calendar";
+      details?: Array<{
+        text: string;
+        subtext?: string;
+        icon?: "monitor" | "building";
+      }>;
+    }>;
+    reviewsText: string;
+    reviewsLink: { label: string; href: string };
   };
   footerNote: string;
   blog: {
@@ -112,10 +128,10 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "/images/about-portrait-hero.webp",
       imageAlt: "Александр, писатель и психолог",
       paragraphs: [
-        "Привет, меня зовут Александр. Я психолог, писатель и хранитель этого пространства.",
-        "Истории, которые вы найдете здесь — это отражения. Нашего мира и нас самих. Это способ посмотреть со стороны и хотя бы немного сбить автопилот, в котором мы существуем большую часть времени.",
-        "Тексты созданы в тандеме с ИИ. Смыслы, чувства и сюжеты — мои, огранка — нейросети.",
-        "Если вы захотите обсудить написанное или просто поговорить, как человек с человеком, я всегда на связи:",
+        "Привет, меня зовут Александр. Я психолог и писатель. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
+        "Я верю, что распутывать эти клубки можно двумя способами.",
+        "Первый — через истории, в которых вдруг узнаёшь себя. Именно для этого я веду этот блог. Тексты созданы в тандеме с ИИ: смыслы и чувства — мои, огранка — нейросети.",
+        "Второй — в тишине личной сессии, через живой диалог. Если что-то из прочитанного срезонировало и хочется разобраться глубже — добро пожаловать!",
       ],
     },
     process: {
@@ -135,9 +151,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Написать в Telegram", href: "https://t.me/alexbon_com" },
-        { label: "Написать в WhatsApp", href: "https://wa.me/+380986552222" },
-        { label: "Написать в Viber", href: "viber://chat?number=+380986552222" },
+        { label: "Написать в Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
+        { label: "Написать в WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
+        { label: "Написать в Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
       ],
     },
     testimonials: {
@@ -152,7 +168,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "Немного обо мне",
+      heading: "Моя история (для тех, кто хочет знать больше)",
       image: "/images/about-story-portrait.webp",
       imageAlt: "Алекс Бон смотрит в камеру, опершись руками на стол",
       paragraphs: [
@@ -161,13 +177,48 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Был женат, развелся, сохранил хорошие отношения и последние десять лет живу один. Ну, если быть точным, не совсем один — со мной кошка. Этот опыт не сделал меня гуру, но научил замечать в чужих историях ниточки, которые когда-то проходили через мою собственную.",
       ],
     },
+    personalWork: {
+      heading: "Как устроена личная работа (для тех, кому нужна конкретика)",
+      steps: [
+        {
+          title: "Первый шаг — встреча-знакомство (бесплатно)",
+          icon: "video",
+          description:
+            "20 минут онлайн. Это не консультация, а простой человеческий разговор, чтобы понять, комфортно ли нам друг с другом и смогу ли я помочь именно в вашей ситуации. Никаких обязательств.",
+        },
+        {
+          title: "Глубокая работа (если решим продолжить)",
+          icon: "calendar",
+          description: "Встречи обычно проходят раз в неделю, длительность — 1 час.",
+          details: [
+            {
+              icon: "monitor",
+              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн",
+              subtext:
+                "Я держу несколько «социальных мест» со сниженной стоимостью для тех, кто сейчас в сложной ситуации. Спросите меня об этом на первой встрече.",
+            },
+            {
+              icon: "building",
+              text: "В кабинете (Киев, м. Левобережная) — 2000 грн",
+            },
+          ],
+        },
+      ],
+      reviewsText: "Отзывы о моей работе можно посмотреть на",
+      reviewsLink: { label: "Google картах >>>", href: "https://g.page/AlexBon?share" },
+    },
     footerNote:
       'P.S. "Алекс Бон" — это мой псевдоним, так проще меня найти в интернете :) А реальная фамилия пусть остается для скучных бумаг.',
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
       metaTitle: "Отражения — короткие рассказы и истории | Алекс Бон",
-      heroDescription: [],
+      heroDescription: [
+        "Меня зовут Алекс Бон. Я психолог и писатель из Украины.",
+        "Здесь нет советов и готовых ответов. Только приглашение к размышлению.",
+        "Я не учу, как стать «лучшей версией себя». Я предлагаю перестать с собой воевать.",
+        "Этот блог — пространство отражений, чтобы сбить автопилот. Добро пожаловать.",
+      ],
     },
   },
   ua: {
@@ -186,10 +237,10 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "/images/about-portrait-hero.webp",
       imageAlt: "Олександр, письменник і психолог",
       paragraphs: [
-        "Привіт, мене звати Олександр. Я психолог, письменник і хранитель цього простору.",
-        "Історії, які ви знайдете тут — це відображення. Нашого світу і нас самих. Це спосіб подивитися збоку і хоча б трохи збити автопілот, у якому ми існуємо більшу частину часу.",
-        "Тексти створені в тандемі з ШІ. Сенси, почуття й сюжети — мої, огранка — нейромережі.",
-        "Якщо захочете обговорити написане або просто поговорити, як людина з людиною, я завжди на зв'язку:",
+        "Привіт, мене звати Олександр. Я психолог і письменник. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
+        "Я вірю, що розплутувати ці клубки можна двома способами.",
+        "Перший — через історії, в яких раптом впізнаєш себе. Саме для цього я веду цей блог. Тексти створені в тандемі з ШІ: сенси та почуття — мої, огранка — нейромережі.",
+        "Другий — у тиші особистої сесії, через живий діалог. Якщо щось із прочитаного зрезонувало і хочеться розібратися глибше — ласкаво просимо!",
       ],
     },
     process: {
@@ -209,9 +260,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Написати в Telegram", href: "https://t.me/alexbon_com" },
-        { label: "Написати в WhatsApp", href: "https://wa.me/+380986552222" },
-        { label: "Написати у Viber", href: "viber://chat?number=+380986552222" },
+        { label: "Написати в Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
+        { label: "Написати в WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
+        { label: "Написати у Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
       ],
     },
     testimonials: {
@@ -226,7 +277,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "Трохи про мене",
+      heading: "Моя історія (для тих, хто хоче знати більше)",
       image: "/images/about-story-portrait.webp",
       imageAlt: "Олександр у затишній студії, спершись на стіл",
       paragraphs: [
@@ -235,13 +286,48 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Був одружений, розлучився, зберіг добрі стосунки і останні десять років живу сам. Якщо точніше, не зовсім сам — зі мною кішка. Цей досвід не зробив мене гуру, але навчив помічати в чужих історіях ниточки, які колись проходили через мою власну.",
       ],
     },
+    personalWork: {
+      heading: "Як влаштована особиста робота (для тих, кому потрібна конкретика)",
+      steps: [
+        {
+          title: "Перший крок — зустріч-знайомство (безкоштовно)",
+          icon: "video",
+          description:
+            "20 хвилин онлайн. Це не консультація, а простий людський розговір, щоб зрозуміти, чи комфортно нам один з одним і чи зможу я допомогти саме у вашій ситуації. Жодних зобов'язань.",
+        },
+        {
+          title: "Глибока робота (якщо вирішимо продовжити)",
+          icon: "calendar",
+          description: "Зустрічі зазвичай проходять раз на тиждень, тривалість — 1 година.",
+          details: [
+            {
+              icon: "monitor",
+              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн",
+              subtext:
+                "Я тримаю декілька «соціальних місць» зі зниженою вартістю для тих, хто зараз у складній ситуації. Запитайте мене про це на першій зустрічі.",
+            },
+            {
+              icon: "building",
+              text: "У кабінеті (Київ, м. Лівобережна) — 2000 грн",
+            },
+          ],
+        },
+      ],
+      reviewsText: "Відгуки про мою роботу можна подивитися на",
+      reviewsLink: { label: "Google картах >>>", href: "https://g.page/AlexBon?share" },
+    },
     footerNote:
       'P.S. "Алекс Бон" — це мій псевдонім, так простіше мене знайти в інтернеті :) А справжнє прізвище нехай залишається для нудних паперів.',
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
       metaTitle: "Відображення — короткі розповіді та історії | Алекс Бон",
-      heroDescription: [],
+      heroDescription: [
+        "Мене звати Алекс Бон. Я психолог і письменник з України.",
+        "Тут немає порад і готових відповідей. Тільки запрошення до роздумів.",
+        "Я не вчу, як стати «кращою версією себе». Я пропоную перестати з собою воювати.",
+        "Цей блог — простір відображень, щоб збити автопілот. Ласкаво просимо.",
+      ],
     },
   },
   en: {
@@ -283,9 +369,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Message on Telegram", href: "https://t.me/alexbon_com" },
-        { label: "Message on WhatsApp", href: "https://wa.me/+380986552222" },
-        { label: "Message on Viber", href: "viber://chat?number=+380986552222" },
+        { label: "Message on Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
+        { label: "Message on WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
+        { label: "Message on Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
       ],
     },
     testimonials: {
@@ -315,7 +401,12 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       badge: "Reflections",
       heroTitle: "Reflections",
       metaTitle: "Reflections — short stories and tales | Alex Bon",
-      heroDescription: [],
+      heroDescription: [
+        "My name is Alex Bon. I'm a psychologist and writer from Ukraine.",
+        "There are no tips or ready answers here. Just an invitation to reflect.",
+        'I don\'t teach how to become "the best version of yourself." I offer to stop waging war on yourself.',
+        "This blog is a space of reflections, to break the autopilot. Welcome.",
+      ],
     },
   },
 };
