@@ -26,6 +26,12 @@ const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
   en: ["Mirror stories. Literary tales and psychological parables about meeting yourself."],
 };
 
+const OKNO_SECTION_BY_LOCALE: Record<Locale, string> = {
+  ua: "Вікно у двір: усе, що не влізло в інші розділи, але шкода викидати :)",
+  ru: "Окно во двор: всё, что не поместилось в другие разделы, но жалко выбрасывать :)",
+  en: "Window to the Yard: everything that didn't fit elsewhere but was too good to throw away :)",
+};
+
 export const AUTHOR_DISPLAY_BY_LOCALE: Record<Locale, string> = {
   ua: "Алекс Бон",
   ru: "Алекс Бон",
@@ -217,7 +223,7 @@ export function buildAuthorReference(
 export function buildPostJsonLd(
   doc: {
     title: string;
-    type: "note" | "article" | "story";
+    type: "note" | "article" | "story" | "okno";
     description: string;
     canonical: string;
     publishedAt: string;
@@ -229,7 +235,7 @@ export function buildPostJsonLd(
     license: string;
     tags: string[];
     image?: string;
-    collection: "articles" | "notes" | "stories";
+    collection: "articles" | "notes" | "stories" | "okno";
   },
   slug: string,
   locale: Locale,
@@ -294,6 +300,13 @@ export function buildPostJsonLd(
         description: doc.description,
         genre: STORY_GENRES_BY_LOCALE[locale],
         isFamilyFriendly: true,
+      };
+    case "okno":
+      return {
+        ...base,
+        "@type": "Article",
+        description: doc.description,
+        articleSection: OKNO_SECTION_BY_LOCALE[locale],
       };
     default:
       return {

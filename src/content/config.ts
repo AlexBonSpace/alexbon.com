@@ -52,7 +52,7 @@ const authorSchemaSchema = z.object({
 
 const basePostSchema = z.object({
   title: z.string().optional(),
-  type: z.enum(["note", "article", "story"]).default("note"),
+  type: z.enum(["note", "article", "story", "okno"]).default("note"),
   description: z.string().optional(),
   canonical: z.string().optional(),
   publishedAt: z.coerce.date(),

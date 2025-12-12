@@ -204,47 +204,35 @@ npm run tags:analyze  # Generate fresh analysis of all tags with translations
 ```
 
 This creates `scripts/.tags-cache.json` (gitignored) containing:
-- All tags sorted by popularity (how many stories use them)
-- Translations across all three locales (RU/UA/EN)
-- Example posts for each tag
-- Total unique story count
+- Tags per locale sorted by rarity (rare tags first for hub building)
+- Total story count
 
 **Best Practices:**
-1. **Reuse existing tags** when possible to build thematic clusters
-2. **Check tag cache** before creating new tags: `scripts/.tags-cache.json`
-3. **Focus on psychology**: Tags should reflect internal processes (emotions, conflicts, transformations)
-4. **Avoid generic tags**: Prefer specific psychological concepts over broad terms
-5. **3-5 tags per story**: Enough to categorize without diluting relevance
+1. **Prioritize rare tags** to build hubs (they appear first in the cache)
+2. **Focus on psychology**: Tags should reflect internal processes (emotions, conflicts, transformations)
+3. **Avoid generic tags**: Prefer specific psychological concepts over broad terms
+4. **3-5 tags per story**: Enough to categorize without diluting relevance
 
 **Tag Selection Process:**
 ```bash
 # 1. Run analysis to see current tags
 npm run tags:analyze
 
-# 2. Check top tags and their translations in console output
-# 3. Reuse high-frequency tags when thematically appropriate
+# 2. Console output shows RARE tags first (use these to build hubs)
+# 3. Check existing tags in each locale separately
 # 4. Add new tags only if existing ones don't capture the story's core themes
 ```
 
-**Example Tag Cache Structure:**
+**Tag Cache Structure:**
 ```json
 {
-  "generatedAt": "2025-11-22T...",
-  "totalTags": 21,
-  "totalStories": 26,
-  "tags": [
-    {
-      "translations": {
-        "ru": "страх близости",
-        "ua": "страх близькості",
-        "en": "fear of intimacy"
-      },
-      "uniqueCount": 4,
-      "examples": [
-        {"title": "Architect of Love", "slug": "arhitektor-lyubvi", "locale": "ru"}
-      ]
-    }
-  ]
+  "generatedAt": "2025-12-12T...",
+  "totalStories": 32,
+  "byLocale": {
+    "ru": { "редкий тег": 1, "частый тег": 5 },
+    "en": { "rare tag": 1, "common tag": 5 },
+    "ua": { "рiдкiсний тег": 1, "частий тег": 5 }
+  }
 }
 ```
 
@@ -268,6 +256,6 @@ npm run tags:analyze
 
 **For content creation tasks (new posts):**
 - **ALWAYS run `npm run tags:analyze` first** to get current tag inventory
-- Reference `scripts/.tags-cache.json` for tag translations and popularity
-- Prioritize reusing high-frequency tags to build content hubs
+- Reference `scripts/.tags-cache.json` for tag translations
+- Prioritize rare tags (shown first in console and cache) to build content hubs
 - If cache is stale (>1 week old), regenerate it before selecting tags

@@ -21,7 +21,7 @@ export const prerender = true;
 export function getStaticPaths() {
   const paths: Array<{ params: { locale: string; type: string } }> = [];
   for (const locale of locales) {
-    for (const type of ["note", "article", "story"] as const) {
+    for (const type of ["note", "article", "story", "okno"] as const) {
       paths.push({ params: { locale, type } });
     }
   }

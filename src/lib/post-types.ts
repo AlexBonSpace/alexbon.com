@@ -1,6 +1,6 @@
 import { defaultLocale, type Locale } from "@/i18n/config";
 
-export const POST_TYPES = ["article", "story", "note"] as const;
+export const POST_TYPES = ["article", "story", "note", "okno"] as const;
 export type PostType = (typeof POST_TYPES)[number];
 
 type TypeCopy = {
@@ -49,6 +49,20 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
     en: {
       label: "Sparks and Glimmers",
       description: "Short notes and aphorisms that help you see the familiar in a new light. Entries: {count}.",
+    },
+  },
+  okno: {
+    ru: {
+      label: "Окно во двор",
+      description: "Всё, что не поместилось в другие разделы, но жалко выбрасывать :) Материалов: {count}.",
+    },
+    ua: {
+      label: "Вікно у двір",
+      description: "Усе, що не влізло в інші розділи, але шкода викидати :) Матеріалів: {count}.",
+    },
+    en: {
+      label: "Window to the Yard",
+      description: "Everything that didn't fit elsewhere but was too good to throw away :) Entries: {count}.",
     },
   },
 };
