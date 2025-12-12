@@ -26,15 +26,15 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   story: {
     ru: {
       label: "Истории-зеркала",
-      description: "Художественные рассказы и психологические притчи о встрече с собой. Материалов: {count}.",
+      description: "Художественные рассказы и психологические притчи в которых ты можешь узнать себя. Материалов: {count}.",
     },
     ua: {
       label: "Історії-дзеркала",
-      description: "Художні оповідання та психологічні притчі про зустріч із собою. Матеріалів: {count}.",
+      description: "Художні оповідання та психологічні притчі в яких ти можеш впізнати себе. Матеріалів: {count}.",
     },
     en: {
       label: "Mirror Stories",
-      description: "Literary stories and psychological parables about meeting yourself. Entries: {count}.",
+      description: "Literary stories and psychological parables in which you can recognize yourself. Entries: {count}.",
     },
   },
   note: {

@@ -21,9 +21,9 @@ const NOTE_SECTION_BY_LOCALE: Record<Locale, string> = {
 };
 
 const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
-  ua: ["Історії-дзеркала. Художні оповідання та психологічні притчі про зустріч із собою."],
-  ru: ["Истории-зеркала. Художественные рассказы и психологические притчи о встрече с собой."],
-  en: ["Mirror stories. Literary tales and psychological parables about meeting yourself."],
+  ua: ["Історії-дзеркала. Художні оповідання та психологічні притчі в яких ти можеш впізнати себе."],
+  ru: ["Истории-зеркала. Художественные рассказы и психологические притчи в которых ты можешь узнать себя."],
+  en: ["Mirror stories. Literary tales and psychological parables in which you can recognize yourself."],
 };
 
 const OKNO_SECTION_BY_LOCALE: Record<Locale, string> = {
