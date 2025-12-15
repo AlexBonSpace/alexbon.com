@@ -51,11 +51,11 @@ html.js .js-only {
 }
 
 [data-theme="dark"] {
-  --background: #101522;
+  --background: #0c1018;
   --foreground: #ecf1ff;
-  --color-page-from: #121a2c;
-  --color-page-via: #101826;
-  --color-page-to: #111929;
+  --color-page-from: #0e1420;
+  --color-page-via: #0c1018;
+  --color-page-to: #0d1320;
   --color-nav-surface: rgba(22, 29, 44, 0.82);
   --color-nav-border: rgba(71, 88, 116, 0.55);
   --color-nav-text: #f2f6ff;
@@ -234,7 +234,7 @@ html * {
 }
 
 body {
-  font-size: clamp(1.05rem, 1.8vw, 1.125rem);
+  font-size: clamp(1.1rem, 1.8vw, 1.125rem);
   line-height: 1.7;
   letter-spacing: 0.01em;
   font-feature-settings:
@@ -779,5 +779,29 @@ button:focus-visible {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile-specific layout adjustments */
+@media (max-width: 639px) {
+  /* ~5% larger base font on mobile for better readability */
+  body {
+    font-size: 1.1rem;
+  }
+
+  /* Narrower outer margins on mobile - less space to screen edges */
+  .px-4 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Wider inner padding on cards for better text breathing room */
+  .section-card,
+  .section-card-strong {
+    padding: 1.75rem;
+  }
+
+  .blog-card {
+    padding: 1.5rem;
   }
 }

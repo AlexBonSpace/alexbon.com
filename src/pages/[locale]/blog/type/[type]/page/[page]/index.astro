@@ -112,14 +112,12 @@ const prefix = `/${locale}`;
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section
-        class="flex flex-col gap-4 rounded-[2rem] border border-[#eadfcd]/70 bg-white/70 p-6 text-sm text-[#4b4139] shadow-[0_24px_70px_-40px_rgba(40,30,20,0.4)] sm:p-8"
-      >
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#7c6d5d]">{label}</p>
-        <h1 class="text-[clamp(1.8rem,4.5vw,2.6rem)] font-semibold leading-tight text-[#2f2b26]">
+      <section class="section-card flex flex-col gap-4 rounded-[2rem] border border-soft p-6 text-sm shadow-card sm:p-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted">{label}</p>
+        <h1 class="text-[clamp(1.8rem,4.5vw,2.6rem)] font-semibold leading-tight text-strong">
           {pageTitle}
         </h1>
-        <p>{pageDescription}</p>
+        <p class="text-primary">{pageDescription}</p>
       </section>
     </div>
 
