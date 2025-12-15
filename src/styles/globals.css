@@ -77,9 +77,9 @@ html.js .js-only {
   --button-gradient-end: #224474;
   --button-text: #f2f6ff;
   --shadow-button: 0 20px 48px -24px rgba(26, 34, 52, 0.75);
-  --surface-card: #161d2c;
+  --surface-card: #111620;
   --surface-card-strong: var(--surface-card);
-  --border-card: rgba(97, 121, 158, 0.4);
+  --border-card: rgba(70, 90, 120, 0.35);
   --shadow-card: 0 30px 84px -44px rgba(5, 10, 20, 0.8);
   --badge-bg: rgba(63, 78, 110, 0.65);
   --badge-text: #eef3ff;
