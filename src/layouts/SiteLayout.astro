@@ -284,15 +284,19 @@ function escapeForRegExp(value: string): string {
 
 const themeCookiePattern = `(?:^|; )${escapeForRegExp(THEME_COOKIE)}=([^;]+)`;
 const themeBootstrapScript = `(function() {
-  try {
-    var stored = localStorage.getItem(${JSON.stringify(THEME_COOKIE)});
-    var cookieMatch = document.cookie.match(new RegExp(${JSON.stringify(themeCookiePattern)}));
-    var theme = stored || (cookieMatch ? decodeURIComponent(cookieMatch[1]) : ${JSON.stringify(initialTheme)});
-    if (theme) {
-      document.documentElement.dataset.theme = theme;
-    }
-  } catch (_) {}
-  document.documentElement.classList.add("js");
+  function applyTheme() {
+    try {
+      var stored = localStorage.getItem(${JSON.stringify(THEME_COOKIE)});
+      var cookieMatch = document.cookie.match(new RegExp(${JSON.stringify(themeCookiePattern)}));
+      var theme = stored || (cookieMatch ? decodeURIComponent(cookieMatch[1]) : ${JSON.stringify(initialTheme)});
+      if (theme) {
+        document.documentElement.dataset.theme = theme;
+      }
+    } catch (_) {}
+    document.documentElement.classList.add("js");
+  }
+  applyTheme();
+  document.addEventListener("astro:after-swap", applyTheme);
 })();`;
 
 const contextualFeeds: FeedLink[] = [];
