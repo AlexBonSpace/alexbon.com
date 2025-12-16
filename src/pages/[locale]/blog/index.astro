@@ -1,15 +1,16 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import PostGrid from "@/components/blog/PostGrid.astro";
+import TypeSection from "@/components/blog/TypeSection.astro";
 import { locales, type Locale } from "@/i18n/config";
 import { contentByLocale } from "@/content";
-import { paginateSummaries, getSummariesByLocale } from "@/lib/post-summaries";
+import { getSummariesByLocale, getSummariesByType } from "@/lib/post-summaries";
 import { buildBlogCollectionJsonLd, buildBlogBreadcrumbJsonLd, getBlogIndexMetadata } from "@/lib/blog-schema";
 import { messagesByLocale } from "@/lib/messages";
 import { notFound } from "@/lib/http";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { toExplorerPosts } from "@/lib/blog-explorer";
 import HeroReflection from "@/components/HeroReflection.astro";
+import { type PostType, getPostTypeLabel, getPostTypeShortDescription, buildPostTypePath } from "@/lib/post-types";
 
 export const prerender = true;
 
@@ -27,8 +28,6 @@ if (!localeParam || !locales.includes(localeParam)) {
 const locale = localeParam;
 const hero = contentByLocale[locale].blog;
 const allPosts = getSummariesByLocale(locale);
-const firstPage = paginateSummaries(locale, 1);
-const pagePosts = toExplorerPosts(firstPage.items, locale);
 const meta = getBlogIndexMetadata(locale);
 const jsonLd = [buildBlogCollectionJsonLd(locale, allPosts), buildBlogBreadcrumbJsonLd(locale)];
 
@@ -44,13 +43,26 @@ const readMoreLabel =
         : "Читати далі"
     : readMoreRaw;
 
-const paginationSummary = translate(messages, "Pagination.pageSummary", {
-  page: firstPage.page,
-  total: firstPage.totalPages,
-});
-const previousLabel = translate(messages, "Pagination.previous");
-const nextLabel = translate(messages, "Pagination.next");
-const prefix = `/${locale}`;
+const viewAllRaw = translate(messages, "Blog.viewAll");
+const viewAllLabel =
+  viewAllRaw === "Blog.viewAll"
+    ? locale === "ru"
+      ? "Смотреть все"
+      : locale === "en"
+        ? "View all"
+        : "Дивитися все"
+    : viewAllRaw;
+
+const POSTS_PER_SECTION = 3;
+const TYPE_ORDER: PostType[] = ["note", "article", "story", "okno"];
+
+const sections = TYPE_ORDER.map((type) => ({
+  type,
+  posts: toExplorerPosts(getSummariesByType(locale, type).slice(0, POSTS_PER_SECTION), locale),
+  label: getPostTypeLabel(locale, type),
+  description: getPostTypeShortDescription(locale, type),
+  typeUrl: buildPostTypePath(locale, type),
+})).filter((section) => section.posts.length > 0);
 ---
 
 <SiteLayout
@@ -67,21 +79,21 @@ const prefix = `/${locale}`;
       <HeroReflection title={hero.heroTitle} description={hero.heroDescription} />
     </div>
 
-    <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <PostGrid
-        posts={pagePosts}
-        readMoreLabel={readMoreLabel}
-        pagination={firstPage.totalPages > 1
-          ? {
-              currentPage: firstPage.page,
-              totalPages: firstPage.totalPages,
-              basePath: `${prefix}/blog/`,
-              summary: paginationSummary,
-              previousLabel,
-              nextLabel,
-            }
-          : undefined}
-      />
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:gap-12 sm:px-6">
+      {
+        sections.map((section, index) => (
+          <TypeSection
+            type={section.type}
+            posts={section.posts}
+            label={section.label}
+            description={section.description}
+            typeUrl={section.typeUrl}
+            readMoreLabel={readMoreLabel}
+            viewAllLabel={viewAllLabel}
+            index={index}
+          />
+        ))
+      }
     </div>
   </main>
 </SiteLayout>

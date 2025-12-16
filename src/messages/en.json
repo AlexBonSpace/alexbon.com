@@ -32,7 +32,8 @@
     "linkText": "I'm here to help you work through it >>>"
   },
   "Blog": {
-    "readMore": "Read more"
+    "readMore": "Read more",
+    "viewAll": "View all"
   },
   "Search": {
     "label": "Search the blog",
@@ -91,7 +92,8 @@
   },
   "Footer": {
     "quote": "I am an explorer describing what I see. Each text here is a mirror reflecting one facet of human experience; one ray of light falling at a particular angle. This is not the ultimate truth nor a universal diagnosis. There are no final answers here. Only an invitation to reflect.",
-    "disclaimerLink": "Important Notice"
+    "disclaimerLink": "Important Notice",
+    "credit": "Design and development: Alex Bon"
   },
   "Disclaimer": {
     "title": "Important Notice",

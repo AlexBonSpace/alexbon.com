@@ -11,8 +11,11 @@ const descriptionArray = Array.isArray(description) ? description : description 
 ---
 
 <section
-  class={`hero-reflection section-card-strong flex flex-col items-center gap-4 rounded-[2.5rem] border border-soft p-6 text-center shadow-card sm:p-10 ${className} overflow-hidden`}
+  class={`hero-reflection section-card-strong flex flex-col items-center gap-4 rounded-[2.5rem] p-6 text-center shadow-card sm:p-10 ${className} overflow-hidden`}
 >
+  {/* Gradient border frame */}
+  <div class="hero-reflection__border" aria-hidden="true"></div>
+
   <div class="hero-reflection__title-wrap" aria-label={title}>
     <h1 class="hero-reflection__title">{title}</h1>
     <span class="hero-reflection__mirror" aria-hidden="true">
@@ -32,3 +35,32 @@ const descriptionArray = Array.isArray(description) ? description : description 
 
   {introCopy ? <p class="hero-reflection__intro mx-auto max-w-3xl">{introCopy}</p> : null}
 </section>
+
+<style>
+  .hero-reflection__border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 70%, var(--color-accent-strong)),
+      var(--color-accent),
+      color-mix(in srgb, var(--color-accent-strong) 80%, var(--color-accent)),
+      var(--color-accent),
+      color-mix(in srgb, var(--color-accent) 70%, var(--color-accent-strong))
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .hero-reflection:hover .hero-reflection__border {
+    opacity: 0.8;
+  }
+</style>

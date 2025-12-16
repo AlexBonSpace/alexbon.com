@@ -116,7 +116,12 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-5xl px-4 sm:px-6">
-      <article class="section-card-strong flex flex-col gap-10 rounded-[2.5rem] border border-soft p-6 sm:p-10">
+      <article
+        class:list={[
+          "section-card-strong accent-card flex flex-col gap-10 rounded-[2.5rem] border border-soft p-6 sm:p-10",
+          `type-accent--${post.type}`,
+        ]}
+      >
         <header class="flex flex-col gap-4">
           <a
             href={ensureTrailingSlash(typeHref)}
@@ -182,10 +187,16 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                 const itemTypeLabel = getPostTypeLabel(locale, item.type);
                 const itemTypeHref = ensureTrailingSlash(buildPostTypePath(locale, item.type));
                 const snippet = item.cardSnippet?.trim() || item.summary || item.description || item.plainText || "";
+                const typeAccentClass = `type-accent--${item.type}`;
 
                 if (item.type === "note") {
                   return (
-                    <article class="blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6">
+                    <article
+                      class:list={[
+                        "blog-card accent-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6",
+                        typeAccentClass,
+                      ]}
+                    >
                       <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
                         <a
                           href={itemTypeHref}
@@ -212,7 +223,12 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
                 }
 
                 return (
-                  <article class="blog-card flex w-full flex-col gap-5 rounded-[2.25rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-7">
+                  <article
+                    class:list={[
+                      "blog-card accent-card flex w-full flex-col gap-5 rounded-[2.25rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-7",
+                      typeAccentClass,
+                    ]}
+                  >
                     <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
                       <a
                         href={itemTypeHref}

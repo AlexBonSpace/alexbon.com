@@ -316,6 +316,34 @@ button:focus-visible {
 .navbar-shell {
   background-color: var(--color-nav-surface);
   border-color: color-mix(in srgb, var(--color-nav-border) 65%, transparent);
+  position: relative;
+}
+
+.navbar-shell::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent) 60%, var(--color-accent-strong)),
+    var(--color-accent),
+    color-mix(in srgb, var(--color-accent-strong) 70%, var(--color-accent)),
+    var(--color-accent),
+    color-mix(in srgb, var(--color-accent) 60%, var(--color-accent-strong)),
+    transparent
+  );
+  border-radius: 2px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.navbar-shell:hover::after {
+  opacity: 0.8;
 }
 
 .language-links {
@@ -398,6 +426,25 @@ button:focus-visible {
   margin: 0;
 }
 
+.site-footer__credit {
+  margin: 2rem auto 0;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+}
+
+.site-footer__credit-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.site-footer__credit-link:hover {
+  color: var(--color-accent);
+}
+
 .text-nav-heading {
   color: var(--color-nav-text);
 }
@@ -465,6 +512,10 @@ button:focus-visible {
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
   .bg-accent {
     background-color: var(--color-accent);
   }
@@ -705,6 +756,130 @@ button:focus-visible {
 
   .blog-card .button-primary:hover {
     color: #ffffff;
+  }
+
+  /* ============================================
+     TYPE ACCENT SYSTEM
+     Reusable accent colors for post type sections
+     ============================================ */
+
+  /* Base accent variables - apply to containers to cascade to children */
+  .type-accent--note {
+    --type-accent-hue: 45;
+    --type-accent-sat: 85%;
+    --type-accent-light: 55%;
+  }
+
+  .type-accent--article {
+    --type-accent-hue: 160;
+    --type-accent-sat: 50%;
+    --type-accent-light: 40%;
+  }
+
+  .type-accent--story {
+    --type-accent-hue: 220;
+    --type-accent-sat: 55%;
+    --type-accent-light: 50%;
+  }
+
+  .type-accent--okno {
+    --type-accent-hue: 25;
+    --type-accent-sat: 80%;
+    --type-accent-light: 50%;
+  }
+
+  /* Accent card with left stripe - inherits type accent from parent */
+  .accent-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .accent-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      hsl(calc(var(--type-accent-hue, 30) + 15), var(--type-accent-sat, 70%), calc(var(--type-accent-light, 50%) + 8%)),
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      transparent
+    );
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .accent-card:hover::before {
+    opacity: 0.85;
+  }
+
+  /* Type hero with colored frame border */
+  .type-hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .type-hero__border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 3px;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), calc(var(--type-accent-light, 50%) + 5%)),
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      hsl(calc(var(--type-accent-hue, 30) + 20), var(--type-accent-sat, 70%), calc(var(--type-accent-light, 50%) - 5%)),
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), calc(var(--type-accent-light, 50%) + 5%))
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .type-hero:hover .type-hero__border {
+    opacity: 0.85;
+  }
+
+  /* Type hero accent line on left edge */
+  .type-hero__accent {
+    position: absolute;
+    left: 0;
+    top: 10%;
+    bottom: 10%;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      hsl(
+        calc(var(--type-accent-hue, 30) + 20),
+        var(--type-accent-sat, 70%),
+        calc(var(--type-accent-light, 50%) + 10%)
+      ),
+      hsl(var(--type-accent-hue, 30), var(--type-accent-sat, 70%), var(--type-accent-light, 50%)),
+      transparent
+    );
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .type-hero:hover .type-hero__accent {
+    opacity: 1;
   }
 }
 

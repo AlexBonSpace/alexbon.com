@@ -1,0 +1,40 @@
+---
+import type { PostType } from "@/lib/post-types";
+
+interface Props {
+  type: PostType;
+  label: string;
+  description: string;
+  className?: string;
+}
+
+const { type, label, description, className = "" } = Astro.props as Props;
+
+const typeAccentClass = `type-accent--${type}`;
+---
+
+<section
+  class:list={[
+    "type-hero section-card-strong flex flex-col gap-4 rounded-[2.5rem] border border-soft p-6 shadow-card sm:p-10",
+    typeAccentClass,
+    className,
+  ]}
+>
+  {/* Gradient border frame */}
+  <div class="type-hero__border" aria-hidden="true"></div>
+
+  {/* Left accent line */}
+  <div class="type-hero__accent" aria-hidden="true"></div>
+
+  <div class="relative z-10 flex flex-col items-center gap-4 text-center">
+    <span
+      class="badge-soft inline-flex w-fit items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em]"
+    >
+      {label}
+    </span>
+    <h1 class="font-display text-[clamp(2.2rem,5.5vw,3.2rem)] font-semibold leading-tight tracking-tight text-strong">
+      {label}
+    </h1>
+    <p class="max-w-2xl text-[1.05rem] leading-relaxed text-muted">{description}</p>
+  </div>
+</section>

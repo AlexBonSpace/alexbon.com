@@ -1,5 +1,6 @@
 ---
 import type { ExplorerPostView } from "@/lib/blog-explorer";
+import type { PostType } from "@/lib/post-types";
 
 type PaginationMeta = {
   currentPage: number;
@@ -14,9 +15,16 @@ interface PostGridProps {
   posts: ExplorerPostView[];
   readMoreLabel: string;
   pagination?: PaginationMeta;
+  /** If set, applies this type's accent color to the entire grid container */
+  sectionType?: PostType;
+  /** If true, applies per-card accent based on each post's type (default: false) */
+  perCardAccent?: boolean;
 }
 
-const { posts, readMoreLabel, pagination } = Astro.props as PostGridProps;
+const { posts, readMoreLabel, pagination, sectionType, perCardAccent = false } = Astro.props as PostGridProps;
+
+// Helper to get accent class for a post type
+const getTypeAccentClass = (type: PostType) => `type-accent--${type}`;
 
 const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
 
@@ -29,14 +37,23 @@ const buildPageHref = (basePath: string, page: number) => {
 };
 ---
 
-<section class="flex flex-col gap-6">
+<section class:list={["flex flex-col gap-6", sectionType && getTypeAccentClass(sectionType)]}>
   {
     posts.length > 0 ? (
       <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {posts.map((post) =>
-          post.type === "note" ? (
+        {posts.map((post) => {
+          // Determine the accent class for this card
+          const cardAccentClass = perCardAccent ? getTypeAccentClass(post.type) : "";
+          // Apply accent-card class when either sectionType is set or perCardAccent is true
+          const hasAccent = sectionType || perCardAccent;
+
+          return post.type === "note" ? (
             <article
-              class="blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6"
+              class:list={[
+                "blog-card flex w-full flex-col gap-3 rounded-3xl border border-soft p-5 transition-transform duration-200 hover:-translate-y-0.5 sm:p-6",
+                hasAccent && "accent-card",
+                cardAccentClass,
+              ]}
               key={post.slug}
             >
               <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
@@ -61,7 +78,11 @@ const buildPageHref = (basePath: string, page: number) => {
             </article>
           ) : (
             <article
-              class="blog-card flex w-full flex-col gap-5 rounded-[2.5rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-8"
+              class:list={[
+                "blog-card flex w-full flex-col gap-5 rounded-[2.5rem] border border-soft p-6 transition-transform duration-200 hover:-translate-y-1 sm:p-8",
+                hasAccent && "accent-card",
+                cardAccentClass,
+              ]}
               key={post.slug}
             >
               <div class="flex items-center text-xs font-semibold uppercase tracking-[0.28em] text-muted">
@@ -94,8 +115,8 @@ const buildPageHref = (basePath: string, page: number) => {
                 </a>
               </div>
             </article>
-          ),
-        )}
+          );
+        })}
       </div>
     ) : (
       <div class="blog-card col-span-full flex flex-col items-center gap-3 rounded-[2rem] border border-soft p-10 text-center text-primary">

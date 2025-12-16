@@ -174,15 +174,9 @@ const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) 
 });
 
 const FOOTER_SOCIAL_LINKS = {
-  ru: [
-    { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
-    { label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" },
-  ],
-  ua: [{ label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" }],
-  en: [
-    { label: "GitHub", href: "https://github.com/AlexBonSpace/alexbon.com" },
-    { label: "X (Twitter)", href: "https://x.com/AlexBonStories" },
-  ],
+  ru: [{ label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" }],
+  ua: [],
+  en: [],
 } as const;
 
 const feedFullUrl = `${SITE_URL}/${locale}/feed-full.json`;
@@ -443,6 +437,14 @@ const FONT_STYLESHEET =
     </div>
 
     <footer class="site-footer" aria-label="Footer">
+      <p class="site-footer__credit">
+        {messages.Footer.credit} (<a
+          href="https://github.com/AlexBonSpace/alexbon.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="site-footer__credit-link">GitHub</a
+        >)
+      </p>
       <div class="site-footer__link-blocks">
         <nav class="language-links language-links--footer" aria-label="Languages">
           <ul class="language-links__list">

@@ -12,7 +12,7 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   article: {
     ru: {
       label: "Карты внутреннего мира",
-      description: "Глубокие статьи о психологии, осознанности и устройстве нашего сознания. Материалов: {count}.",
+      description: "Статьи о психологии, осознанности и устройстве нашего сознания. Материалов: {count}.",
     },
     ua: {
       label: "Карти внутрішнього світу",
@@ -88,6 +88,11 @@ export function getPostTypeLabel(locale: Locale, type: PostType): string {
 export function getPostTypeDescription(locale: Locale, type: PostType, count: number): string {
   const template = resolveCopy(locale, type).description;
   return template.replace("{count}", formatCount(locale, count));
+}
+
+export function getPostTypeShortDescription(locale: Locale, type: PostType): string {
+  const template = resolveCopy(locale, type).description;
+  return template.replace(/ Материалов: \{count\}\.| Матеріалів: \{count\}\.| Entries: \{count\}\./, "");
 }
 
 export function buildPostTypePath(locale: Locale, type: PostType): string {

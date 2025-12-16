@@ -1,12 +1,12 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostGrid from "@/components/blog/PostGrid.astro";
+import TypeHero from "@/components/blog/TypeHero.astro";
 import { locales, type Locale } from "@/i18n/config";
 import { getSummariesByType, paginateSummariesByType } from "@/lib/post-summaries";
 import {
   buildPostTypePath,
   buildPostTypeRelativePath,
-  getPostTypeLabel,
   getPostTypePageDescription,
   getPostTypePageTitle,
   isValidPostType,
@@ -60,7 +60,6 @@ if (pagination.totalCount === 0 || pageNumber > pagination.totalPages) {
 
 const allPosts = getSummariesByType(locale, type);
 const postsView = toExplorerPosts(pagination.items, locale);
-const label = getPostTypeLabel(locale, type);
 const pageTitle = getPostTypePageTitle(locale, type, pageNumber);
 const pageDescription = getPostTypePageDescription(locale, type, allPosts.length, pageNumber);
 const relativePath = buildPostTypeRelativePath(type);
@@ -112,21 +111,14 @@ const prefix = `/${locale}`;
 >
   <main class="relative z-10 flex flex-col gap-10 py-8 sm:py-12">
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
-      <section
-        class="section-card flex flex-col gap-4 rounded-[2rem] border border-soft p-6 text-sm shadow-card sm:p-8"
-      >
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted">{label}</p>
-        <h1 class="text-[clamp(1.8rem,4.5vw,2.6rem)] font-semibold leading-tight text-strong">
-          {pageTitle}
-        </h1>
-        <p class="text-primary">{pageDescription}</p>
-      </section>
+      <TypeHero type={type} label={pageTitle} description={pageDescription} />
     </div>
 
     <div class="mx-auto w-full max-w-6xl px-4 sm:px-6">
       <PostGrid
         posts={postsView}
         readMoreLabel={readMoreLabel}
+        sectionType={type}
         pagination={{
           currentPage: pageNumber,
           totalPages: pagination.totalPages,
