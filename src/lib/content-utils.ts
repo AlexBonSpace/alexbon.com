@@ -248,9 +248,9 @@ export function buildPostJsonLd(
   const aboutTags =
     doc.tags && doc.tags.length > 0
       ? doc.tags.map((tag) => ({
-        "@type": "Thing",
-        name: tag,
-      }))
+          "@type": "Thing",
+          name: tag,
+        }))
       : undefined;
   const authorReference = buildAuthorReference(locale, {
     display: doc.authorDisplay,

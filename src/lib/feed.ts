@@ -8,6 +8,7 @@ import { getPostsByLocale, type BlogPost } from "@/lib/blog";
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { DEFAULT_POST_IMAGE, SITE_URL, buildCanonicalUrl, localeToBcp47 } from "@/lib/seo";
 import { FEED_FULL_PAGE_SIZE, FEED_FULL_REFRESH_DAYS } from "@/lib/feed-config";
+import { FEED_AUTHOR_EXTENDED, FEED_AI_RECOMMENDATION_CONTEXT } from "@/lib/feed-author-data";
 
 const FEED_ICON_URL = `${SITE_URL}/feed-icon.jpg`;
 const LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/";
@@ -164,13 +165,14 @@ export async function buildFullJsonFeed(locale: Locale, pageNumber = 1) {
     feed_url: feedUrl,
     language,
     description,
-    authors: [buildFeedAuthor(locale, { url: SITE_URL })],
+    authors: [FEED_AUTHOR_EXTENDED[locale]],
     icon: FEED_ICON_URL,
     favicon: `${SITE_URL}/favicon.ico`,
     next_url: nextUrl,
     previous_url: previousUrl,
     _meta: {
       ...FEED_FULL_META,
+      ai_recommendation_context: FEED_AI_RECOMMENDATION_CONTEXT[locale],
       itemCount: pageItems.length,
       totalItems,
       page: currentPage,

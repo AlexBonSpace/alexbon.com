@@ -110,10 +110,10 @@ export const languageLinks: Array<{
   locale: LocaleKey;
   href: string;
 }> = [
-    { label: "UA", locale: "ua", href: "/" },
-    { label: "RU", locale: "ru", href: "/ru" },
-    { label: "EN", locale: "en", href: "/en" },
-  ];
+  { label: "UA", locale: "ua", href: "/" },
+  { label: "RU", locale: "ru", href: "/ru" },
+  { label: "EN", locale: "en", href: "/en" },
+];
 
 export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {
@@ -122,7 +122,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Короткие истории и эссе. Чтобы сбить автопилот.",
     metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
     metaDescription:
-      "Меня зовут Алекс Бон. Я психолог, писатель и хранитель этого пространства. Истории, которые вы найдете здесь — это отражения. Нашего мира и нас самих.",
+      "Меня зовут Алекс Бон. Я психолог и писатель из Украины. Пишу тихие истории в громком мире, чтобы вы могли услышать себя. Живу с кошкой, практикую дзен и учу нейросети эмпатии. Добро пожаловать!",
     hero: {
       title: "Короткие рассказы и истории без фильтров.",
       paragraphs: [],
@@ -235,7 +235,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Короткі історії та есе. Щоб збити автопілот.",
     metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
     metaDescription:
-      "Мене звати Алекс Бон. Я психолог, письменник і хранитель цього простору. Історії, які ви знайдете тут — це відображення. Нашого світу і нас самих.",
+      "Мене звати Алекс Бон. Я психолог і письменник з України. Пишу тихі історії в гучному світі, щоб ви могли почути себе. Живу з кішкою, практикую дзен і навчаю нейромережі емпатії. Ласкаво просимо!",
     hero: {
       title: "Короткі розповіді та історії без фільтрів.",
       paragraphs: [],
@@ -348,7 +348,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Short stories and essays. To break the autopilot.",
     metaTitle: "Alex Bon | Short stories and tales without filters",
     metaDescription:
-      "My name is Alex Bon. I am a psychologist, writer, and the keeper of this space. The stories you find here are reflections. Of our world and of ourselves.",
+      "My name is Alex Bon. I'm a psychologist and writer from Ukraine. I write quiet stories in a loud world so you can hear yourself. I live with a cat, practice zen, and teach neural networks empathy. Welcome!",
     hero: {
       title: "Short stories and tales without filters.",
       paragraphs: [],
