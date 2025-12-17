@@ -4,9 +4,13 @@ interface Props {
   description?: string | string[] | null;
   introCopy?: string | null;
   className?: string;
+  actionButton?: {
+    label: string;
+    href: string;
+  } | null;
 }
 
-const { title, description, introCopy, className = "" } = Astro.props as Props;
+const { title, description, introCopy, className = "", actionButton } = Astro.props as Props;
 const descriptionArray = Array.isArray(description) ? description : description ? [description] : [];
 ---
 
@@ -34,6 +38,20 @@ const descriptionArray = Array.isArray(description) ? description : description 
   }
 
   {introCopy ? <p class="hero-reflection__intro mx-auto max-w-3xl">{introCopy}</p> : null}
+
+  {
+    actionButton ? (
+      <a href={actionButton.href} class="action-btn action-btn--lg mt-2">
+        <span class="action-btn__text">{actionButton.label}</span>
+        <span class="action-btn__arrow" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+        <span class="action-btn__shimmer" aria-hidden="true" />
+      </a>
+    ) : null
+  }
 </section>
 
 <style>

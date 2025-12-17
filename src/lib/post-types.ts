@@ -55,15 +55,15 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   okno: {
     ru: {
       label: "Окно во двор",
-      description: "Всё, что не поместилось в другие разделы, но жалко выбрасывать :) Материалов: {count}.",
+      description: "Свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться. Материалов: {count}.",
     },
     ua: {
       label: "Вікно у двір",
-      description: "Усе, що не влізло в інші розділи, але шкода викидати :) Матеріалів: {count}.",
+      description: "Вільний потік. Тексти, що дивують, надихають або змушують усміхнутися. Матеріалів: {count}.",
     },
     en: {
       label: "Window to the Yard",
-      description: "Everything that didn't fit elsewhere but was too good to throw away :) Entries: {count}.",
+      description: "Free flow. Texts that surprise, inspire, or make you smile. Entries: {count}.",
     },
   },
 };

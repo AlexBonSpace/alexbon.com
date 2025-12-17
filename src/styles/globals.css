@@ -748,6 +748,122 @@ button:focus-visible {
     transform: translateY(0);
   }
 
+  /* ============================================
+     UNIFIED ACTION BUTTON
+     Pill-style button with border, arrow, gradient fill & shimmer
+     ============================================ */
+  .action-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-accent);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: var(--color-text-strong);
+    background: var(--surface-card);
+    border: 1.5px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+    border-radius: 100px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px -2px color-mix(in srgb, var(--color-accent) 15%, transparent);
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .action-btn:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--color-accent) 35%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .action-btn:active {
+    transform: translateY(0);
+  }
+
+  .action-btn__text {
+    position: relative;
+    z-index: 2;
+  }
+
+  .action-btn__arrow {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .action-btn:hover .action-btn__arrow {
+    transform: translateX(3px);
+  }
+
+  /* Shimmer effect on hover */
+  .action-btn__shimmer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-accent) 15%, transparent),
+      transparent
+    );
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+
+  .action-btn:hover .action-btn__shimmer {
+    animation: action-btn-shimmer 0.5s ease forwards;
+  }
+
+  @keyframes action-btn-shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Focus state for accessibility */
+  .action-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Size variants */
+  .action-btn--sm {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    gap: 0.4rem;
+  }
+
+  .action-btn--lg {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 639px) {
+    .action-btn {
+      padding: 0.7rem 1.3rem;
+      font-size: 0.88rem;
+    }
+
+    .action-btn--lg {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  }
+
   .blog-card .button-primary {
     background-image: linear-gradient(135deg, #2158ad, #3676d1, #2158ad);
     box-shadow: 0 18px 48px -24px rgba(33, 88, 173, 0.45);

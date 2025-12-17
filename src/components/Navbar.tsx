@@ -123,7 +123,10 @@ export function Navbar({
       <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
           <div className="flex w-full items-center justify-between gap-3 sm:flex-1">
-            <h1 className="text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
+            {/* Spacer для баланса — такой же ширины как кнопка меню */}
+            <div className="min-h-[44px] w-[68px] shrink-0" aria-hidden="true" />
+
+            <h1 className="flex-1 text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
               <a
                 href={buildHref("/")}
                 aria-label={`${brandName}: ${tagline}`}
@@ -140,7 +143,7 @@ export function Navbar({
               aria-controls="navbar-menu"
               onClick={toggleMobileMenu}
               aria-label={mobileMenuLabel}
-              className="nav-pill ml-auto inline-flex min-h-[44px] items-center justify-center gap-3 rounded-full border border-soft px-4 py-2 text-base font-semibold text-nav transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+              className="nav-pill inline-flex min-h-[44px] shrink-0 items-center justify-center gap-3 rounded-full border border-soft px-4 py-2 text-base font-semibold text-nav transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
             >
               <span aria-hidden="true" className="relative block h-5 w-6">
                 <span

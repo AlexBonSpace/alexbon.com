@@ -27,9 +27,9 @@ const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
 };
 
 const OKNO_SECTION_BY_LOCALE: Record<Locale, string> = {
-  ua: "Вікно у двір: усе, що не влізло в інші розділи, але шкода викидати :)",
-  ru: "Окно во двор: всё, что не поместилось в другие разделы, но жалко выбрасывать :)",
-  en: "Window to the Yard: everything that didn't fit elsewhere but was too good to throw away :)",
+  ua: "Вікно у двір: вільний потік. Тексти, що дивують, надихають або змушують усміхнутися.",
+  ru: "Окно во двор: свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться.",
+  en: "Window to the Yard: free flow. Texts that surprise, inspire, or make you smile.",
 };
 
 export const AUTHOR_DISPLAY_BY_LOCALE: Record<Locale, string> = {
@@ -248,9 +248,9 @@ export function buildPostJsonLd(
   const aboutTags =
     doc.tags && doc.tags.length > 0
       ? doc.tags.map((tag) => ({
-          "@type": "Thing",
-          name: tag,
-        }))
+        "@type": "Thing",
+        name: tag,
+      }))
       : undefined;
   const authorReference = buildAuthorReference(locale, {
     display: doc.authorDisplay,

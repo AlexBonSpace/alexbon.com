@@ -123,12 +123,14 @@ const accentClass = sectionAccents[type] || "";
     }
 
     <div class="flex justify-center pt-2">
-      <a
-        href={ensureTrailingSlash(typeUrl)}
-        class="hub-section__view-all inline-flex items-center gap-2 rounded-full border-2 border-current/20 bg-surface px-6 py-3 text-sm font-semibold text-primary shadow-card transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
-      >
-        {viewAllLabel}
-        <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+      <a href={ensureTrailingSlash(typeUrl)} class="action-btn">
+        <span class="action-btn__text">{viewAllLabel}</span>
+        <span class="action-btn__arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+        <span class="action-btn__shimmer" aria-hidden="true"></span>
       </a>
     </div>
   </div>
@@ -289,27 +291,4 @@ const accentClass = sectionAccents[type] || "";
     }
   }
 
-  /* View all button enhancement */
-  .hub-section__view-all {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hub-section__view-all::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, var(--color-accent) 10%, transparent),
-      transparent
-    );
-    transform: translateX(-100%);
-    transition: transform 0.5s ease;
-  }
-
-  .hub-section__view-all:hover::before {
-    transform: translateX(100%);
-  }
 </style>

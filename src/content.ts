@@ -98,6 +98,10 @@ export interface LandingContent {
     heroTitle: string;
     metaTitle: string;
     heroDescription: string | string[];
+    aboutButton?: {
+      label: string;
+      href: string;
+    };
   };
 }
 
@@ -106,16 +110,16 @@ export const languageLinks: Array<{
   locale: LocaleKey;
   href: string;
 }> = [
-  { label: "UA", locale: "ua", href: "/" },
-  { label: "RU", locale: "ru", href: "/ru" },
-  { label: "EN", locale: "en", href: "/en" },
-];
+    { label: "UA", locale: "ua", href: "/" },
+    { label: "RU", locale: "ru", href: "/ru" },
+    { label: "EN", locale: "en", href: "/en" },
+  ];
 
 export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {
     locale: "ru",
     brandName: "Алекс Бон",
-    tagline: "Короткие рассказы и истории без фильтров. Чтобы сбить автопилот.",
+    tagline: "Короткие истории и эссе. Чтобы сбить автопилот.",
     metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
     metaDescription:
       "Меня зовут Алекс Бон. Я психолог, писатель и хранитель этого пространства. Истории, которые вы найдете здесь — это отражения. Нашего мира и нас самих.",
@@ -128,10 +132,10 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "/images/about-portrait-hero.webp",
       imageAlt: "Александр, писатель и психолог",
       paragraphs: [
-        "Привет, меня зовут Александр. Я психолог и писатель. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
+        "Привет, меня зовут Александр. Я психолог. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
         "Я верю, что распутывать эти клубки можно двумя способами.",
-        "Первый — через истории, в которых вдруг узнаёшь себя. Именно для этого я веду этот блог. Тексты созданы в тандеме с ИИ: смыслы и чувства — мои, огранка — нейросети.",
-        "Второй — в тишине личной сессии, через живой диалог. Если что-то из прочитанного срезонировало и хочется разобраться глубже — добро пожаловать!",
+        "Первый — через истории, в которых вдруг узнаёшь себя. Именно для этого я веду этот блог.",
+        "Второй — в тишине личной сессии, через живой диалог. Если что-то из прочитанного откликнулось или у вас есть свой «клубок», который пора распутать — добро пожаловать!",
       ],
     },
     process: {
@@ -193,7 +197,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
           details: [
             {
               icon: "monitor",
-              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн",
+              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн / 30 € / 35 $",
               subtext:
                 "Я держу несколько «социальных мест» со сниженной стоимостью для тех, кто сейчас в сложной ситуации. Спросите меня об этом на первой встрече.",
             },
@@ -215,16 +219,20 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Отражения — короткие рассказы и истории | Алекс Бон",
       heroDescription: [
         "Меня зовут Алекс Бон. Я психолог и писатель из Украины.",
-        "Здесь нет советов и готовых ответов. Только приглашение к размышлению.",
-        "Я не учу, как стать «лучшей версией себя». Я предлагаю перестать с собой воевать.",
-        "Этот блог — пространство отражений, чтобы сбить автопилот. Добро пожаловать.",
+        "Пишу тихие истории в громком мире, чтобы вы могли услышать себя.",
+        "Живу с кошкой, практикую дзен и учу нейросети эмпатии.",
+        "Добро пожаловать!",
       ],
+      aboutButton: {
+        label: "Обо мне",
+        href: "/ru/about/",
+      },
     },
   },
   ua: {
     locale: "ua",
     brandName: "Алекс Бон",
-    tagline: "Короткі розповіді та історії без фільтрів. Щоб збити автопілот.",
+    tagline: "Короткі історії та есе. Щоб збити автопілот.",
     metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
     metaDescription:
       "Мене звати Алекс Бон. Я психолог, письменник і хранитель цього простору. Історії, які ви знайдете тут — це відображення. Нашого світу і нас самих.",
@@ -237,10 +245,10 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "/images/about-portrait-hero.webp",
       imageAlt: "Олександр, письменник і психолог",
       paragraphs: [
-        "Привіт, мене звати Олександр. Я психолог і письменник. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
+        "Привіт, мене звати Олександр. Я психолог. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
         "Я вірю, що розплутувати ці клубки можна двома способами.",
-        "Перший — через історії, в яких раптом впізнаєш себе. Саме для цього я веду цей блог. Тексти створені в тандемі з ШІ: сенси та почуття — мої, огранка — нейромережі.",
-        "Другий — у тиші особистої сесії, через живий діалог. Якщо щось із прочитаного зрезонувало і хочеться розібратися глибше — ласкаво просимо!",
+        "Перший — через історії, в яких раптом впізнаєш себе. Саме для цього я веду цей блог.",
+        "Другий — у тиші особистої сесії, через живий діалог. Якщо щось із прочитаного відгукнулося або у вас є свій «клубок», який час розплутати — ласкаво просимо!",
       ],
     },
     process: {
@@ -293,7 +301,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
           title: "Перший крок — зустріч-знайомство (безкоштовно)",
           icon: "video",
           description:
-            "20 хвилин онлайн. Це не консультація, а простий людський розговір, щоб зрозуміти, чи комфортно нам один з одним і чи зможу я допомогти саме у вашій ситуації. Жодних зобов'язань.",
+            "20 хвилин онлайн. Це не консультація, а проста людська розмова, щоб зрозуміти, чи комфортно нам один з одним і чи зможу я допомогти саме у вашій ситуації. Жодних зобов'язань.",
         },
         {
           title: "Глибока робота (якщо вирішимо продовжити)",
@@ -302,7 +310,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
           details: [
             {
               icon: "monitor",
-              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн",
+              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн / 30 € / 35 $",
               subtext:
                 "Я тримаю декілька «соціальних місць» зі зниженою вартістю для тих, хто зараз у складній ситуації. Запитайте мене про це на першій зустрічі.",
             },
@@ -324,16 +332,20 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Відображення — короткі розповіді та історії | Алекс Бон",
       heroDescription: [
         "Мене звати Алекс Бон. Я психолог і письменник з України.",
-        "Тут немає порад і готових відповідей. Тільки запрошення до роздумів.",
-        "Я не вчу, як стати «кращою версією себе». Я пропоную перестати з собою воювати.",
-        "Цей блог — простір відображень, щоб збити автопілот. Ласкаво просимо.",
+        "Пишу тихі історії в гучному світі, щоб ви могли почути себе.",
+        "Живу з кішкою, практикую дзен і вчу нейромережі емпатії.",
+        "Ласкаво просимо!",
       ],
+      aboutButton: {
+        label: "Про мене",
+        href: "/ua/about/",
+      },
     },
   },
   en: {
     locale: "en",
     brandName: "Alex Bon",
-    tagline: "Short stories and tales without filters. To break the autopilot.",
+    tagline: "Short stories and essays. To break the autopilot.",
     metaTitle: "Alex Bon | Short stories and tales without filters",
     metaDescription:
       "My name is Alex Bon. I am a psychologist, writer, and the keeper of this space. The stories you find here are reflections. Of our world and of ourselves.",
@@ -346,10 +358,10 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "/images/about-portrait-hero.webp",
       imageAlt: "Alexander, writer and psychologist",
       paragraphs: [
-        "Hi, my name is Alexander. I am a psychologist, writer, and the keeper of this space.",
-        "The stories you find here are reflections. Of our world and of ourselves. A way to look from the outside and at least slightly break the autopilot in which we exist most of the time.",
-        "The texts are created in tandem with AI. The meanings, feelings, and plots are mine; the polish is the neural network's.",
-        "If you want to discuss what you've read or just talk, person to person, I'm always available (I write in English better than I speak it, so let's keep to text):",
+        "Hi, my name is Alexander. I'm a psychologist. If we drop the terminology, I'm simply someone who helps untangle the knots of thoughts, emotions, and feelings.",
+        "I believe there are two ways to do this.",
+        "The first is through stories where you suddenly recognize yourself. That is exactly why I run this blog.",
+        "The second is through dialogue. While I offer professional therapy only in Russian and Ukrainian, I am always open to a friendly chat in English. If a story resonated with you and you want to share your thoughts — feel free to message me. I use translation tools to communicate, so let's keep it to text :)",
       ],
     },
     process: {
@@ -386,13 +398,13 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "A bit about me",
+      heading: "My Story",
       image: "/images/about-story-portrait.webp",
       imageAlt: "Alex Bon looking at the camera, leaning on a table",
       paragraphs: [
-        "I didn't become a psychologist by plan. My path began unexpectedly — in the army. In harsh conditions, in remote forests hundreds of kilometers from home, I understood a paradoxical thing: you can be in hell but feel like you're in paradise. The universe loves to joke, dropping insights in the most unexpected places :)",
-        'I traveled a lot, lived in Yemen, India, and England, meditated in ashrams, got two higher education degrees (economics and psychology), worked in various fields and positions — from "fetch and carry" to founder and director of my own company.',
-        "I was married, divorced, maintained good relationships, and have lived alone for the last ten years. Well, to be precise, not entirely alone — I have a cat. This experience hasn't made me a guru, but it taught me to notice in other people's stories the threads that once ran through my own.",
+        "Becoming a psychologist wasn't part of the plan. My path began unexpectedly — in the army. In harsh conditions, in remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can be in hell but feel like you're in paradise. The universe loves to joke, dropping insights in the most unexpected places.",
+        "I traveled a lot, lived in Yemen, India, and England, meditated in ashrams, and earned two degrees (economics and psychology). I've worked in various fields — from running errands to being the founder of my own company.",
+        "I was married, divorced, maintained good relationships, and have been living on my own for the last ten years. Well, not entirely alone — I have a cat. This experience hasn't made me a guru, but it taught me to notice the threads in other people's stories that are woven into my own life too.",
       ],
     },
     footerNote:
@@ -403,10 +415,14 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Reflections — short stories and tales | Alex Bon",
       heroDescription: [
         "My name is Alex Bon. I'm a psychologist and writer from Ukraine.",
-        "There are no tips or ready answers here. Just an invitation to reflect.",
-        'I don\'t teach how to become "the best version of yourself." I offer to stop waging war on yourself.',
-        "This blog is a space of reflections, to break the autopilot. Welcome.",
+        "I write quiet stories in a loud world so you can hear yourself.",
+        "I live with a cat, practice Zen, and teach neural networks empathy.",
+        "Welcome!",
       ],
+      aboutButton: {
+        label: "About me",
+        href: "/en/about/",
+      },
     },
   },
 };
