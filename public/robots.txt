@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.alexbon.com/sitemap.xml
-LLMs: https://www.alexbon.com/llms.txt
+# LLMs: https://www.alexbon.com/llms.txt

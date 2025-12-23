@@ -422,31 +422,31 @@ const FONT_STYLESHEET =
       </nav>
     </noscript>
     <slot />
-    <div class="container mx-auto px-4 py-12 text-center max-w-2xl border-t border-gray-100 dark:border-gray-800 mt-12">
-      <p class="text-lg text-primary italic font-serif leading-relaxed">
+
+    <!-- Footer Zone 1: Quote -->
+    <div class="footer-quote mt-12">
+      <p class="footer-quote__text">
         "{messages.Footer.quote}"
       </p>
-      <div class="mt-6">
-        <a
-          href={buildLocalizedPath("/disclaimer/", locale)}
-          class="text-sm text-primary hover:text-accent transition-colors underline decoration-1 underline-offset-2"
-        >
-          {messages.Footer.disclaimerLink}
-        </a>
-      </div>
+      <a href={buildLocalizedPath("/disclaimer/", locale)} class="footer-quote__link">
+        {messages.Footer.disclaimerLink}
+      </a>
     </div>
 
-    <footer class="site-footer" aria-label="Footer">
-      <p class="site-footer__credit">
-        {messages.Footer.credit} (<a
-          href="https://github.com/AlexBonSpace/alexbon.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="site-footer__credit-link">GitHub</a
-        >)
-      </p>
-      <div class="site-footer__link-blocks">
-        <nav class="language-links language-links--footer" aria-label="Languages">
+    <!-- Footer divider -->
+    <div class="footer-divider" aria-hidden="true">✦</div>
+
+    <!-- Footer Zone 2: Identity -->
+    <div class="footer-identity">
+      <p class="footer-identity__name">© 2025 {messages.Footer.name}</p>
+      <p class="footer-identity__tagline">{messages.Footer.tagline}</p>
+      <p class="footer-identity__location">{messages.Footer.location}</p>
+    </div>
+
+    <!-- Footer Zone 3: Navigation -->
+    <footer class="footer-nav" aria-label="Footer">
+      <div class="footer-nav__links">
+        <nav class="language-links" aria-label="Languages">
           <ul class="language-links__list">
             {
               languageSwitcherLinks.map((link) => (
@@ -466,7 +466,7 @@ const FONT_STYLESHEET =
         {
           FOOTER_SOCIAL_LINKS[locale]?.length ? (
             <nav
-              class="language-links language-links--footer"
+              class="language-links"
               aria-label={locale === "en" ? "Social links" : locale === "ua" ? "Соціальні мережі" : "Социальные сети"}
             >
               <ul class="language-links__list">
@@ -482,6 +482,14 @@ const FONT_STYLESHEET =
           ) : null
         }
       </div>
+      <p class="footer-nav__credit">
+        {messages.Footer.credit} (<a
+          href="https://github.com/AlexBonSpace/alexbon.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-nav__credit-link">GitHub</a
+        >)
+      </p>
     </footer>
   </body>
 </html>

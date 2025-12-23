@@ -110,10 +110,10 @@ export const languageLinks: Array<{
   locale: LocaleKey;
   href: string;
 }> = [
-    { label: "UA", locale: "ua", href: "/" },
-    { label: "RU", locale: "ru", href: "/ru" },
-    { label: "EN", locale: "en", href: "/en" },
-  ];
+  { label: "UA", locale: "ua", href: "/" },
+  { label: "RU", locale: "ru", href: "/ru" },
+  { label: "EN", locale: "en", href: "/en" },
+];
 
 export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {

@@ -35,6 +35,13 @@ const content = contentByLocale[locale];
 const canonical = buildCanonicalUrl(locale, "/about/");
 const languageAlternates = buildLanguageAlternates("/about/", { locales });
 const personJsonLd = buildAuthorPersonJsonLd(locale);
+
+const aboutTitle: Record<Locale, string> = {
+  ru: "Алекс Бон | Психолог (Киев, Украина)",
+  ua: "Алекс Бон | Психолог (Київ, Україна)",
+  en: "Alex Bon | Psychologist (Kyiv, Ukraine)",
+};
+
 const profileJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -67,7 +74,7 @@ const profileJsonLd = {
 
 <SiteLayout
   locale={locale}
-  title={content.metaTitle}
+  title={aboutTitle[locale]}
   description={content.metaDescription}
   canonical={canonical}
   languageAlternates={languageAlternates}

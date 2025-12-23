@@ -409,39 +409,120 @@ button:focus-visible {
   color: var(--color-accent-contrast);
 }
 
-.site-footer {
-  padding: 0 1rem;
+/* Footer Zone 1: Quote section */
+.footer-quote {
+  position: relative;
+  padding: 3rem 1rem 2rem;
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto;
 }
 
-.site-footer__link-blocks {
-  margin: 3rem auto;
+.footer-quote::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, 16rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border) 20%, var(--color-border) 80%, transparent);
+}
+
+.footer-quote__text {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-primary);
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+.footer-quote__link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-secondary) 40%, transparent);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.footer-quote__link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Footer divider */
+.footer-divider {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  opacity: 0.5;
+  letter-spacing: 0.5em;
+  margin: 0.5rem 0 1.5rem;
+}
+
+/* Footer Zone 2: Identity/Copyright */
+.footer-identity {
+  text-align: center;
+  padding: 0 1rem 2rem;
+  line-height: 1.9;
+}
+
+.footer-identity__name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: 0.02em;
+}
+
+.footer-identity__tagline {
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+}
+
+.footer-identity__location {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* Footer Zone 3: Navigation */
+.footer-nav {
+  background: color-mix(in srgb, var(--color-surface) 50%, transparent);
+  border-top: 1px solid var(--color-border);
+  padding: 2rem 1rem;
+}
+
+.footer-nav__links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-  max-width: min(100%, 60rem);
+  margin-bottom: 1.5rem;
 }
 
-.site-footer__link-blocks .language-links {
+.footer-nav__links .language-links {
   margin: 0;
 }
 
-.site-footer__credit {
-  margin: 2rem auto 0;
+.footer-nav__credit {
   text-align: center;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  color: var(--color-primary);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  letter-spacing: 0.03em;
 }
 
-.site-footer__credit-link {
+.footer-nav__credit-link {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.2s ease;
 }
 
-.site-footer__credit-link:hover {
+.footer-nav__credit-link:hover {
   color: var(--color-accent);
 }
 
