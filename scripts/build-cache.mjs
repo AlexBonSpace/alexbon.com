@@ -83,15 +83,15 @@ function createSearchContent(raw) {
 }
 
 function resolveCollection(segment) {
-  if (segment === "articles" || segment === "stories" || segment === "okno") return segment;
+  if (segment === "articles" || segment === "stories" || segment === "okna") return segment;
   return "notes";
 }
 
 function resolveType(collection, candidate) {
   if (collection === "articles") return "article";
   if (collection === "stories") return "story";
-  if (collection === "okno") return "okno";
-  if (candidate === "article" || candidate === "story" || candidate === "okno") return candidate;
+  if (collection === "okna") return "okna";
+  if (candidate === "article" || candidate === "story" || candidate === "okna") return candidate;
   return "note";
 }
 

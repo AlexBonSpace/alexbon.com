@@ -20,8 +20,8 @@ type PostCollectionEntry = CollectionEntry<"posts">;
 export type BlogPost = {
   slug: string;
   locale: Locale;
-  collection: "articles" | "notes" | "stories" | "okno";
-  type: "note" | "article" | "story" | "okno";
+  collection: "articles" | "notes" | "stories" | "okna";
+  type: "note" | "article" | "story" | "okna";
   title: string;
   description: string;
   canonical: string;
@@ -50,7 +50,7 @@ export type BlogPost = {
 const rawPosts = await getCollection("posts");
 const CARD_SNIPPET_LIMIT = 350;
 
-type PostType = "note" | "article" | "story" | "okno";
+type PostType = "note" | "article" | "story" | "okna";
 
 /**
  * Intelligently truncates text to a limit without cutting words mid-way
@@ -102,21 +102,21 @@ function buildCardSnippet(type: PostType, plainText: string, override?: string):
   return ensureEllipsis(auto || plainText);
 }
 
-function resolveCollection(segment: string | undefined): "articles" | "notes" | "stories" | "okno" {
-  if (segment === "articles" || segment === "stories" || segment === "okno") {
+function resolveCollection(segment: string | undefined): "articles" | "notes" | "stories" | "okna" {
+  if (segment === "articles" || segment === "stories" || segment === "okna") {
     return segment;
   }
   return "notes";
 }
 
 function resolveType(
-  collection: "articles" | "notes" | "stories" | "okno",
+  collection: "articles" | "notes" | "stories" | "okna",
   candidate: string | undefined,
-): "article" | "note" | "story" | "okno" {
+): "article" | "note" | "story" | "okna" {
   if (collection === "articles") return "article";
   if (collection === "stories") return "story";
-  if (collection === "okno") return "okno";
-  if (candidate === "article" || candidate === "story" || candidate === "okno") {
+  if (collection === "okna") return "okna";
+  if (candidate === "article" || candidate === "story" || candidate === "okna") {
     return candidate;
   }
   return "note";

@@ -223,7 +223,7 @@ export function buildAuthorReference(
 export function buildPostJsonLd(
   doc: {
     title: string;
-    type: "note" | "article" | "story" | "okno";
+    type: "note" | "article" | "story" | "okna";
     description: string;
     canonical: string;
     publishedAt: string;
@@ -235,7 +235,7 @@ export function buildPostJsonLd(
     license: string;
     tags: string[];
     image?: string;
-    collection: "articles" | "notes" | "stories" | "okno";
+    collection: "articles" | "notes" | "stories" | "okna";
   },
   slug: string,
   locale: Locale,
@@ -301,7 +301,7 @@ export function buildPostJsonLd(
         genre: STORY_GENRES_BY_LOCALE[locale],
         isFamilyFriendly: true,
       };
-    case "okno":
+    case "okna":
       return {
         ...base,
         "@type": "Article",

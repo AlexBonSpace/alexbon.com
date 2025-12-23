@@ -1,6 +1,6 @@
 import { defaultLocale, type Locale } from "@/i18n/config";
 
-export const POST_TYPES = ["article", "story", "note", "okno"] as const;
+export const POST_TYPES = ["article", "story", "note", "okna"] as const;
 export type PostType = (typeof POST_TYPES)[number];
 
 type TypeCopy = {
@@ -12,59 +12,69 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   article: {
     ru: {
       label: "Карты внутреннего мира",
-      description: "Статьи о психологии, осознанности и устройстве нашего сознания. Материалов: {count}.",
+      description:
+        "Статьи о психологии, осознанности и устройстве нашего сознания. Разбираем устройство человеческой психики и ищем пути к осознанности, чтобы лучше понимать себя и свои реакции. Материалов: {count}.",
     },
     ua: {
       label: "Карти внутрішнього світу",
-      description: "Глибокі статті про психологію, усвідомленість і будову нашої свідомості. Матеріалів: {count}.",
+      description:
+        "Статті про психологію, усвідомленість і будову нашої свідомості. Розбираємо устрій людської психіки та шукаємо шляхи до усвідомленості, щоб краще розуміти себе та свої реакції. Матеріалів: {count}.",
     },
     en: {
       label: "Inner World Maps",
-      description: "In-depth essays on psychology, mindfulness, and how the mind works. Entries: {count}.",
+      description:
+        "Essays on psychology, mindfulness, and how the mind works. Exploring the structure of the human psyche and seeking paths to awareness, to better understand yourself and your reactions. Entries: {count}.",
     },
   },
   story: {
     ru: {
       label: "Истории-зеркала",
       description:
-        "Художественные рассказы и психологические притчи в которых ты можешь узнать себя. Материалов: {count}.",
+        "Художественные рассказы и притчи, в которых можно увидеть себя. Про одиночество и близость. Про страх ошибки и смелость быть несовершенным. Про кризисы и социальные маски, за которыми мы прячемся... Про то, что мы чувствуем на самом деле. Материалов: {count}.",
     },
     ua: {
       label: "Історії-дзеркала",
-      description: "Художні оповідання та психологічні притчі в яких ти можеш впізнати себе. Матеріалів: {count}.",
+      description:
+        "Художні оповідання та притчі, в яких можна побачити себе. Про самотність і близькість. Про страх помилки та сміливість бути недосконалим. Про кризи та соціальні маски, за якими ми ховаємось... Про те, що ми насправді відчуваємо. Матеріалів: {count}.",
     },
     en: {
       label: "Mirror Stories",
-      description: "Literary stories and psychological parables in which you can recognize yourself. Entries: {count}.",
+      description:
+        "Literary stories and parables in which you can see yourself. About loneliness and intimacy. About the fear of making mistakes and the courage to be imperfect. About crises and the social masks we hide behind... About what we truly feel. Entries: {count}.",
     },
   },
   note: {
     ru: {
       label: "Искры и проблески",
-      description: "Короткие заметки и афоризмы, которые помогают увидеть привычное по-новому. Материалов: {count}.",
+      description:
+        "Короткие заметки и парадоксы, которые помогают увидеть привычное по-новому. Убираем шаблоны мышления и сбиваем автопилот. Материалов: {count}.",
     },
     ua: {
       label: "Іскри й проблиски",
-      description: "Короткі нотатки й афоризми, що допомагають побачити звичне по-новому. Матеріалів: {count}.",
+      description:
+        "Короткі нотатки й парадокси, що допомагають побачити звичне по-новому. Прибираємо шаблони мислення та збиваємо автопілот. Матеріалів: {count}.",
     },
     en: {
       label: "Sparks and Glimmers",
-      description: "Short notes and aphorisms that help you see the familiar in a new light. Entries: {count}.",
+      description:
+        "Short notes and paradoxes that help you see the familiar in a new light. Breaking thought patterns and disrupting the autopilot. Entries: {count}.",
     },
   },
-  okno: {
+  okna: {
     ru: {
-      label: "Окно во двор",
+      label: "Окна во двор",
       description:
-        "Свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться. Материалов: {count}.",
+        "Свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться. Короткие истории и эссе обо всем на свете. Материалов: {count}.",
     },
     ua: {
-      label: "Вікно у двір",
-      description: "Вільний потік. Тексти, що дивують, надихають або змушують усміхнутися. Матеріалів: {count}.",
+      label: "Вікна у двір",
+      description:
+        "Вільний потік. Тексти, що дивують, надихають або змушують усміхнутися. Короткі історії та есе про все на світі. Матеріалів: {count}.",
     },
     en: {
-      label: "Window to the Yard",
-      description: "Free flow. Texts that surprise, inspire, or make you smile. Entries: {count}.",
+      label: "Windows to the Yard",
+      description:
+        "Free flow. Texts that surprise, inspire, or make you smile. Short stories and essays about everything under the sun. Entries: {count}.",
     },
   },
 };

@@ -110,16 +110,16 @@ export const languageLinks: Array<{
   locale: LocaleKey;
   href: string;
 }> = [
-  { label: "UA", locale: "ua", href: "/" },
-  { label: "RU", locale: "ru", href: "/ru" },
-  { label: "EN", locale: "en", href: "/en" },
-];
+    { label: "UA", locale: "ua", href: "/" },
+    { label: "RU", locale: "ru", href: "/ru" },
+    { label: "EN", locale: "en", href: "/en" },
+  ];
 
 export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {
     locale: "ru",
     brandName: "Алекс Бон",
-    tagline: "Короткие истории и эссе. Чтобы сбить автопилот.",
+    tagline: "Психолог Алекс Бон | Отражения",
     metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
     metaDescription:
       "Меня зовут Алекс Бон. Я психолог и писатель из Украины. Пишу тихие истории в громком мире, чтобы вы могли услышать себя. Живу с кошкой, практикую дзен и учу нейросети эмпатии. Добро пожаловать!",
@@ -134,7 +134,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       paragraphs: [
         "Привет, меня зовут Александр. Я психолог. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
         "Я верю, что распутывать эти клубки можно двумя способами.",
-        "Первый — через истории, в которых вдруг узнаёшь себя. Именно для этого я веду этот блог.",
+        "Первый — через истории, в которых вдруг видишь себя. Именно для этого я веду этот блог.",
         "Второй — в тишине личной сессии, через живой диалог. Если что-то из прочитанного откликнулось или у вас есть свой «клубок», который пора распутать — добро пожаловать!",
       ],
     },
@@ -182,7 +182,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       ],
     },
     personalWork: {
-      heading: "Как устроена личная работа (для тех, кому нужна конкретика)",
+      heading: "Как устроена личная работа:",
       steps: [
         {
           title: "Первый шаг — встреча-знакомство (бесплатно)",
@@ -216,12 +216,13 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
-      metaTitle: "Отражения — короткие рассказы и истории | Алекс Бон",
+      metaTitle: "Психолог Алекс Бон | Отражения - короткие рассказы и истории",
       heroDescription: [
-        "Меня зовут Алекс Бон. Я психолог и писатель из Украины.",
-        "Пишу тихие истории в громком мире, чтобы вы могли услышать себя.",
+        "Добро пожаловать в пространство отражений.",
+        "Меня зовут Алекс Бон. Я психолог и писатель. Живу и работаю в Киеве.",
+        "Пишу истории о людях, чтобы вы могли увидеть в них себя.",
+        "А на личных встречах помогаю переписать истории вашей жизни.",
         "Живу с кошкой, практикую дзен и учу нейросети эмпатии.",
-        "Добро пожаловать!",
       ],
       aboutButton: {
         label: "Обо мне",
@@ -232,7 +233,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ua: {
     locale: "ua",
     brandName: "Алекс Бон",
-    tagline: "Короткі історії та есе. Щоб збити автопілот.",
+    tagline: "Психолог Алекс Бон | Відображення",
     metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
     metaDescription:
       "Мене звати Алекс Бон. Я психолог і письменник з України. Пишу тихі історії в гучному світі, щоб ви могли почути себе. Живу з кішкою, практикую дзен і навчаю нейромережі емпатії. Ласкаво просимо!",
@@ -247,7 +248,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       paragraphs: [
         "Привіт, мене звати Олександр. Я психолог. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
         "Я вірю, що розплутувати ці клубки можна двома способами.",
-        "Перший — через історії, в яких раптом впізнаєш себе. Саме для цього я веду цей блог.",
+        "Перший — через історії, в яких раптом бачиш себе. Саме для цього я веду цей блог.",
         "Другий — у тиші особистої сесії, через живий діалог. Якщо щось із прочитаного відгукнулося або у вас є свій «клубок», який час розплутати — ласкаво просимо!",
       ],
     },
@@ -295,7 +296,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       ],
     },
     personalWork: {
-      heading: "Як влаштована особиста робота (для тих, кому потрібна конкретика)",
+      heading: "Як влаштована особиста робота:",
       steps: [
         {
           title: "Перший крок — зустріч-знайомство (безкоштовно)",
@@ -329,12 +330,13 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
-      metaTitle: "Відображення — короткі розповіді та історії | Алекс Бон",
+      metaTitle: "Психолог Алекс Бон | Відображення - короткі розповіді та історії",
       heroDescription: [
-        "Мене звати Алекс Бон. Я психолог і письменник з України.",
-        "Пишу тихі історії в гучному світі, щоб ви могли почути себе.",
+        "Ласкаво просимо до простору відображень.",
+        "Мене звати Алекс Бон. Я психолог і письменник. Живу і працюю в Києві.",
+        "Пишу історії про людей, щоб ви могли побачити в них себе.",
+        "А на особистих зустрічах допомагаю переписати історії вашого життя.",
         "Живу з кішкою, практикую дзен і вчу нейромережі емпатії.",
-        "Ласкаво просимо!",
       ],
       aboutButton: {
         label: "Про мене",
@@ -345,7 +347,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   en: {
     locale: "en",
     brandName: "Alex Bon",
-    tagline: "Short stories and essays. To break the autopilot.",
+    tagline: "Psychologist Alex Bon | Reflections",
     metaTitle: "Alex Bon | Short stories and tales without filters",
     metaDescription:
       "My name is Alex Bon. I'm a psychologist and writer from Ukraine. I write quiet stories in a loud world so you can hear yourself. I live with a cat, practice zen, and teach neural networks empathy. Welcome!",
@@ -360,7 +362,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       paragraphs: [
         "Hi, my name is Alexander. I'm a psychologist. If we drop the terminology, I'm simply someone who helps untangle the knots of thoughts, emotions, and feelings.",
         "I believe there are two ways to do this.",
-        "The first is through stories where you suddenly recognize yourself. That is exactly why I run this blog.",
+        "The first is through stories where you suddenly see yourself. That is exactly why I run this blog.",
         "The second is through dialogue. While I offer professional therapy only in Russian and Ukrainian, I am always open to a friendly chat in English. If a story resonated with you and you want to share your thoughts — feel free to message me. I use translation tools to communicate, so let's keep it to text :)",
       ],
     },
@@ -412,12 +414,13 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",
-      metaTitle: "Reflections — short stories and tales | Alex Bon",
+      metaTitle: "Psychologist Alex Bon | Reflections - short stories and tales",
       heroDescription: [
-        "My name is Alex Bon. I'm a psychologist and writer from Ukraine.",
-        "I write quiet stories in a loud world so you can hear yourself.",
+        "Welcome to the space of reflections.",
+        "My name is Alex Bon. I'm a psychologist and writer. I live and work in Kyiv.",
+        "I write stories about people so you can see yourself in them.",
+        "And in personal sessions, I help rewrite the stories of your life.",
         "I live with a cat, practice Zen, and teach neural networks empathy.",
-        "Welcome!",
       ],
       aboutButton: {
         label: "About me",

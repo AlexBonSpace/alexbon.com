@@ -12,8 +12,8 @@ export const MIN_POSTS_FOR_TAG_PAGE = 3;
 export type PostSummary = {
   slug: string;
   locale: Locale;
-  collection: "articles" | "notes" | "stories" | "okno";
-  type: "article" | "note" | "story" | "okno";
+  collection: "articles" | "notes" | "stories" | "okna";
+  type: "article" | "note" | "story" | "okna";
   title: string;
   description: string;
   summary: string;
