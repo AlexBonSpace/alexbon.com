@@ -199,17 +199,23 @@ const stepIcons = {
             </div>
 
             <div class="flex flex-col items-center gap-4">
-              <p class="text-base leading-relaxed text-primary sm:text-lg">
-                {content.personalWork.reviewsText}{" "}
-                <a
-                  href={content.personalWork.reviewsLink.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-strong underline-offset-4 hover:underline"
-                >
-                  {content.personalWork.reviewsLink.label}
-                </a>
-              </p>
+              <div class="relative rounded-2xl border border-soft bg-surface/50 px-6 py-4 text-center shadow-sm">
+                <span
+                  class="absolute left-1/2 top-0 h-[2px] w-16 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-[#e7b57f] to-transparent"
+                  aria-hidden="true"
+                />
+                <p class="text-base leading-relaxed text-primary sm:text-lg">
+                  {content.personalWork.reviewsText}{" "}
+                  <a
+                    href={content.personalWork.reviewsLink.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-medium text-strong underline underline-offset-4"
+                  >
+                    {content.personalWork.reviewsLink.label}
+                  </a>
+                </p>
+              </div>
 
               {content.invitation.buttons.length > 0 ? (
                 <div class="flex flex-wrap justify-center gap-3 mt-2">
