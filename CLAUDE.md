@@ -236,6 +236,57 @@ npm run tags:analyze
 }
 ```
 
+### Creating New Posts (For Claude Code)
+
+**User provides:**
+1. **Section**: stories / articles / okna / notes (or Claude asks)
+2. **Title** in Russian
+3. **Text** in Russian
+4. **Date** (optional, defaults to today)
+
+**Claude does automatically:**
+- Translate to Ukrainian and English (natural, preserving style)
+- Run `npm run tags:analyze` and select 3-5 appropriate tags
+- Create slugs for each locale (check uniqueness)
+- Write description based on content
+- Generate frontmatter using template below
+- Create 3 MDX files in `src/content/posts/{locale}/{section}/`
+- Run `npm run build` to verify
+
+**Formatting rules:**
+- Long dash `—` → regular dash `-` (in text, description, translations)
+- Direct speech start: `\-` instead of `-` (e.g., `\- Да, - сказал он`)
+- Empty line between paragraphs
+- Section dividers: `***` (renders as `✦ ✦ ✦`)
+
+**Frontmatter template:**
+```yaml
+title: ...
+type: story | article | note
+publishedAt: YYYY-MM-DD
+updatedAt: YYYY-MM-DD
+tags:
+  - tag1
+  - tag2
+translationGroup: slug-YYYY-MM-DD
+author: Alex Bon
+authorDisplay:
+  ua: Алекс Бон
+  ru: Алекс Бон
+  en: Alex Bon
+authorSchema:
+  sameAs:
+    - 'https://www.alexbon.com/en/about/'
+    - 'https://www.alexbon.com/ru/about/'
+    - 'https://www.alexbon.com/ua/about/'
+    - 'https://github.com/AlexBonSpace/alexbon.com'
+    - 'https://www.facebook.com/AlexBonSpace'
+license: CC BY 4.0
+canonical: https://www.alexbon.com/{locale}/blog/{slug}/
+description: |-
+  ...
+```
+
 ## Algolia Search (Optional)
 - **Indexing**: `scripts/push-algolia.mjs` reads all `dist/*/feed-full*.json` pages (follows `next_url`)
 - **Incremental mode**: Maintains manifest at `scripts/.algolia-cache.json` (gitignored); only pushes changed/removed records

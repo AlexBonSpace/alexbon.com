@@ -785,6 +785,22 @@ button:focus-visible {
     color: var(--color-text-strong);
   }
 
+  .prose-article hr {
+    border: none;
+    margin: 2.5rem auto;
+    height: auto;
+    display: block;
+    text-align: center;
+  }
+
+  .prose-article hr::before {
+    content: "✦   ✦   ✦";
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    letter-spacing: 0.5rem;
+  }
+
   .button-primary {
     background-image: linear-gradient(
       135deg,
