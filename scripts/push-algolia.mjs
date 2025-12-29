@@ -40,16 +40,19 @@ const TYPE_FALLBACKS = {
     article: { label: 'Карти внутрішнього світу', path: '/ua/blog/type/article/' },
     note: { label: 'Іскри й проблиски', path: '/ua/blog/type/note/' },
     story: { label: 'Історії-дзеркала', path: '/ua/blog/type/story/' },
+    okna: { label: 'Вікна у двір', path: '/ua/blog/type/okna/' },
   },
   ru: {
     article: { label: 'Карты внутреннего мира', path: '/ru/blog/type/article/' },
     note: { label: 'Искры и проблески', path: '/ru/blog/type/note/' },
     story: { label: 'Истории-зеркала', path: '/ru/blog/type/story/' },
+    okna: { label: 'Окна во двор', path: '/ru/blog/type/okna/' },
   },
   en: {
     article: { label: 'Inner World Maps', path: '/en/blog/type/article/' },
     note: { label: 'Sparks and Glimmers', path: '/en/blog/type/note/' },
     story: { label: 'Mirror Stories', path: '/en/blog/type/story/' },
+    okna: { label: 'Windows to the Yard', path: '/en/blog/type/okna/' },
   },
 };
 
@@ -174,7 +177,7 @@ function mapRecord(locale, item) {
   const slug = url ? new URL(url).pathname.replace(/\/$/, '') : item.id ?? Math.random().toString(36).slice(2);
   const rawType = typeof item.type === 'string' && item.type.trim() ? item.type.trim() : 'note';
   const normalizedType =
-    rawType === 'article' || rawType === 'story' || rawType === 'note' ? rawType : 'note';
+    rawType === 'article' || rawType === 'story' || rawType === 'note' || rawType === 'okna' ? rawType : 'note';
   const typeMeta = resolveTypeMeta(locale, normalizedType);
   const typeLabel =
     (typeof item.type_label === 'string' && item.type_label.trim()) || typeMeta.label;

@@ -119,7 +119,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {
     locale: "ru",
     brandName: "Алекс Бон",
-    tagline: "Психолог Алекс Бон | Отражения",
+    tagline: "Отражения | Алекс Бон | Психолог",
     metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
     metaDescription:
       "Меня зовут Алекс Бон. Я психолог и писатель из Украины. Пишу тихие истории в громком мире, чтобы вы могли услышать себя. Живу с кошкой, практикую дзен и учу нейросети эмпатии. Добро пожаловать!",
@@ -233,7 +233,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ua: {
     locale: "ua",
     brandName: "Алекс Бон",
-    tagline: "Психолог Алекс Бон | Відображення",
+    tagline: "Відображення | Алекс Бон | Психолог",
     metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
     metaDescription:
       "Мене звати Алекс Бон. Я психолог і письменник з України. Пишу тихі історії в гучному світі, щоб ви могли почути себе. Живу з кішкою, практикую дзен і навчаю нейромережі емпатії. Ласкаво просимо!",
@@ -347,7 +347,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   en: {
     locale: "en",
     brandName: "Alex Bon",
-    tagline: "Psychologist Alex Bon | Reflections",
+    tagline: "Reflections | Alex Bon | Psychologist",
     metaTitle: "Alex Bon | Short stories and tales without filters",
     metaDescription:
       "My name is Alex Bon. I'm a psychologist and writer from Ukraine. I write quiet stories in a loud world so you can hear yourself. I live with a cat, practice zen, and teach neural networks empathy. Welcome!",
