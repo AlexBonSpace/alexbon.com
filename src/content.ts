@@ -122,7 +122,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Отражения | Алекс Бон | Психолог",
     metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
     metaDescription:
-      "Меня зовут Алекс Бон. Я психолог и писатель из Украины. Пишу тихие истории в громком мире, чтобы вы могли услышать себя. Живу с кошкой, практикую дзен и учу нейросети эмпатии. Добро пожаловать!",
+      "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве. Пишу истории о людях, чтобы вы могли увидеть в них себя. А на личных встречах помогаю переписать истории вашей жизни.",
     hero: {
       title: "Короткие рассказы и истории без фильтров.",
       paragraphs: [],
@@ -130,7 +130,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     introduction: {
       heading: "Знакомство",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Александр, писатель и психолог",
+      imageAlt: "Александр, психолог",
       paragraphs: [
         "Привет, меня зовут Александр. Я психолог. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
         "Я верю, что распутывать эти клубки можно двумя способами.",
@@ -219,7 +219,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Психолог Алекс Бон | Отражения - короткие рассказы и истории",
       heroDescription: [
         "Добро пожаловать в пространство отражений.",
-        "Меня зовут Алекс Бон. Я психолог и писатель. Живу и работаю в Киеве.",
+        "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве.",
         "Пишу истории о людях, чтобы вы могли увидеть в них себя.",
         "А на личных встречах помогаю переписать истории вашей жизни.",
         "Живу с кошкой, практикую дзен и учу нейросети эмпатии.",
@@ -236,7 +236,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Відображення | Алекс Бон | Психолог",
     metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
     metaDescription:
-      "Мене звати Алекс Бон. Я психолог і письменник з України. Пишу тихі історії в гучному світі, щоб ви могли почути себе. Живу з кішкою, практикую дзен і навчаю нейромережі емпатії. Ласкаво просимо!",
+      "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві. Пишу історії про людей, щоб ви могли побачити в них себе. А на особистих зустрічах допомагаю переписати історії вашого життя.",
     hero: {
       title: "Короткі розповіді та історії без фільтрів.",
       paragraphs: [],
@@ -244,7 +244,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     introduction: {
       heading: "Знайомство",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Олександр, письменник і психолог",
+      imageAlt: "Олександр, психолог",
       paragraphs: [
         "Привіт, мене звати Олександр. Я психолог. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
         "Я вірю, що розплутувати ці клубки можна двома способами.",
@@ -333,7 +333,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Психолог Алекс Бон | Відображення - короткі розповіді та історії",
       heroDescription: [
         "Ласкаво просимо до простору відображень.",
-        "Мене звати Алекс Бон. Я психолог і письменник. Живу і працюю в Києві.",
+        "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві.",
         "Пишу історії про людей, щоб ви могли побачити в них себе.",
         "А на особистих зустрічах допомагаю переписати історії вашого життя.",
         "Живу з кішкою, практикую дзен і вчу нейромережі емпатії.",
@@ -350,7 +350,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     tagline: "Reflections | Alex Bon | Psychologist",
     metaTitle: "Alex Bon | Short stories and tales without filters",
     metaDescription:
-      "My name is Alex Bon. I'm a psychologist and writer from Ukraine. I write quiet stories in a loud world so you can hear yourself. I live with a cat, practice zen, and teach neural networks empathy. Welcome!",
+      "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv. I write stories about people so you can see yourself in them. And in personal sessions, I help rewrite the stories of your life.",
     hero: {
       title: "Short stories and tales without filters.",
       paragraphs: [],
@@ -358,7 +358,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     introduction: {
       heading: "Introduction",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Alexander, writer and psychologist",
+      imageAlt: "Alexander, psychologist",
       paragraphs: [
         "Hi, my name is Alexander. I'm a psychologist. If we drop the terminology, I'm simply someone who helps untangle the knots of thoughts, emotions, and feelings.",
         "I believe there are two ways to do this.",
@@ -417,7 +417,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Psychologist Alex Bon | Reflections - short stories and tales",
       heroDescription: [
         "Welcome to the space of reflections.",
-        "My name is Alex Bon. I'm a psychologist and writer. I live and work in Kyiv.",
+        "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv.",
         "I write stories about people so you can see yourself in them.",
         "And in personal sessions, I help rewrite the stories of your life.",
         "I live with a cat, practice Zen, and teach neural networks empathy.",

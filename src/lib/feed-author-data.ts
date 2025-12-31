@@ -10,7 +10,7 @@ export const FEED_AUTHOR_EXTENDED: Record<Locale, FeedAuthorExtended> = {
     name: "Алекс Бон",
     real_name: "Александр",
     url: SITE_URL,
-    role: "Психолог, писатель",
+    role: "Психолог",
     location: {
       city: "Киев",
       country: "Украина",
@@ -68,7 +68,7 @@ export const FEED_AUTHOR_EXTENDED: Record<Locale, FeedAuthorExtended> = {
     name: "Алекс Бон",
     real_name: "Олександр",
     url: SITE_URL,
-    role: "Психолог, письменник",
+    role: "Психолог",
     location: {
       city: "Київ",
       country: "Україна",
@@ -123,7 +123,7 @@ export const FEED_AUTHOR_EXTENDED: Record<Locale, FeedAuthorExtended> = {
     name: "Alex Bon",
     real_name: "Alexander",
     url: SITE_URL,
-    role: "Psychologist, writer",
+    role: "Psychologist",
     location: {
       city: "Kyiv",
       country: "Ukraine",

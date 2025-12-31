@@ -39,9 +39,9 @@ export const AUTHOR_DISPLAY_BY_LOCALE: Record<Locale, string> = {
 };
 
 const AUTHOR_DESCRIPTIONS: Record<Locale, string> = {
-  ru: "Психолог и писатель, помогает распутывать клубки мыслей и чувств и создавать пространство для честного разговора.",
-  ua: "Психолог і письменник, допомагає розплутувати клубок думок і почуттів та створювати простір для чесної розмови.",
-  en: "Writer and psychologist tending a lighthouse of reflective stories so you can see your patterns and hear yourself.",
+  ru: "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве. Пишу истории о людях, чтобы вы могли увидеть в них себя. А на личных встречах помогаю переписать истории вашей жизни.",
+  ua: "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві. Пишу історії про людей, щоб ви могли побачити в них себе. А на особистих зустрічах допомагаю переписати історії вашого життя.",
+  en: "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv. I write stories about people so you can see yourself in them. And in personal sessions, I help rewrite the stories of your life.",
 };
 
 const AUTHOR_ALTERNATE_NAMES: Record<Locale, string[]> = {
