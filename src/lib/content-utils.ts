@@ -7,6 +7,14 @@ import {
   SITE_URL,
   localeToBcp47,
 } from "@/lib/seo";
+import {
+  AUTHOR_NAME,
+  AUTHOR_BIO,
+  AUTHOR_ALTERNATE_NAMES,
+  AUTHOR_LOCATION,
+  AUTHOR_CONTACTS,
+  AUTHOR_SAME_AS as AUTHOR_SAME_AS_SOURCE,
+} from "@/lib/author-data";
 
 const ARTICLE_SECTION_BY_LOCALE: Record<Locale, string> = {
   ua: "Карти внутрішнього світу: глибокі статті про психологію, усвідомленість і будову нашої свідомості.",
@@ -32,34 +40,15 @@ const OKNO_SECTION_BY_LOCALE: Record<Locale, string> = {
   en: "Window to the Yard: free flow. Texts that surprise, inspire, or make you smile.",
 };
 
-export const AUTHOR_DISPLAY_BY_LOCALE: Record<Locale, string> = {
-  ua: "Алекс Бон",
-  ru: "Алекс Бон",
-  en: "Alex Bon",
-};
+// Re-export from author-data.ts for backward compatibility
+export const AUTHOR_DISPLAY_BY_LOCALE = AUTHOR_NAME;
+export const AUTHOR_SAME_AS = AUTHOR_SAME_AS_SOURCE;
 
-const AUTHOR_DESCRIPTIONS: Record<Locale, string> = {
-  ru: "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве. Пишу истории о людях, чтобы вы могли увидеть в них себя. А на личных встречах помогаю переписать истории вашей жизни.",
-  ua: "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві. Пишу історії про людей, щоб ви могли побачити в них себе. А на особистих зустрічах допомагаю переписати історії вашого життя.",
-  en: "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv. I write stories about people so you can see yourself in them. And in personal sessions, I help rewrite the stories of your life.",
-};
-
-const AUTHOR_ALTERNATE_NAMES: Record<Locale, string[]> = {
-  ru: ["Alex Bon", "Александр"],
-  ua: ["Alex Bon"],
-  en: ["Алекс Бон"],
-};
-
-const AUTHOR_LANGUAGES: Record<Locale, string[]> = {
+// Языки по локалям (порядок зависит от локали)
+const AUTHOR_LANGUAGES_BY_LOCALE: Record<Locale, string[]> = {
   ru: ["ru", "uk"],
   ua: ["uk", "ru"],
   en: ["en", "ru", "uk"],
-};
-
-const AUTHOR_ADDRESS_LOCALITY: Record<Locale, string> = {
-  ru: "Киев",
-  ua: "Київ",
-  en: "Kyiv",
 };
 
 const AUTHOR_SERVICE_OFFERS: Record<Locale, Array<Record<string, unknown>>> = {
@@ -134,19 +123,11 @@ const AUTHOR_SUPPORT_OFFERS = {
 };
 
 const CONTACT_LINKS = [
-  "https://t.me/alexbon_com",
-  "https://wa.me/+380986552222",
-  "viber://chat?number=+380986552222",
-  "https://g.page/AlexBon?share",
+  AUTHOR_CONTACTS.telegram,
+  AUTHOR_CONTACTS.whatsapp,
+  AUTHOR_CONTACTS.viber,
+  AUTHOR_CONTACTS.googleMaps,
 ];
-
-export const AUTHOR_SAME_AS = [
-  `${SITE_URL}/en/about/`,
-  `${SITE_URL}/ru/about/`,
-  `${SITE_URL}/ua/about/`,
-  "https://github.com/AlexBonSpace/alexbon.com",
-  "https://www.facebook.com/AlexBonSpace",
-] as const;
 
 export function createPlainText(raw: string): string {
   return raw
@@ -321,13 +302,13 @@ export function buildPostJsonLd(
 
 export function buildAuthorPersonJsonLd(locale: Locale) {
   const aboutUrl = `${SITE_URL}/${locale}/about/`;
-  const description = AUTHOR_DESCRIPTIONS[locale];
+  const description = AUTHOR_BIO[locale];
   const alternateName = AUTHOR_ALTERNATE_NAMES[locale];
-  const knowsLanguage = AUTHOR_LANGUAGES[locale];
+  const knowsLanguage = AUTHOR_LANGUAGES_BY_LOCALE[locale];
   const name = AUTHOR_DISPLAY_BY_LOCALE[locale] ?? AUTHOR_DISPLAY_BY_LOCALE[defaultLocale];
   const jobTitle = PERSON_JOB_TITLES[locale] ?? PERSON_JOB_TITLES[defaultLocale];
   const knowsAbout = PERSON_KNOWS_ABOUT[locale] ?? PERSON_KNOWS_ABOUT[defaultLocale];
-  const addressLocality = AUTHOR_ADDRESS_LOCALITY[locale];
+  const addressLocality = AUTHOR_LOCATION[locale].city;
   const sameAs = Array.from(new Set([...AUTHOR_SAME_AS, ...CONTACT_LINKS]));
 
   const base: Record<string, unknown> = {

@@ -1,3 +1,5 @@
+import { AUTHOR_BIO, AUTHOR_CONTACTS } from "@/lib/author-data";
+
 export type LocaleKey = "ru" | "ua" | "en";
 
 export type DetailIconKey = "video" | "donate" | "lock";
@@ -120,9 +122,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "ru",
     brandName: "Алекс Бон",
     tagline: "Отражения | Алекс Бон | Психолог",
-    metaTitle: "Алекс Бон | Короткие рассказы и истории без фильтров",
-    metaDescription:
-      "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве. Пишу истории о людях, чтобы вы могли увидеть в них себя. А на личных встречах помогаю переписать истории вашей жизни.",
+    metaTitle: "Психолог Алекс Бон | Отражения - короткие истории и эссе",
+    metaDescription: AUTHOR_BIO.ru,
     hero: {
       title: "Короткие рассказы и истории без фильтров.",
       paragraphs: [],
@@ -155,9 +156,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Написать в Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
-        { label: "Написать в WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
-        { label: "Написать в Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
+        { label: "Написать в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
+        { label: "Написать в WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
+        { label: "Написать в Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {
@@ -167,7 +168,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         text: "Отзывы о моей работе можно посмотреть на Google Картах:",
         button: {
           label: "Отзывы на Google Картах",
-          href: "https://g.page/AlexBon?share",
+          href: AUTHOR_CONTACTS.googleMaps,
         },
       },
     },
@@ -209,14 +210,14 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         },
       ],
       reviewsText: "Отзывы о моей работе можно посмотреть на",
-      reviewsLink: { label: "Google картах >>>", href: "https://g.page/AlexBon?share" },
+      reviewsLink: { label: "Google картах >>>", href: AUTHOR_CONTACTS.googleMaps },
     },
     footerNote:
       'P.S. "Алекс Бон" — это мой псевдоним, так проще меня найти в интернете :) А реальная фамилия пусть остается для скучных бумаг.',
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
-      metaTitle: "Психолог Алекс Бон | Отражения - короткие рассказы и истории",
+      metaTitle: "Психолог Алекс Бон | Отражения - короткие истории и эссе",
       heroDescription: [
         "Добро пожаловать в пространство отражений.",
         "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве.",
@@ -234,9 +235,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "ua",
     brandName: "Алекс Бон",
     tagline: "Відображення | Алекс Бон | Психолог",
-    metaTitle: "Алекс Бон | Короткі розповіді та історії без фільтрів",
-    metaDescription:
-      "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві. Пишу історії про людей, щоб ви могли побачити в них себе. А на особистих зустрічах допомагаю переписати історії вашого життя.",
+    metaTitle: "Психолог Алекс Бон | Відображення - короткі історії та есе",
+    metaDescription: AUTHOR_BIO.ua,
     hero: {
       title: "Короткі розповіді та історії без фільтрів.",
       paragraphs: [],
@@ -269,9 +269,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Написати в Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
-        { label: "Написати в WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
-        { label: "Написати у Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
+        { label: "Написати в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
+        { label: "Написати в WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
+        { label: "Написати у Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {
@@ -281,7 +281,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         text: "Відгуки про мою роботу можна подивитися на Google Картах:",
         button: {
           label: "Відгуки на Google Картах",
-          href: "https://g.page/AlexBon?share",
+          href: AUTHOR_CONTACTS.googleMaps,
         },
       },
     },
@@ -323,14 +323,14 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         },
       ],
       reviewsText: "Відгуки про мою роботу можна подивитися на",
-      reviewsLink: { label: "Google картах >>>", href: "https://g.page/AlexBon?share" },
+      reviewsLink: { label: "Google картах >>>", href: AUTHOR_CONTACTS.googleMaps },
     },
     footerNote:
       'P.S. "Алекс Бон" — це мій псевдонім, так простіше мене знайти в інтернеті :) А справжнє прізвище нехай залишається для нудних паперів.',
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
-      metaTitle: "Психолог Алекс Бон | Відображення - короткі розповіді та історії",
+      metaTitle: "Психолог Алекс Бон | Відображення - короткі історії та есе",
       heroDescription: [
         "Ласкаво просимо до простору відображень.",
         "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві.",
@@ -348,9 +348,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     locale: "en",
     brandName: "Alex Bon",
     tagline: "Reflections | Alex Bon | Psychologist",
-    metaTitle: "Alex Bon | Short stories and tales without filters",
-    metaDescription:
-      "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv. I write stories about people so you can see yourself in them. And in personal sessions, I help rewrite the stories of your life.",
+    metaTitle: "Psychologist Alex Bon | Reflections - short stories and essays",
+    metaDescription: AUTHOR_BIO.en,
     hero: {
       title: "Short stories and tales without filters.",
       paragraphs: [],
@@ -383,9 +382,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       heading: "",
       body: "",
       buttons: [
-        { label: "Message on Telegram", href: "https://t.me/alexbon_com", icon: "telegram" },
-        { label: "Message on WhatsApp", href: "https://wa.me/+380986552222", icon: "whatsapp" },
-        { label: "Message on Viber", href: "viber://chat?number=+380986552222", icon: "viber" },
+        { label: "Message on Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
+        { label: "Message on WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
+        { label: "Message on Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {
@@ -395,7 +394,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         text: "You can see reviews of my work on Google Maps:",
         button: {
           label: "Reviews on Google Maps",
-          href: "https://g.page/AlexBon?share",
+          href: AUTHOR_CONTACTS.googleMaps,
         },
       },
     },
@@ -414,7 +413,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",
-      metaTitle: "Psychologist Alex Bon | Reflections - short stories and tales",
+      metaTitle: "Psychologist Alex Bon | Reflections - short stories and essays",
       heroDescription: [
         "Welcome to the space of reflections.",
         "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv.",
