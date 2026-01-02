@@ -47,17 +47,17 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
     ru: {
       label: "Искры и проблески",
       description:
-        "Короткие заметки и парадоксы, которые помогают увидеть привычное по-новому. Убираем шаблоны мышления и сбиваем автопилот. Материалов: {count}.",
+        "Авторская коллекция инсайтов, рожденных в диалогах с ИИ. То, что не найдешь в поисковиках или сборниках цитат. Убираем шаблоны мышления и сбиваем автопилот. Материалов: {count}.",
     },
     ua: {
       label: "Іскри й проблиски",
       description:
-        "Короткі нотатки й парадокси, що допомагають побачити звичне по-новому. Прибираємо шаблони мислення та збиваємо автопілот. Матеріалів: {count}.",
+        "Авторська колекція інсайтів, народжених у діалогах з ШІ. Те, що не знайдеш у пошуковиках чи збірниках цитат. Прибираємо шаблони мислення та збиваємо автопілот. Матеріалів: {count}.",
     },
     en: {
       label: "Sparks and Glimmers",
       description:
-        "Short notes and paradoxes that help you see the familiar in a new light. Breaking thought patterns and disrupting the autopilot. Entries: {count}.",
+        "An author's collection of insights born from dialogues with AI. Things you won't find in search engines or quote collections. Breaking thought patterns and disrupting the autopilot. Entries: {count}.",
     },
   },
   okna: {
