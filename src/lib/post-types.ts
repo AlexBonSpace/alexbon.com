@@ -45,19 +45,19 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
   },
   note: {
     ru: {
-      label: "Искры и проблески",
+      label: "Телеграммы от Реальности",
       description:
-        "Авторская коллекция инсайтов, рожденных в диалогах с ИИ. То, что не найдешь в поисковиках или сборниках цитат. Убираем шаблоны мышления и сбиваем автопилот. Материалов: {count}.",
+        "Коллекция коротких инсайтов, очищенных от шума. Часть из них получена в диалогах с ИИ, часть - расшифрована из жизненного опыта. Мысли, которые сбивают автопилот, убирают шаблоны и помогают увидеть суть вещей. Материалов: {count}.",
     },
     ua: {
-      label: "Іскри й проблиски",
+      label: "Телеграми від Реальності",
       description:
-        "Авторська колекція інсайтів, народжених у діалогах з ШІ. Те, що не знайдеш у пошуковиках чи збірниках цитат. Прибираємо шаблони мислення та збиваємо автопілот. Матеріалів: {count}.",
+        "Колекція коротких інсайтів, очищених від шуму. Частина з них отримана в діалогах з ШІ, частина - розшифрована з життєвого досвіду. Думки, що збивають автопілот, прибирають шаблони й допомагають побачити суть речей. Матеріалів: {count}.",
     },
     en: {
-      label: "Sparks and Glimmers",
+      label: "Telegrams from Reality",
       description:
-        "An author's collection of insights born from dialogues with AI. Things you won't find in search engines or quote collections. Breaking thought patterns and disrupting the autopilot. Entries: {count}.",
+        "A collection of brief insights, distilled from noise. Some emerged from dialogues with AI, others were decoded from life experience. Thoughts that disrupt autopilot, break patterns, and help see through to the essence of things. Entries: {count}.",
     },
   },
   okna: {

@@ -38,19 +38,19 @@ const FEED_PATHS = {
 const TYPE_FALLBACKS = {
   ua: {
     article: { label: 'Карти внутрішнього світу', path: '/ua/blog/type/article/' },
-    note: { label: 'Іскри й проблиски', path: '/ua/blog/type/note/' },
+    note: { label: 'Телеграми від Реальності', path: '/ua/blog/type/note/' },
     story: { label: 'Історії-дзеркала', path: '/ua/blog/type/story/' },
     okna: { label: 'Вікна у двір', path: '/ua/blog/type/okna/' },
   },
   ru: {
     article: { label: 'Карты внутреннего мира', path: '/ru/blog/type/article/' },
-    note: { label: 'Искры и проблески', path: '/ru/blog/type/note/' },
+    note: { label: 'Телеграммы от Реальности', path: '/ru/blog/type/note/' },
     story: { label: 'Истории-зеркала', path: '/ru/blog/type/story/' },
     okna: { label: 'Окна во двор', path: '/ru/blog/type/okna/' },
   },
   en: {
     article: { label: 'Inner World Maps', path: '/en/blog/type/article/' },
-    note: { label: 'Sparks and Glimmers', path: '/en/blog/type/note/' },
+    note: { label: 'Telegrams from Reality', path: '/en/blog/type/note/' },
     story: { label: 'Mirror Stories', path: '/en/blog/type/story/' },
     okna: { label: 'Windows to the Yard', path: '/en/blog/type/okna/' },
   },

@@ -23,9 +23,9 @@ const ARTICLE_SECTION_BY_LOCALE: Record<Locale, string> = {
 };
 
 const NOTE_SECTION_BY_LOCALE: Record<Locale, string> = {
-  ua: "Іскри та проблиски. Короткі нотатки й афоризми, що допомагають побачити звичне по-новому.",
-  ru: "Искры и проблески. Короткие заметки и афоризмы, которые помогают увидеть привычное по-новому.",
-  en: "Sparks and glimmers. Short notes and aphorisms that help you see the familiar anew.",
+  ua: "Телеграми від Реальності. Короткі інсайти, очищені від шуму, що збивають автопілот і допомагають побачити суть.",
+  ru: "Телеграммы от Реальности. Короткие инсайты, очищенные от шума, которые сбивают автопилот и помогают увидеть суть.",
+  en: "Telegrams from Reality. Brief insights distilled from noise that disrupt autopilot and help see through to the essence.",
 };
 
 const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
@@ -129,7 +129,8 @@ const CONTACT_LINKS = [
   AUTHOR_CONTACTS.googleMaps,
 ];
 
-export function createPlainText(raw: string): string {
+export function createPlainText(raw: string | undefined | null): string {
+  if (!raw) return "";
   return raw
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`+/g, "")
@@ -167,7 +168,8 @@ export function cleanCardSnippet(snippet?: string): string {
     .trim();
 }
 
-export function createSearchContent(raw: string): string {
+export function createSearchContent(raw: string | undefined | null): string {
+  if (!raw) return "";
   return raw
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/[`*_>#]/g, " ")
@@ -292,9 +294,9 @@ export function buildPostJsonLd(
     default:
       return {
         ...base,
-        "@type": "Quotation",
+        "@type": "SocialMediaPosting",
         description: doc.description,
-        text: doc.description,
+        articleBody: doc.description,
         articleSection: NOTE_SECTION_BY_LOCALE[locale],
       };
   }

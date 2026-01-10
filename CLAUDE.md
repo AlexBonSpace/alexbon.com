@@ -259,10 +259,17 @@ npm run tags:analyze
 - Empty line between paragraphs
 - Section dividers: `***` (renders as `✦ ✦ ✦`)
 
-**Frontmatter template:**
+**Notes (Телеграммы от Реальности) - special format:**
+- `title` = full quote text (the actual insight, not a label)
+- `body` = empty (no content after frontmatter)
+- `description` = not needed (auto-generated from title)
+- Schema: `@type: SocialMediaPosting` (author's original insights, not external quotes)
+- H1 on page shows the title as main content
+
+**Frontmatter template (story/article/okna):**
 ```yaml
 title: ...
-type: story | article | note
+type: story | article | okna
 publishedAt: YYYY-MM-DD
 updatedAt: YYYY-MM-DD
 tags:
@@ -285,6 +292,33 @@ license: CC BY 4.0
 canonical: https://www.alexbon.com/{locale}/blog/{slug}/
 description: |-
   ...
+```
+
+**Frontmatter template (note) - minimal:**
+```yaml
+title: Полный текст цитаты здесь. Без сокращений.
+type: note
+publishedAt: YYYY-MM-DD
+updatedAt: YYYY-MM-DD
+tags:
+  - tag1
+  - tag2
+translationGroup: slug-YYYY-MM-DD
+author: Alex Bon
+authorDisplay:
+  ua: Алекс Бон
+  ru: Алекс Бон
+  en: Alex Bon
+authorSchema:
+  sameAs:
+    - 'https://www.alexbon.com/en/about/'
+    - 'https://www.alexbon.com/ru/about/'
+    - 'https://www.alexbon.com/ua/about/'
+    - 'https://github.com/AlexBonSpace/alexbon.com'
+    - 'https://www.facebook.com/AlexBonSpace'
+license: CC BY 4.0
+canonical: https://www.alexbon.com/{locale}/blog/{slug}/
+---
 ```
 
 ## Algolia Search (Optional)

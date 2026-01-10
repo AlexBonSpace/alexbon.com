@@ -132,10 +132,11 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
 
   const rawBody = entry.body;
   const plainText = createPlainText(rawBody);
-  const description = (entry.data.description ?? "").trim() || createDescription(plainText, 160);
-  const summary = extractFirstSentence(plainText) || description;
+  const textForMeta = plainText || entry.data.title;
+  const description = (entry.data.description ?? "").trim() || createDescription(textForMeta, 160);
+  const summary = extractFirstSentence(textForMeta) || description;
   const cardSnippetOverride = cleanCardSnippet(entry.data.cardSnippet);
-  const cardSnippet = buildCardSnippet(type, plainText, cardSnippetOverride);
+  const cardSnippet = buildCardSnippet(type, textForMeta, cardSnippetOverride);
   const translationGroup = (entry.data.translationGroup ?? "").trim() || fileSlug;
   const authorDisplay = entry.data.authorDisplay ?? AUTHOR_DISPLAY_BY_LOCALE;
   const authorSameAs = Array.from(new Set([...(entry.data.authorSchema?.sameAs ?? []), ...AUTHOR_SAME_AS]));

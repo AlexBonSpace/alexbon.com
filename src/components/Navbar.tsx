@@ -126,7 +126,7 @@ export function Navbar({
             {/* Spacer для баланса — такой же ширины как кнопка меню */}
             <div className="min-h-[44px] w-[68px] shrink-0" aria-hidden="true" />
 
-            <h1 className="flex-1 text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
+            <div className="flex-1 text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
               <a
                 href={buildHref("/")}
                 aria-label={`${brandName}: ${tagline}`}
@@ -134,7 +134,7 @@ export function Navbar({
               >
                 <span className="block">{tagline}</span>
               </a>
-            </h1>
+            </div>
 
             <button
               type="button"

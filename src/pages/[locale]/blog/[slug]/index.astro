@@ -129,11 +129,15 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
           >
             {typeLabel}
           </a>
-          <h1
-            class={`text-center text-[clamp(2.2rem,4.5vw,2.9rem)] font-semibold leading-tight text-strong${post.type === "note" ? " sr-only" : ""}`}
-          >
-            {post.title}
-          </h1>
+          {
+            post.type === "note" ? (
+              <h1 class="text-pretty text-[clamp(1.3rem,4vw,1.8rem)] leading-relaxed text-strong">{post.title}</h1>
+            ) : (
+              <h1 class="text-center text-[clamp(2.2rem,4.5vw,2.9rem)] font-semibold leading-tight text-strong">
+                {post.title}
+              </h1>
+            )
+          }
           <div class="flex flex-wrap gap-3 text-sm text-muted">
             <time datetime={post.publishedAt} class="font-medium">
               {publishedOn}
