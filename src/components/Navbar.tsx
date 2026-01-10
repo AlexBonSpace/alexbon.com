@@ -122,11 +122,8 @@ export function Navbar({
 
       <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-          <div className="flex w-full items-center justify-between gap-3 sm:flex-1">
-            {/* Spacer для баланса — такой же ширины как кнопка меню */}
-            <div className="min-h-[44px] w-[68px] shrink-0" aria-hidden="true" />
-
-            <div className="flex-1 text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
+          <div className="flex w-full items-center gap-3 sm:flex-1">
+            <div className="min-w-0 flex-1 text-pretty text-center text-[clamp(1.25rem,4vw,2rem)] font-semibold leading-tight text-nav-heading">
               <a
                 href={buildHref("/")}
                 aria-label={`${brandName}: ${tagline}`}
