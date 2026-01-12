@@ -255,7 +255,8 @@ npm run tags:analyze
 
 **Formatting rules:**
 - Long dash `—` → regular dash `-` (in text, description, translations)
-- Direct speech start: `\-` instead of `-` (e.g., `\- Да, - сказал он`)
+- **Direct speech (RU/UA)**: `\-` instead of `-` (e.g., `\- Да, - сказал он`)
+- **Direct speech (EN)**: Use quotation marks, not dashes (e.g., `"Yes," he said.`)
 - Empty line between paragraphs
 - Section dividers: `***` (renders as `✦ ✦ ✦`)
 
