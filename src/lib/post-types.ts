@@ -64,17 +64,17 @@ const TYPE_COPY: Record<PostType, Record<Locale, TypeCopy>> = {
     ru: {
       label: "Окна во двор",
       description:
-        "Свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться. Короткие истории и эссе обо всем на свете. Материалов: {count}.",
+        "Свободный поток. Тексты, которые удивляют, вдохновляют или заставляют задуматься. Короткие истории и эссе обо всем на свете. Материалов: {count}.",
     },
     ua: {
       label: "Вікна у двір",
       description:
-        "Вільний потік. Тексти, що дивують, надихають або змушують усміхнутися. Короткі історії та есе про все на світі. Матеріалів: {count}.",
+        "Вільний потік. Тексти, що дивують, надихають або змушують замислитися. Короткі історії та есе про все на світі. Матеріалів: {count}.",
     },
     en: {
       label: "Windows to the Yard",
       description:
-        "Free flow. Texts that surprise, inspire, or make you smile. Short stories and essays about everything under the sun. Entries: {count}.",
+        "Free flow. Texts that surprise, inspire, or make you think. Short stories and essays about everything under the sun. Entries: {count}.",
     },
   },
 };

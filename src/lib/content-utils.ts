@@ -35,9 +35,9 @@ const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {
 };
 
 const OKNO_SECTION_BY_LOCALE: Record<Locale, string> = {
-  ua: "Вікно у двір: вільний потік. Тексти, що дивують, надихають або змушують усміхнутися.",
-  ru: "Окно во двор: свободный поток. Тексты, которые удивляют, вдохновляют или заставляют улыбнуться.",
-  en: "Window to the Yard: free flow. Texts that surprise, inspire, or make you smile.",
+  ua: "Вікно у двір: вільний потік. Тексти, що дивують, надихають або змушують замислитися.",
+  ru: "Окно во двор: свободный поток. Тексты, которые удивляют, вдохновляют или заставляют задуматься.",
+  en: "Window to the Yard: free flow. Texts that surprise, inspire, or make you think.",
 };
 
 // Re-export from author-data.ts for backward compatibility
