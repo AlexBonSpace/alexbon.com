@@ -326,7 +326,7 @@ function mapPostToPlainFeedItem(locale: Locale, post: BlogPost): PlainFeedItem {
   const postLanguage = localeToBcp47[post.locale as Locale] ?? post.locale;
   const typePath = buildPostTypePath(locale, post.type);
   const typeUrl = ensureAbsoluteUrl(typePath);
-  const contentText = post.plainText || "";
+  const contentText = post.plainText || (post.type === "note" ? post.title : "");
   const license = post.license?.trim() || LICENSE_URL;
 
   return {

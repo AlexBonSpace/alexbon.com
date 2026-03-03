@@ -23,9 +23,9 @@ const ARTICLE_SECTION_BY_LOCALE: Record<Locale, string> = {
 };
 
 const NOTE_SECTION_BY_LOCALE: Record<Locale, string> = {
-  ua: "Телеграми від Реальності. Короткі інсайти, очищені від шуму, що збивають автопілот і допомагають побачити суть.",
-  ru: "Телеграммы от Реальности. Короткие инсайты, очищенные от шума, которые сбивают автопилот и помогают увидеть суть.",
-  en: "Telegrams from Reality. Brief insights distilled from noise that disrupt autopilot and help see through to the essence.",
+  ua: "Іскри та проблиски. Короткі інсайти, очищені від шуму, що збивають автопілот і допомагають побачити суть.",
+  ru: "Искры и проблески. Короткие инсайты, очищенные от шума, которые сбивают автопилот и помогают увидеть суть.",
+  en: "Sparks and Glimmers. Brief insights distilled from noise that disrupt autopilot and help see through to the essence.",
 };
 
 const STORY_GENRES_BY_LOCALE: Record<Locale, string[]> = {

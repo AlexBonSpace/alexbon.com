@@ -260,7 +260,7 @@ npm run tags:analyze
 - Empty line between paragraphs
 - Section dividers: `***` (renders as `✦ ✦ ✦`)
 
-**Notes (Телеграммы от Реальности) - special format:**
+**Notes (Искры и проблески) - special format:**
 - `title` = full quote text (the actual insight, not a label)
 - `body` = empty (no content after frontmatter)
 - `description` = not needed (auto-generated from title)

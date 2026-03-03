@@ -18,17 +18,17 @@ const BLOG_TOPICS_BY_LOCALE: Record<Locale, string[]> = {
   ua: [
     "Карти внутрішнього світу: глибокі статті про психологію, усвідомленість і будову нашої свідомості.",
     "Історії-дзеркала. Художні оповідання та психологічні притчі в яких ти можеш впізнати себе.",
-    "Телеграми від Реальності. Короткі інсайти, очищені від шуму, що збивають автопілот і допомагають побачити суть.",
+    "Іскри та проблиски. Короткі інсайти, очищені від шуму, що збивають автопілот і допомагають побачити суть.",
   ],
   ru: [
     "Карты внутреннего мира: глубокие статьи о психологии, осознанности и устройстве нашего сознания.",
     "Истории-зеркала. Художественные рассказы и психологические притчи в которых ты можешь узнать себя.",
-    "Телеграммы от Реальности. Короткие инсайты, очищенные от шума, которые сбивают автопилот и помогают увидеть суть.",
+    "Искры и проблески. Короткие инсайты, очищенные от шума, которые сбивают автопилот и помогают увидеть суть.",
   ],
   en: [
     "Inner World Maps: in-depth essays on psychology, mindfulness, and how our mind works.",
     "Mirror stories. Literary tales and psychological parables in which you can recognize yourself.",
-    "Telegrams from Reality. Brief insights distilled from noise that disrupt autopilot and help see through to the essence.",
+    "Sparks and Glimmers. Brief insights distilled from noise that disrupt autopilot and help see through to the essence.",
   ],
 };
 
