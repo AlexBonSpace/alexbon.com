@@ -439,16 +439,16 @@ const FONT_STYLESHEET =
     <slot />
 
     <!-- Footer Zone 1: Quote -->
-    {!hideDisclaimer && (
-      <div class="footer-quote mt-12">
-        <p class="footer-quote__text">
-          "{messages.Footer.quote}"
-        </p>
-        <a href={buildLocalizedPath("/disclaimer/", locale)} class="footer-quote__link">
-          {messages.Footer.disclaimerLink}
-        </a>
-      </div>
-    )}
+    {
+      !hideDisclaimer && (
+        <div class="footer-quote mt-12">
+          <p class="footer-quote__text">"{messages.Footer.quote}"</p>
+          <a href={buildLocalizedPath("/disclaimer/", locale)} class="footer-quote__link">
+            {messages.Footer.disclaimerLink}
+          </a>
+        </div>
+      )
+    }
 
     <!-- Footer divider -->
     <div class="footer-divider" aria-hidden="true">✦</div>
