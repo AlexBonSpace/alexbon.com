@@ -142,7 +142,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Мой путь начался в армии. В глухих лесах за сотни километров от дома я понял парадоксальную вещь: можно жить в аду, но чувствовать себя как в раю. С тех пор я ищу это состояние - и помогаю находить его другим.",
         'Я много путешествовал - жил в Йемене, Индии и Англии, медитировал в ашрамах. Более 30 лет практикую осознанность - это не хобби, а способ жить. Получил два высших образования (экономическое и психологическое), поработал на всех должностях - от "принеси-подай" до учредителя собственной компании. Был женат, развелся, сохранил хорошие отношения. Последние десять лет живу один. Ну, не совсем один - со мной кошка.',
         'В какой-то момент я понял, что звук делает то же, что годами я делал словами: возвращает человека в настоящий момент. Так родился <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музыкальный проект с лозунгом "deep sounds for dark times" (глубокие звуки для темных времен). Послушать можно на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> и других платформах.',
-        'Помимо этого в свободное время занимаюсь вайб-кодингом: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">этот сайт</a>, голосовой дневник <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">визуализатор музыки для YouTube</a> и некоторые другие программы для личного пользования - все собрано с помощью ИИ.',
         "Живу в Киеве. Свет иногда гаснет, но творчество - нет :)",
       ],
     },
@@ -191,7 +190,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         {
           heading: "Психология и осознанность",
           description:
-            "Помогаю распутывать клубки мыслей, эмоций и чувств. Более 30 лет практики медитации и осознанности, психологическое образование, сотрудничество с Центром томалогии, а также обширный собственный опыт - все это научило меня понимать других через себя. Если что-то внутри запуталось - разберемся вместе.",
+            "Помогаю распутывать клубки мыслей, эмоций и чувств. Более 30 лет практики медитации и осознанности, психологическое образование, сотрудничество с <a href='https://tomalogy.com/' target='_blank' rel='noopener noreferrer'>Центром томалогии</a>, а также обширный собственный опыт - все это научило меня понимать других через себя. Если что-то внутри запуталось - разберемся вместе.",
           reviews: "29 отзывов · рейтинг 4.9",
           reviewsLink: { label: "Посмотреть на Google Картах >>>", href: AUTHOR_CONTACTS.googleMaps },
         },
@@ -254,7 +253,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Мій шлях почався в армії. У глухих лісах за сотні кілометрів від дому я зрозумів парадоксальну річ: можна жити в пеклі, але відчувати себе як у раю. З того часу я шукаю цей стан - і допомагаю знаходити його іншим.",
         'Я багато подорожував - жив у Ємені, Індії та Англії, медитував в ашрамах. Понад 30 років практикую усвідомленість - це не хобі, а спосіб жити. Здобув дві вищі освіти (економічну та психологічну), попрацював на різних посадах - від "принеси-подай" до засновника власної компанії. Був одружений, розлучився, зберіг добрі стосунки. Останні десять років живу сам. Ну, не зовсім сам - зі мною кішка.',
         'В якийсь момент я зрозумів, що звук робить те саме, що роками я робив словами: повертає людину в теперішній момент. Так народився <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музичний проєкт з гаслом "deep sounds for dark times" (глибокі звуки для темних часів). Послухати можна на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> та інших платформах.',
-        'Крім цього у вільний час займаюся вайб-кодингом: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">цей сайт</a>, голосовий щоденник <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">візуалізатор музики для YouTube</a> та деякі інші програми для особистого користування - все зібрано за допомогою ШІ.',
         "Живу в Києві. Світло іноді гасне, але творчість - ні :)",
       ],
     },
@@ -303,7 +301,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         {
           heading: "Психологія та усвідомленість",
           description:
-            "Допомагаю розплутувати клубки думок, емоцій і почуттів. Понад 30 років практики медитації та усвідомленості, психологічна освіта, співпраця з Центром томалогії, а також великий власний досвід - все це навчило мене розуміти інших через себе. Якщо щось усередині заплуталося - розберемося разом.",
+            "Допомагаю розплутувати клубки думок, емоцій і почуттів. Понад 30 років практики медитації та усвідомленості, психологічна освіта, співпраця з <a href='https://tomalogy.com/' target='_blank' rel='noopener noreferrer'>Центром томалогії</a>, а також великий власний досвід - все це навчило мене розуміти інших через себе. Якщо щось усередині заплуталося - розберемося разом.",
           reviews: "29 відгуків · рейтинг 4.9",
           reviewsLink: { label: "Подивитися на Google Картах >>>", href: AUTHOR_CONTACTS.googleMaps },
         },
@@ -366,7 +364,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "My path started in the army. In remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can live in hell but feel like you're in paradise. Since then, I've been searching for that state - and helping others find it.",
         "I traveled a lot - lived in Yemen, India, and England, meditated in ashrams. I've been practicing mindfulness for over 30 years - it's not a hobby, it's a way of life. I earned two degrees (economics and psychology), worked in every position from \"fetch this\" to founding my own company. Was married, divorced, kept good relationships. For the last ten years I've been living on my own. Well, not entirely - I have a cat.",
         'At some point I realized that sound does the same thing I had been doing with words for years: it brings a person back to the present moment. That\'s how <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> was born - a music project with the motto "deep sounds for dark times." Listen on <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a>, and other platforms.',
-        'I also do vibe coding in my free time: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">this website</a>, voice diary <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">music visualizer for YouTube</a> and some other personal tools - all built with the help of AI.',
         "I live in Kyiv. The power sometimes goes out, but creativity doesn't :)",
       ],
     },
@@ -408,35 +405,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       image: "",
       imageAlt: "",
       paragraphs: [],
-    },
-    personalWork: {
-      heading: "Work with me",
-      directions: [
-        {
-          heading: "Psychology and Mindfulness",
-          description:
-            "I help untangle the knots of thoughts, emotions, and feelings. Over 30 years of meditation and mindfulness practice, a psychology degree, collaboration with the Tomalogy Center, and extensive personal experience - all of this taught me to understand others through myself. If something inside got tangled - we'll figure it out together.",
-          reviews: "29 reviews · rating 4.9",
-          reviewsLink: { label: "See on Google Maps >>>", href: AUTHOR_CONTACTS.googleMaps },
-        },
-        {
-          heading: "AI in Creativity",
-          description:
-            "Not theory, but real practice. Prompt engineering, image and video generation, voice, vibe coding, creative task automation, and more. If you need to integrate AI into your creative process or have questions about working with AI - write to me, and I'll do my best to help you and AI find a common language.",
-        },
-      ],
-      process: {
-        heading: "How it works",
-        step1:
-          "First step - a free introductory meeting (20 minutes online) to understand if I can help. No obligations.",
-        social:
-          "I keep several 'social slots' at a reduced rate for those currently in a difficult situation. Ask me about this at our first meeting.",
-      },
-      pricing: {
-        heading: "Consultation rates",
-        online: "Online (Zoom, Telegram, Viber, WhatsApp) - 2000 UAH / 40 € / 45 $",
-        office: "In office (Kyiv, Livoberezhna metro) - 2500 UAH / 50 € / 57 $",
-      },
     },
     footerNote: "",
     blog: {

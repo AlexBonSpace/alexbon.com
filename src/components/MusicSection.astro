@@ -15,6 +15,12 @@ const headings: Record<LocaleKey, string> = {
 
 const subtitle = "Alex Bon Space · Deep sounds for dark times";
 
+const videos = [
+  { id: "zu2QM_Zb2Sk", title: "Immersion" },
+  { id: "y5005ohFBzg", title: "Vivaldi Deep" },
+  { id: "pcKSsAU5Q8k", title: "Dream Love" },
+];
+
 const platformLinks = [
   {
     label: "YouTube",
@@ -53,14 +59,33 @@ const platformLinks = [
     <p class="hub-section__description">{subtitle}</p>
   </div>
 
-  <div class="music-embed">
-    <iframe
-      src="https://www.youtube.com/embed/videoseries?list=PLqNK3NuVBgtB1wviRIy_RRzzdB4DrYIl2"
-      title="Alex Bon Space — Discography"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      loading="lazy"
-      style="aspect-ratio: 16/9; width: 100%; border: 0; border-radius: 1rem;"></iframe>
+  <div class="music-grid">
+    {
+      videos.map((video) => (
+        <a
+          href={`https://www.youtube.com/watch?v=${video.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="music-card"
+        >
+          <div class="music-card__thumb">
+            <img
+              src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
+              alt={video.title}
+              loading="lazy"
+              width="320"
+              height="180"
+            />
+            <div class="music-card__play" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
+          <span class="music-card__title">{video.title}</span>
+        </a>
+      ))
+    }
   </div>
 
   <div class="music-platforms">
@@ -82,11 +107,71 @@ const platformLinks = [
 </section>
 
 <style>
-  .music-embed {
+  .music-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
     margin-top: 1.25rem;
-    border-radius: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    .music-grid {
+      grid-template-columns: 1fr;
+      gap: 0.625rem;
+    }
+  }
+
+  .music-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    border-radius: 0.75rem;
     overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .music-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .music-card__thumb {
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
     box-shadow: var(--shadow-card);
+  }
+
+  .music-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .music-card__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: #fff;
+  }
+
+  .music-card:hover .music-card__play {
+    opacity: 1;
+  }
+
+  .music-card__title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 0.25rem;
   }
 
   .music-platforms {

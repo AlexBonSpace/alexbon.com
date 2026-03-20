@@ -36,6 +36,7 @@ type SiteLayoutProps = {
   openGraph?: Record<string, string | undefined>;
   twitter?: Record<string, string | undefined>;
   navigationAlternatePaths?: Partial<Record<Locale, string>>;
+  hideDisclaimer?: boolean;
 };
 
 const {
@@ -53,6 +54,7 @@ const {
   openGraph,
   twitter,
   navigationAlternatePaths,
+  hideDisclaimer = false,
 } = Astro.props as SiteLayoutProps;
 
 const content = contentByLocale[locale];
@@ -177,14 +179,17 @@ const FOOTER_SOCIAL_LINKS = {
   ru: [
     { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
     { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+    { label: "TikTok", href: "https://www.tiktok.com/@alexbonspace" },
   ],
   ua: [
     { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
     { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+    { label: "TikTok", href: "https://www.tiktok.com/@alexbonspace" },
   ],
   en: [
     { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
     { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+    { label: "TikTok", href: "https://www.tiktok.com/@alexbonspace" },
   ],
 } as const;
 
@@ -434,14 +439,16 @@ const FONT_STYLESHEET =
     <slot />
 
     <!-- Footer Zone 1: Quote -->
-    <div class="footer-quote mt-12">
-      <p class="footer-quote__text">
-        "{messages.Footer.quote}"
-      </p>
-      <a href={buildLocalizedPath("/disclaimer/", locale)} class="footer-quote__link">
-        {messages.Footer.disclaimerLink}
-      </a>
-    </div>
+    {!hideDisclaimer && (
+      <div class="footer-quote mt-12">
+        <p class="footer-quote__text">
+          "{messages.Footer.quote}"
+        </p>
+        <a href={buildLocalizedPath("/disclaimer/", locale)} class="footer-quote__link">
+          {messages.Footer.disclaimerLink}
+        </a>
+      </div>
+    )}
 
     <!-- Footer divider -->
     <div class="footer-divider" aria-hidden="true">✦</div>

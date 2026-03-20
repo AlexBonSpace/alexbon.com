@@ -61,23 +61,21 @@ const messengerIcons = {
             aria-hidden="true"></span>
         </div>
         {content.introduction.paragraphs.map((paragraph) => <p class="about-paragraph" set:html={paragraph} />)}
-        {
-          content.invitation.buttons.length > 0 ? (
-            <div class="flex flex-wrap justify-center gap-3 mt-4">
-              {content.invitation.buttons.map((button) => (
-                <a
-                  href={button.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  class="inline-flex items-center justify-center gap-2 rounded-full bg-[#0C0E10] px-5 py-2.5 text-sm font-semibold text-[#F5F5F5] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1a1d21]"
-                >
-                  {button.icon && <Fragment set:html={messengerIcons[button.icon]} />}
-                  {button.label}
-                </a>
-              ))}
-            </div>
-          ) : null
-        }
+        {!content.personalWork && content.invitation.buttons.length > 0 ? (
+          <div class="flex flex-wrap justify-center gap-3 mt-4">
+            {content.invitation.buttons.map((button) => (
+              <a
+                href={button.href}
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-[#0C0E10] px-5 py-2.5 text-sm font-semibold text-[#F5F5F5] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1a1d21]"
+              >
+                {button.icon && <Fragment set:html={messengerIcons[button.icon]} />}
+                {button.label}
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
       <div class="relative z-10 flex flex-1 justify-center">
         <div class="section-card-strong overflow-hidden rounded-[2rem] border border-soft shadow-card">
@@ -113,7 +111,7 @@ const messengerIcons = {
               {content.personalWork.directions.map((direction) => (
                 <div class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6">
                   <h3 class="mb-3 text-lg font-semibold text-strong">{direction.heading}</h3>
-                  <p class="text-[clamp(1rem,2.5vw,1.1rem)] leading-relaxed text-primary">{direction.description}</p>
+                  <p class="about-paragraph text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary" set:html={direction.description} />
                   {direction.reviews && direction.reviewsLink ? (
                     <div class="mt-4 flex flex-col gap-2">
                       <p class="text-sm font-medium text-muted">{direction.reviews}</p>
@@ -134,10 +132,10 @@ const messengerIcons = {
             {/* Process */}
             <div class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6">
               <h3 class="mb-3 text-lg font-semibold text-strong">{content.personalWork.process.heading}</h3>
-              <p class="text-[clamp(1rem,2.5vw,1.1rem)] leading-relaxed text-primary">
+              <p class="text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                 {content.personalWork.process.step1}
               </p>
-              <p class="mt-3 text-[clamp(0.95rem,2.3vw,1rem)] leading-relaxed text-primary italic">
+              <p class="mt-3 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary italic">
                 {content.personalWork.process.social}
               </p>
             </div>
@@ -146,7 +144,7 @@ const messengerIcons = {
             <div class="blog-card rounded-[1.75rem] border border-soft bg-surface p-6">
               <h3 class="mb-3 text-lg font-semibold text-strong">{content.personalWork.pricing.heading}</h3>
               <ul class="grid gap-3 pl-1">
-                <li class="flex items-start gap-3 text-[clamp(0.95rem,2.5vw,1.05rem)] leading-relaxed text-primary">
+                <li class="flex items-start gap-3 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                   <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#f0e6da] text-[#8b7355]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +165,7 @@ const messengerIcons = {
                   </span>
                   <span class="font-medium">{content.personalWork.pricing.online}</span>
                 </li>
-                <li class="flex items-start gap-3 text-[clamp(0.95rem,2.5vw,1.05rem)] leading-relaxed text-primary">
+                <li class="flex items-start gap-3 text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">
                   <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#f0e6da] text-[#8b7355]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -263,7 +261,7 @@ const messengerIcons = {
       content.footerNote ? (
         <section class={`${containerClass} flex items-center justify-center`}>
           <div class="section-card w-full max-w-3xl overflow-hidden rounded-[2.5rem] border border-soft px-6 py-6 text-center shadow-card">
-            <p class="text-base leading-relaxed text-primary sm:text-lg">{content.footerNote}</p>
+            <p class="text-[clamp(1.1rem,3vw,1.2rem)] leading-relaxed text-primary">{content.footerNote}</p>
           </div>
         </section>
       ) : null
@@ -275,10 +273,11 @@ const messengerIcons = {
   .about-paragraph :global(a) {
     color: var(--color-text-strong);
     text-underline-offset: 4px;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-text-strong) 40%, transparent);
   }
 
   .about-paragraph :global(a:hover) {
-    text-decoration: underline;
+    text-decoration-color: var(--color-text-strong);
   }
 </style>
