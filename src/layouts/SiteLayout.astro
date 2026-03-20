@@ -211,7 +211,7 @@ const dataFeedJsonLd = {
   url: feedFullUrl,
   license: "https://creativecommons.org/licenses/by/4.0/",
   distribution: [feedDownloadNode],
-  isPartOf: websiteJsonLd["@id"],
+  isPartOf: { "@id": websiteJsonLd["@id"] },
 };
 const additionalJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const structuredData = {
@@ -370,6 +370,7 @@ const FONT_STYLESHEET =
         value ? <meta name={`twitter:${key}`} content={value} /> : null,
       )
     }
+    <link rel="author" type="text/plain" href="/llms.txt" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link rel="preload" href={FONT_STYLESHEET} as="style" />

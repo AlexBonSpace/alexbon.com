@@ -43,14 +43,13 @@ const aboutTitle: Record<Locale, string> = {
 };
 
 const profileJsonLd = {
-  "@context": "https://schema.org",
   "@type": "ProfilePage",
   "@id": `${canonical}#profile`,
   name: content.metaTitle,
   description: content.metaDescription,
   inLanguage: localeToBcp47[locale],
   url: canonical,
-  isPartOf: `${SITE_URL}/${locale}/`,
+  isPartOf: { "@id": `${SITE_URL}/${locale}/#website` },
   license: "https://creativecommons.org/licenses/by/4.0/",
   mainEntity: {
     "@type": "Person",

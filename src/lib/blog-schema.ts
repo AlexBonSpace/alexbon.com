@@ -66,7 +66,6 @@ export function buildBlogCollectionJsonLd(locale: Locale, posts: BlogPreview[]) 
   });
 
   return {
-    "@context": "https://schema.org",
     "@type": "Blog",
     name: hero.heroTitle,
     description: normalizeHeroDescription(hero.heroDescription),
@@ -91,7 +90,6 @@ export function buildBlogBreadcrumbJsonLd(locale: Locale) {
   const homeUrl = buildCanonicalUrl(locale, "/");
   const blogUrl = buildCanonicalUrl(locale, "/blog/");
   return {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       {

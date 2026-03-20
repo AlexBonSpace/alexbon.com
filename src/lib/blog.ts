@@ -495,25 +495,23 @@ export function paginatePostsByType(locale: Locale, type: BlogPost["type"], page
 }
 
 export function buildBreadcrumbJsonLd(locale: Locale, post: BlogPost) {
-  const siteUrl = "https://alexbon.com";
   const prefix = `/${locale}`;
-  const postUrl = `${siteUrl}${prefix}/blog/${post.slug}`;
+  const postUrl = `${SITE_URL}${prefix}/blog/${post.slug}/`;
 
   return {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: locale === "en" ? "Home" : locale === "ua" ? "Головна" : "Главная",
-        item: `${siteUrl}/${locale}/`,
+        item: `${SITE_URL}/${locale}/`,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: locale === "en" ? "Reflections" : locale === "ua" ? "Відображення" : "Отражения",
-        item: `${siteUrl}${prefix}/blog/`,
+        item: `${SITE_URL}${prefix}/blog/`,
       },
       {
         "@type": "ListItem",

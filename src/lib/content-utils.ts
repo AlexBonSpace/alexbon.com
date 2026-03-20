@@ -242,7 +242,6 @@ export function buildPostJsonLd(
     sameAs: doc.authorSameAs,
   });
   const base = {
-    "@context": "https://schema.org",
     "@id": doc.canonical,
     license: licenseUrl,
     author: authorReference,
@@ -257,7 +256,7 @@ export function buildPostJsonLd(
     url: doc.canonical,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${SITE_URL}${path}`,
+      "@id": `${SITE_URL}${path}/`,
     },
     image,
     thumbnailUrl: image,
@@ -315,7 +314,6 @@ export function buildAuthorPersonJsonLd(locale: Locale) {
   const sameAs = Array.from(new Set([...AUTHOR_SAME_AS, ...CONTACT_LINKS]));
 
   const base: Record<string, unknown> = {
-    "@context": "https://schema.org",
     "@type": "Person",
     "@id": aboutUrl,
     url: aboutUrl,
@@ -382,7 +380,6 @@ export function buildPageJsonLd(
   const licenseUrl = doc.license.startsWith("http") ? doc.license : "https://creativecommons.org/licenses/by/4.0/";
 
   return {
-    "@context": "https://schema.org",
     "@type": "WebPage",
     name: doc.title,
     description: doc.description,
@@ -396,7 +393,7 @@ export function buildPageJsonLd(
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${SITE_URL}${path}`,
+      "@id": `${SITE_URL}${path}/`,
     },
   };
 }

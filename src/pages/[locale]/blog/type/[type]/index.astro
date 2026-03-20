@@ -90,13 +90,12 @@ const prefix = `/${locale}`;
   languageAlternates={languageAlternates}
   jsonLd={[
     {
-      "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: label,
       inLanguage: localeToBcp47[locale],
       description,
       url: canonical,
-      isPartOf: `${SITE_URL}/${locale}/blog/`,
+      isPartOf: { "@id": `${SITE_URL}/${locale}/blog/` },
       sameAs,
       about: {
         "@type": "DefinedTerm",
