@@ -22,15 +22,48 @@ export const ABOUT_HERO_IMAGE = `${SITE_URL}/images/about-portrait-hero.webp`;
 export const DEFAULT_POST_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export const PERSON_JOB_TITLES: Record<Locale, string[]> = {
-  ua: ["Психолог", "Лайф-коуч", "Експерт з усвідомленості та медитації"],
-  ru: ["Психолог", "Лайф-коуч", "Эксперт по осознанности и медитации"],
-  en: ["Psychologist", "Life coach", "Mindfulness and meditation expert"],
+  ua: ["Психолог", "Письменник", "Музикант", "Експерт з усвідомленості та медитації"],
+  ru: ["Психолог", "Писатель", "Музыкант", "Эксперт по осознанности и медитации"],
+  en: ["Psychologist", "Writer", "Musician", "Mindfulness and meditation expert"],
 };
 
 export const PERSON_KNOWS_ABOUT: Record<Locale, string[]> = {
-  ua: ["Психологія", "Лайф-коучинг", "Усвідомленість", "Медитація", "Особистісний розвиток"],
-  ru: ["Психология", "Лайф-коучинг", "Осознанность", "Медитация", "Саморазвитие"],
-  en: ["Psychology", "Life coaching", "Mindfulness", "Meditation", "Personal growth"],
+  ua: [
+    "Психологія",
+    "Лайф-коучинг",
+    "Усвідомленість",
+    "Медитація",
+    "Особистісний розвиток",
+    "Музичне виробництво",
+    "Deep house",
+    "ШІ-інструменти",
+    "Промпт-інжиніринг",
+    "Вайб-кодинг",
+  ],
+  ru: [
+    "Психология",
+    "Лайф-коучинг",
+    "Осознанность",
+    "Медитация",
+    "Саморазвитие",
+    "Музыкальное производство",
+    "Deep house",
+    "ИИ-инструменты",
+    "Промпт-инжиниринг",
+    "Вайб-кодинг",
+  ],
+  en: [
+    "Psychology",
+    "Life coaching",
+    "Mindfulness",
+    "Meditation",
+    "Personal growth",
+    "Music production",
+    "Deep house",
+    "AI tools",
+    "Prompt engineering",
+    "Vibe coding",
+  ],
 };
 
 function normalizePath(path: string): string {

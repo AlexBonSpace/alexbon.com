@@ -81,18 +81,22 @@ export interface LandingContent {
   };
   personalWork?: {
     heading: string;
-    steps: Array<{
-      title: string;
+    directions: Array<{
+      heading: string;
       description: string;
-      icon?: "video" | "calendar";
-      details?: Array<{
-        text: string;
-        subtext?: string;
-        icon?: "monitor" | "building";
-      }>;
+      reviews?: string;
+      reviewsLink?: { label: string; href: string };
     }>;
-    reviewsText: string;
-    reviewsLink: { label: string; href: string };
+    process: {
+      heading: string;
+      step1: string;
+      social: string;
+    };
+    pricing: {
+      heading: string;
+      online: string;
+      office: string;
+    };
   };
   footerNote: string;
   blog: {
@@ -121,22 +125,25 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ru: {
     locale: "ru",
     brandName: "Алекс Бон",
-    tagline: "Отражения | Алекс Бон | Психолог",
-    metaTitle: "Психолог Алекс Бон | Отражения - короткие истории и эссе",
+    tagline: "Алекс Бон | Отражения",
+    metaTitle: "Алекс Бон | Отражения - истории, музыка, осознанность",
     metaDescription: AUTHOR_BIO.ru,
     hero: {
       title: "Короткие рассказы и истории без фильтров.",
       paragraphs: [],
     },
     introduction: {
-      heading: "Знакомство",
+      heading: "Обо мне",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Александр, психолог",
+      imageAlt: "Александр, психолог, писатель, музыкант",
       paragraphs: [
-        "Привет, меня зовут Александр. Я психолог. Если отбросить термины — человек, который помогает другим распутывать клубки мыслей, эмоций и чувств.",
-        "Я верю, что распутывать эти клубки можно двумя способами.",
-        "Первый — через истории, в которых вдруг видишь себя. Именно для этого я веду этот блог.",
-        "Второй — в тишине личной сессии, через живой диалог. Если что-то из прочитанного откликнулось или у вас есть свой «клубок», который пора распутать — добро пожаловать!",
+        "Привет, меня зовут Александр. Большинство знает меня как Алекс Бон.",
+        "Мне сложно уместить себя в одно слово. Психолог? Да. Писатель? Тоже. Музыкант? С недавних пор. Вайб-кодер? Тоже я :)",
+        "Мой путь начался в армии. В глухих лесах за сотни километров от дома я понял парадоксальную вещь: можно жить в аду, но чувствовать себя как в раю. С тех пор я ищу это состояние - и помогаю находить его другим.",
+        'Я много путешествовал - жил в Йемене, Индии и Англии, медитировал в ашрамах. Более 30 лет практикую осознанность - это не хобби, а способ жить. Получил два высших образования (экономическое и психологическое), поработал на всех должностях - от "принеси-подай" до учредителя собственной компании. Был женат, развелся, сохранил хорошие отношения. Последние десять лет живу один. Ну, не совсем один - со мной кошка.',
+        'В какой-то момент я понял, что звук делает то же, что годами я делал словами: возвращает человека в настоящий момент. Так родился <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музыкальный проект с лозунгом "deep sounds for dark times" (глубокие звуки для темных времен). Послушать можно на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> и других платформах.',
+        'Помимо этого в свободное время занимаюсь вайб-кодингом: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">этот сайт</a>, голосовой дневник <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">визуализатор музыки для YouTube</a> и некоторые другие программы для личного пользования - все собрано с помощью ИИ.',
+        "Живу в Киеве. Свет иногда гаснет, но творчество - нет :)",
       ],
     },
     process: {
@@ -173,57 +180,53 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "Моя история (для тех, кто хочет знать больше)",
-      image: "/images/about-story-portrait.webp",
-      imageAlt: "Алекс Бон смотрит в камеру, опершись руками на стол",
-      paragraphs: [
-        "Психологом я стал не по плану. Мой путь начался неожиданно — в армии. В тяжёлых условиях, в глухих лесах за сотни километров от дома я понял парадоксальную вещь: можно находиться в аду, но чувствовать себя как в раю. Вселенная любит шутить, подбрасывая озарения в самых неожиданных местах :)",
-        'Я много путешествовал, жил в Йемене, Индии и Англии, медитировал в ашрамах, получил два высших образования (экономическое и психологическое), поработал в разных сферах и на разных должностях — от "принеси-подай" до учредителя и руководителя собственной компании.',
-        "Был женат, развелся, сохранил хорошие отношения и последние десять лет живу один. Ну, если быть точным, не совсем один — со мной кошка. Этот опыт не сделал меня гуру, но научил замечать в чужих историях ниточки, которые когда-то проходили через мою собственную.",
-      ],
+      heading: "",
+      image: "",
+      imageAlt: "",
+      paragraphs: [],
     },
     personalWork: {
-      heading: "Как устроена личная работа:",
-      steps: [
+      heading: "Сотрудничество со мной",
+      directions: [
         {
-          title: "Первый шаг — встреча-знакомство (бесплатно)",
-          icon: "video",
+          heading: "Психология и осознанность",
           description:
-            "20 минут онлайн. Это не консультация, а простой человеческий разговор, чтобы понять, комфортно ли нам друг с другом и смогу ли я помочь именно в вашей ситуации. Никаких обязательств.",
+            "Помогаю распутывать клубки мыслей, эмоций и чувств. Более 30 лет практики медитации и осознанности, психологическое образование, сотрудничество с Центром томалогии, а также обширный собственный опыт - все это научило меня понимать других через себя. Если что-то внутри запуталось - разберемся вместе.",
+          reviews: "29 отзывов · рейтинг 4.9",
+          reviewsLink: { label: "Посмотреть на Google Картах >>>", href: AUTHOR_CONTACTS.googleMaps },
         },
         {
-          title: "Глубокая работа (если решим продолжить)",
-          icon: "calendar",
-          description: "Встречи обычно проходят раз в неделю, длительность — 1 час.",
-          details: [
-            {
-              icon: "monitor",
-              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн / 30 € / 35 $",
-              subtext:
-                "Я держу несколько «социальных мест» со сниженной стоимостью для тех, кто сейчас в сложной ситуации. Спросите меня об этом на первой встрече.",
-            },
-            {
-              icon: "building",
-              text: "В кабинете (Киев, м. Левобережная) — 2000 грн",
-            },
-          ],
+          heading: "ИИ в творчестве",
+          description:
+            "Не теория, а реальная практика. Промпт-инжиниринг, генерация изображений, видео, голоса, вайб-кодинг, автоматизация творческих задач и т.д. Если вам нужно встроить ИИ в творческий процесс или у вас есть вопросы по работе с ИИ - напишите, и я сделаю все возможное, чтобы вы и ИИ нашли общий язык.",
         },
       ],
-      reviewsText: "Отзывы о моей работе можно посмотреть на",
-      reviewsLink: { label: "Google картах >>>", href: AUTHOR_CONTACTS.googleMaps },
+      process: {
+        heading: "Процесс нашего сотрудничества",
+        step1:
+          "Первый шаг - бесплатная встреча-знакомство (20 минут онлайн), чтобы понять, смогу ли я помочь. Никаких обязательств.",
+        social:
+          "Я держу несколько «социальных мест» со сниженной стоимостью для тех, кто сейчас в сложной ситуации. Спросите меня об этом на первой встрече.",
+      },
+      pricing: {
+        heading: "Стоимость консультаций",
+        online: "Онлайн (Zoom, Telegram, Viber, WhatsApp) - 2000 грн / 40 € / 45 $",
+        office: "В кабинете (Киев, м. Левобережная) - 2500 грн / 50 € / 57 $",
+      },
     },
-    footerNote:
-      'P.S. "Алекс Бон" — это мой псевдоним, так проще меня найти в интернете :) А реальная фамилия пусть остается для скучных бумаг.',
+    footerNote: "",
     blog: {
       badge: "Отражения",
       heroTitle: "Отражения",
-      metaTitle: "Психолог Алекс Бон | Отражения - короткие истории и эссе",
+      metaTitle: "Алекс Бон | Отражения - истории, музыка, осознанность",
       heroDescription: [
-        "Добро пожаловать в пространство отражений.",
-        "Меня зовут Алекс Бон. Я психолог. Живу и работаю в Киеве.",
-        "Пишу истории о людях, чтобы вы могли увидеть в них себя.",
-        "А на личных встречах помогаю переписать истории вашей жизни.",
-        "Живу с кошкой, практикую дзен и учу нейросети эмпатии.",
+        "Меня зовут Алекс Бон. Живу в Киеве.",
+        "Пишу истории о людях - чтобы вы увидели в них себя.",
+        "Пишу музыку для людей - чтобы вы почувствовали момент.",
+        "Пишу код - потому что идеи не должны оставаться в голове.",
+        "А еще помогаю распутать то, что запуталось в вашей жизни.",
+        "30 лет практикую медитацию и осознанность.",
+        "Свет может погаснуть, но творчество - нет.",
       ],
       aboutButton: {
         label: "Обо мне",
@@ -234,22 +237,25 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   ua: {
     locale: "ua",
     brandName: "Алекс Бон",
-    tagline: "Відображення | Алекс Бон | Психолог",
-    metaTitle: "Психолог Алекс Бон | Відображення - короткі історії та есе",
+    tagline: "Алекс Бон | Відображення",
+    metaTitle: "Алекс Бон | Відображення - історії, музика, усвідомленість",
     metaDescription: AUTHOR_BIO.ua,
     hero: {
       title: "Короткі розповіді та історії без фільтрів.",
       paragraphs: [],
     },
     introduction: {
-      heading: "Знайомство",
+      heading: "Про мене",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Олександр, психолог",
+      imageAlt: "Олександр, психолог, письменник, музикант",
       paragraphs: [
-        "Привіт, мене звати Олександр. Я психолог. Якщо відкинути терміни — людина, яка допомагає іншим розплутувати клубки думок, емоцій і почуттів.",
-        "Я вірю, що розплутувати ці клубки можна двома способами.",
-        "Перший — через історії, в яких раптом бачиш себе. Саме для цього я веду цей блог.",
-        "Другий — у тиші особистої сесії, через живий діалог. Якщо щось із прочитаного відгукнулося або у вас є свій «клубок», який час розплутати — ласкаво просимо!",
+        "Привіт, мене звати Олександр. Більшість знає мене як Алекс Бон.",
+        "Мені складно вмістити себе в одне слово. Психолог? Так. Письменник? Теж. Музикант? З недавніх пір. Вайб-кодер? Теж я :)",
+        "Мій шлях почався в армії. У глухих лісах за сотні кілометрів від дому я зрозумів парадоксальну річ: можна жити в пеклі, але відчувати себе як у раю. З того часу я шукаю цей стан - і допомагаю знаходити його іншим.",
+        'Я багато подорожував - жив у Ємені, Індії та Англії, медитував в ашрамах. Понад 30 років практикую усвідомленість - це не хобі, а спосіб жити. Здобув дві вищі освіти (економічну та психологічну), попрацював на різних посадах - від "принеси-подай" до засновника власної компанії. Був одружений, розлучився, зберіг добрі стосунки. Останні десять років живу сам. Ну, не зовсім сам - зі мною кішка.',
+        'В якийсь момент я зрозумів, що звук робить те саме, що роками я робив словами: повертає людину в теперішній момент. Так народився <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музичний проєкт з гаслом "deep sounds for dark times" (глибокі звуки для темних часів). Послухати можна на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> та інших платформах.',
+        'Крім цього у вільний час займаюся вайб-кодингом: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">цей сайт</a>, голосовий щоденник <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">візуалізатор музики для YouTube</a> та деякі інші програми для особистого користування - все зібрано за допомогою ШІ.',
+        "Живу в Києві. Світло іноді гасне, але творчість - ні :)",
       ],
     },
     process: {
@@ -286,57 +292,53 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "Моя історія (для тих, хто хоче знати більше)",
-      image: "/images/about-story-portrait.webp",
-      imageAlt: "Олександр у затишній студії, спершись на стіл",
-      paragraphs: [
-        "Психологом я став не за планом. Мій шлях почався несподівано — в армії. У важких умовах, у глухих лісах за сотні кілометрів від дому я зрозумів парадоксальну річ: можна перебувати в пеклі, але відчувати себе як у раю. Всесвіт любить жартувати, підкидаючи осяяння у найнеочікуваніших місцях :)",
-        'Я багато подорожував, жив у Ємені, Індії та Англії, медитував в ашрамах, здобув дві вищі освіти (економічну та психологічну), попрацював у різних сферах і на різних посадах — від "принеси-подай" до засновника і керівника власної компанії.',
-        "Був одружений, розлучився, зберіг добрі стосунки і останні десять років живу сам. Якщо точніше, не зовсім сам — зі мною кішка. Цей досвід не зробив мене гуру, але навчив помічати в чужих історіях ниточки, які колись проходили через мою власну.",
-      ],
+      heading: "",
+      image: "",
+      imageAlt: "",
+      paragraphs: [],
     },
     personalWork: {
-      heading: "Як влаштована особиста робота:",
-      steps: [
+      heading: "Співпраця зі мною",
+      directions: [
         {
-          title: "Перший крок — зустріч-знайомство (безкоштовно)",
-          icon: "video",
+          heading: "Психологія та усвідомленість",
           description:
-            "20 хвилин онлайн. Це не консультація, а проста людська розмова, щоб зрозуміти, чи комфортно нам один з одним і чи зможу я допомогти саме у вашій ситуації. Жодних зобов'язань.",
+            "Допомагаю розплутувати клубки думок, емоцій і почуттів. Понад 30 років практики медитації та усвідомленості, психологічна освіта, співпраця з Центром томалогії, а також великий власний досвід - все це навчило мене розуміти інших через себе. Якщо щось усередині заплуталося - розберемося разом.",
+          reviews: "29 відгуків · рейтинг 4.9",
+          reviewsLink: { label: "Подивитися на Google Картах >>>", href: AUTHOR_CONTACTS.googleMaps },
         },
         {
-          title: "Глибока робота (якщо вирішимо продовжити)",
-          icon: "calendar",
-          description: "Зустрічі зазвичай проходять раз на тиждень, тривалість — 1 година.",
-          details: [
-            {
-              icon: "monitor",
-              text: "Онлайн (Zoom, Telegram, Viber, WhatsApp) — 1500 грн / 30 € / 35 $",
-              subtext:
-                "Я тримаю декілька «соціальних місць» зі зниженою вартістю для тих, хто зараз у складній ситуації. Запитайте мене про це на першій зустрічі.",
-            },
-            {
-              icon: "building",
-              text: "У кабінеті (Київ, м. Лівобережна) — 2000 грн",
-            },
-          ],
+          heading: "ШІ у творчості",
+          description:
+            "Не теорія, а реальна практика. Промпт-інжиніринг, генерація зображень, відео, голосу, вайб-кодинг, автоматизація творчих завдань тощо. Якщо вам потрібно вбудувати ШІ у творчий процес або у вас є питання щодо роботи з ШІ - напишіть, і я зроблю все можливе, щоб ви і ШІ знайшли спільну мову.",
         },
       ],
-      reviewsText: "Відгуки про мою роботу можна подивитися на",
-      reviewsLink: { label: "Google картах >>>", href: AUTHOR_CONTACTS.googleMaps },
+      process: {
+        heading: "Процес нашої співпраці",
+        step1:
+          "Перший крок - безкоштовна зустріч-знайомство (20 хвилин онлайн), щоб зрозуміти, чи зможу я допомогти. Жодних зобов'язань.",
+        social:
+          "Я тримаю декілька «соціальних місць» зі зниженою вартістю для тих, хто зараз у складній ситуації. Запитайте мене про це на першій зустрічі.",
+      },
+      pricing: {
+        heading: "Вартість консультацій",
+        online: "Онлайн (Zoom, Telegram, Viber, WhatsApp) - 2000 грн / 40 € / 45 $",
+        office: "У кабінеті (Київ, м. Лівобережна) - 2500 грн / 50 € / 57 $",
+      },
     },
-    footerNote:
-      'P.S. "Алекс Бон" — це мій псевдонім, так простіше мене знайти в інтернеті :) А справжнє прізвище нехай залишається для нудних паперів.',
+    footerNote: "",
     blog: {
       badge: "Відображення",
       heroTitle: "Відображення",
-      metaTitle: "Психолог Алекс Бон | Відображення - короткі історії та есе",
+      metaTitle: "Алекс Бон | Відображення - історії, музика, усвідомленість",
       heroDescription: [
-        "Ласкаво просимо до простору відображень.",
-        "Мене звати Алекс Бон. Я психолог. Живу і працюю в Києві.",
-        "Пишу історії про людей, щоб ви могли побачити в них себе.",
-        "А на особистих зустрічах допомагаю переписати історії вашого життя.",
-        "Живу з кішкою, практикую дзен і вчу нейромережі емпатії.",
+        "Мене звати Алекс Бон. Живу в Києві.",
+        "Пишу історії про людей - щоб ви побачили в них себе.",
+        "Пишу музику для людей - щоб ви відчули момент.",
+        "Пишу код - бо ідеї не повинні залишатися в голові.",
+        "А ще допомагаю розплутати те, що заплуталося у вашому житті.",
+        "30 років практикую медитацію та усвідомленість.",
+        "Світло може згаснути, але творчість - ні.",
       ],
       aboutButton: {
         label: "Про мене",
@@ -347,22 +349,25 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
   en: {
     locale: "en",
     brandName: "Alex Bon",
-    tagline: "Reflections | Alex Bon | Psychologist",
-    metaTitle: "Psychologist Alex Bon | Reflections - short stories and essays",
+    tagline: "Alex Bon | Reflections",
+    metaTitle: "Alex Bon | Reflections - stories, music, mindfulness",
     metaDescription: AUTHOR_BIO.en,
     hero: {
       title: "Short stories and tales without filters.",
       paragraphs: [],
     },
     introduction: {
-      heading: "Introduction",
+      heading: "About me",
       image: "/images/about-portrait-hero.webp",
-      imageAlt: "Alexander, psychologist",
+      imageAlt: "Alexander, psychologist, writer, musician",
       paragraphs: [
-        "Hi, my name is Alexander. I'm a psychologist. If we drop the terminology, I'm simply someone who helps untangle the knots of thoughts, emotions, and feelings.",
-        "I believe there are two ways to do this.",
-        "The first is through stories where you suddenly see yourself. That is exactly why I run this blog.",
-        "The second is through dialogue. While I offer professional therapy only in Russian and Ukrainian, I am always open to a friendly chat in English. If a story resonated with you and you want to share your thoughts — feel free to message me. I use translation tools to communicate, so let's keep it to text :)",
+        "Hi, my name is Alexander. Most people know me as Alex Bon.",
+        "It's hard to fit me into one word. Psychologist? Yes. Writer? That too. Musician? Recently. Vibe coder? Also me :)",
+        "My path started in the army. In remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can live in hell but feel like you're in paradise. Since then, I've been searching for that state - and helping others find it.",
+        "I traveled a lot - lived in Yemen, India, and England, meditated in ashrams. I've been practicing mindfulness for over 30 years - it's not a hobby, it's a way of life. I earned two degrees (economics and psychology), worked in every position from \"fetch this\" to founding my own company. Was married, divorced, kept good relationships. For the last ten years I've been living on my own. Well, not entirely - I have a cat.",
+        'At some point I realized that sound does the same thing I had been doing with words for years: it brings a person back to the present moment. That\'s how <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> was born - a music project with the motto "deep sounds for dark times." Listen on <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a>, and other platforms.',
+        'I also do vibe coding in my free time: <a href="https://github.com/AlexBonSpace/alexbon.com" target="_blank" rel="noopener noreferrer">this website</a>, voice diary <a href="https://dumkolov.alexbon.com/" target="_blank" rel="noopener noreferrer">DumkoLov</a>, <a href="https://youtu.be/S_J6lAnp9C4" target="_blank" rel="noopener noreferrer">music visualizer for YouTube</a> and some other personal tools - all built with the help of AI.',
+        "I live in Kyiv. The power sometimes goes out, but creativity doesn't :)",
       ],
     },
     process: {
@@ -399,27 +404,53 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
     },
     story: {
-      heading: "My Story",
-      image: "/images/about-story-portrait.webp",
-      imageAlt: "Alex Bon looking at the camera, leaning on a table",
-      paragraphs: [
-        "Becoming a psychologist wasn't part of the plan. My path began unexpectedly — in the army. In harsh conditions, in remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can be in hell but feel like you're in paradise. The universe loves to joke, dropping insights in the most unexpected places.",
-        "I traveled a lot, lived in Yemen, India, and England, meditated in ashrams, and earned two degrees (economics and psychology). I've worked in various fields — from running errands to being the founder of my own company.",
-        "I was married, divorced, maintained good relationships, and have been living on my own for the last ten years. Well, not entirely alone — I have a cat. This experience hasn't made me a guru, but it taught me to notice the threads in other people's stories that are woven into my own life too.",
-      ],
+      heading: "",
+      image: "",
+      imageAlt: "",
+      paragraphs: [],
     },
-    footerNote:
-      'P.S. "Alex Bon" is my pen name — it\'s easier to find me online :) My real surname is reserved for boring paperwork.',
+    personalWork: {
+      heading: "Work with me",
+      directions: [
+        {
+          heading: "Psychology and Mindfulness",
+          description:
+            "I help untangle the knots of thoughts, emotions, and feelings. Over 30 years of meditation and mindfulness practice, a psychology degree, collaboration with the Tomalogy Center, and extensive personal experience - all of this taught me to understand others through myself. If something inside got tangled - we'll figure it out together.",
+          reviews: "29 reviews · rating 4.9",
+          reviewsLink: { label: "See on Google Maps >>>", href: AUTHOR_CONTACTS.googleMaps },
+        },
+        {
+          heading: "AI in Creativity",
+          description:
+            "Not theory, but real practice. Prompt engineering, image and video generation, voice, vibe coding, creative task automation, and more. If you need to integrate AI into your creative process or have questions about working with AI - write to me, and I'll do my best to help you and AI find a common language.",
+        },
+      ],
+      process: {
+        heading: "How it works",
+        step1:
+          "First step - a free introductory meeting (20 minutes online) to understand if I can help. No obligations.",
+        social:
+          "I keep several 'social slots' at a reduced rate for those currently in a difficult situation. Ask me about this at our first meeting.",
+      },
+      pricing: {
+        heading: "Consultation rates",
+        online: "Online (Zoom, Telegram, Viber, WhatsApp) - 2000 UAH / 40 € / 45 $",
+        office: "In office (Kyiv, Livoberezhna metro) - 2500 UAH / 50 € / 57 $",
+      },
+    },
+    footerNote: "",
     blog: {
       badge: "Reflections",
       heroTitle: "Reflections",
-      metaTitle: "Psychologist Alex Bon | Reflections - short stories and essays",
+      metaTitle: "Alex Bon | Reflections - stories, music, mindfulness",
       heroDescription: [
-        "Welcome to the space of reflections.",
-        "My name is Alex Bon. I'm a psychologist. I live and work in Kyiv.",
-        "I write stories about people so you can see yourself in them.",
-        "And in personal sessions, I help rewrite the stories of your life.",
-        "I live with a cat, practice Zen, and teach neural networks empathy.",
+        "My name is Alex Bon. I live in Kyiv.",
+        "I write stories about people - so you can see yourself in them.",
+        "I make music for people - so you can feel the moment.",
+        "I write code - because ideas shouldn't stay in your head.",
+        "I also help untangle what got tangled in your life.",
+        "30 years of meditation and mindfulness practice.",
+        "The power may go out, but creativity doesn't stop.",
       ],
       aboutButton: {
         label: "About me",

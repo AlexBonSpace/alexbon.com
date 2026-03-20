@@ -174,9 +174,18 @@ const languageSwitcherLinks = languageLinks.map(({ label, locale: linkLocale }) 
 });
 
 const FOOTER_SOCIAL_LINKS = {
-  ru: [{ label: "Facebook", href: "https://www.facebook.com/AlexBonSpace" }],
-  ua: [],
-  en: [],
+  ru: [
+    { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
+    { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+  ],
+  ua: [
+    { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
+    { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+  ],
+  en: [
+    { label: "YouTube", href: "https://www.youtube.com/@AlexBonSpace" },
+    { label: "Spotify", href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" },
+  ],
 } as const;
 
 const feedFullUrl = `${SITE_URL}/${locale}/feed-full.json`;
@@ -439,9 +448,8 @@ const FONT_STYLESHEET =
 
     <!-- Footer Zone 2: Identity -->
     <div class="footer-identity">
-      <p class="footer-identity__name">© 2025 {messages.Footer.name}</p>
-      <p class="footer-identity__tagline">{messages.Footer.tagline}</p>
-      <p class="footer-identity__location">{messages.Footer.location}</p>
+      <p class="footer-identity__name">© 2025 {messages.Footer.name} · {messages.Footer.location}</p>
+      {messages.Footer.tagline ? <p class="footer-identity__tagline">{messages.Footer.tagline}</p> : null}
     </div>
 
     <!-- Footer Zone 3: Navigation -->

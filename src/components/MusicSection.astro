@@ -1,0 +1,124 @@
+---
+import type { LocaleKey } from "@/content";
+
+interface Props {
+  locale: LocaleKey;
+}
+
+const { locale } = Astro.props;
+
+const headings: Record<LocaleKey, string> = {
+  ru: "Музыка",
+  ua: "Музика",
+  en: "Music",
+};
+
+const subtitle = "Alex Bon Space · Deep sounds for dark times";
+
+const platformLinks = [
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@AlexBonSpace",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  },
+  {
+    label: "Spotify",
+    href: "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>`,
+  },
+  {
+    label: "Apple Music",
+    href: "https://music.apple.com/us/artist/alex-bon-space/1879505673",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M23.994 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043A5.022 5.022 0 0 0 19.7.243a10.16 10.16 0 0 0-1.898-.122C17.075.061 16.349.02 15.625.02H8.375c-.724 0-1.45.04-2.177.1-.637.045-1.27.15-1.874.345A5.11 5.11 0 0 0 2.42.89C1.3 1.623.558 2.623.24 3.934a9.23 9.23 0 0 0-.24 2.19C-.06 6.85-.02 7.576-.02 8.3v7.25c0 .724-.04 1.45.1 2.177.042.637.15 1.27.345 1.874.326 1.31 1.062 2.31 2.18 3.043a5.022 5.022 0 0 0 1.874.638c.627.094 1.26.15 1.898.122.727.06 1.453.1 2.177.1h7.25c.724 0 1.45-.04 2.177-.1.637-.042 1.27-.15 1.874-.345a5.11 5.11 0 0 0 1.904-.424c1.12-.733 1.862-1.733 2.18-3.043.19-.604.295-1.237.24-1.874.06-.727.1-1.453.1-2.177V8.3c.02-.724.06-1.45-.086-2.176zM16.95 14.12c0 .91-.18 1.776-.54 2.597-.36.823-.875 1.502-1.545 2.034a4.95 4.95 0 0 1-1.92.997c-.54.172-1.096.198-1.67.076-.488-.101-.9-.328-1.23-.682-.332-.355-.498-.76-.498-1.216 0-.41.103-.792.307-1.146.206-.355.49-.66.853-.915.364-.254.8-.465 1.305-.632.506-.168 1.079-.3 1.72-.398.55-.084 1.036-.21 1.46-.38v-.4c0-.578-.052-1.085-.158-1.523-.103-.437-.28-.793-.527-1.067a1.87 1.87 0 0 0-.94-.586 5.3 5.3 0 0 0-1.42-.166c-.12 0-.307.027-.556.082-.25.054-.47.146-.657.277v.725c0 .27-.098.497-.295.682a.986.986 0 0 1-.694.278.886.886 0 0 1-.652-.278.924.924 0 0 1-.27-.682V8.97c0-.203.054-.395.164-.576.11-.18.273-.336.49-.466.433-.268.963-.465 1.59-.59.627-.124 1.22-.187 1.776-.187.813 0 1.508.1 2.084.302.577.2 1.05.504 1.42.913.37.407.636.92.8 1.535.163.616.245 1.335.245 2.156v2.063z"/></svg>`,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@alexbonspace",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+  },
+];
+---
+
+<section class="hub-section hub-section--music">
+  <div class="hub-section__header">
+    <a
+      class="hub-section__title group"
+      href="https://www.youtube.com/@AlexBonSpace"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <h2>{headings[locale]}</h2>
+      <span class="hub-section__arrow" aria-hidden="true">→</span>
+    </a>
+    <p class="hub-section__description">{subtitle}</p>
+  </div>
+
+  <div class="music-embed">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?list=PLqNK3NuVBgtB1wviRIy_RRzzdB4DrYIl2"
+      title="Alex Bon Space — Discography"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      loading="lazy"
+      style="aspect-ratio: 16/9; width: 100%; border: 0; border-radius: 1rem;"></iframe>
+  </div>
+
+  <div class="music-platforms">
+    {
+      platformLinks.map((link) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="music-platforms__link"
+          aria-label={link.label}
+        >
+          <Fragment set:html={link.icon} />
+          <span>{link.label}</span>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .music-embed {
+    margin-top: 1.25rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .music-platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    justify-content: center;
+  }
+
+  .music-platforms__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1.5px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .music-platforms__link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  /* Music section accent: purple/violet to stand out from text sections */
+  :global(.hub-section--music) {
+    --section-accent: hsl(270, 50%, 55%);
+  }
+</style>

@@ -59,6 +59,7 @@ const securityHeaders = {
     "img-src 'self' data: https:",
     "font-src 'self' data: fonts.gstatic.com",
     "connect-src 'self' *.algolia.net *.algolianet.com",
+    "frame-src 'self' https://www.youtube.com https://youtube.com https://open.spotify.com",
     "frame-ancestors 'none'",
   ].join("; "),
   // Prevents clickjacking attacks

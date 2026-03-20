@@ -69,8 +69,8 @@ export const AUTHOR_LOCATION: Record<Locale, { city: string; country: string; on
 // ============================================================================
 
 export const AUTHOR_PRICING = {
-  online: { UAH: 1500, EUR: 30, USD: 35 },
-  inPerson: { UAH: 2000 },
+  online: { UAH: 2000, EUR: 40, USD: 45 },
+  inPerson: { UAH: 2500, EUR: 50, USD: 57 },
 } as const;
 
 export const AUTHOR_PRICING_NOTE: Record<Locale, string> = {
@@ -157,7 +157,10 @@ export const AUTHOR_SAME_AS = [
   `${SITE_URL}/ru/about/`,
   `${SITE_URL}/ua/about/`,
   "https://github.com/AlexBonSpace/alexbon.com",
-  "https://www.facebook.com/AlexBonSpace",
+  "https://www.youtube.com/@AlexBonSpace",
+  "https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU",
+  "https://music.apple.com/us/artist/alex-bon-space/1879505673",
+  "https://www.tiktok.com/@alexbonspace",
 ] as const;
 
 // ============================================================================
@@ -188,7 +191,7 @@ export function formatPricingText(_locale: Locale): { online: string; inPerson: 
   const { online, inPerson } = AUTHOR_PRICING;
   return {
     online: `${online.UAH} грн / ${online.EUR} € / ${online.USD} $`,
-    inPerson: `${inPerson.UAH} грн`,
+    inPerson: `${inPerson.UAH} грн / ${inPerson.EUR} € / ${inPerson.USD} $`,
   };
 }
 
