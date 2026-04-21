@@ -142,7 +142,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Мой путь начался в армии. В глухих лесах за сотни километров от дома я понял парадоксальную вещь: можно жить в аду, но чувствовать себя как в раю. С тех пор я ищу это состояние - и помогаю находить его другим.",
         'Я много путешествовал - жил в Йемене, Индии и Англии, медитировал в ашрамах. Более 30 лет практикую осознанность - это не хобби, а способ жить. Получил два высших образования (экономическое и психологическое), поработал на всех должностях - от "принеси-подай" до учредителя собственной компании. Был женат, развелся, сохранил хорошие отношения. Последние десять лет живу один. Ну, не совсем один - со мной кошка.',
         'В какой-то момент я понял, что звук делает то же, что годами я делал словами: возвращает человека в настоящий момент. Так родился <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музыкальный проект с лозунгом "deep sounds for dark times" (глубокие звуки для темных времен). Послушать можно на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> и других платформах.',
-        "Живу в Киеве. Свет иногда гаснет, но творчество - нет :)",
+        "Живу в Киеве. Свет иногда гаснет, творчество - нет.",
       ],
     },
     process: {
@@ -222,10 +222,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Меня зовут Алекс Бон. Живу в Киеве.",
         "Пишу истории о людях - чтобы вы увидели в них себя.",
         "Пишу музыку для людей - чтобы вы почувствовали момент.",
-        "Пишу код - потому что идеи не должны оставаться в голове.",
         "А еще помогаю распутать то, что запуталось в вашей жизни.",
         "30 лет практикую медитацию и осознанность.",
-        "Свет может погаснуть, но творчество - нет.",
       ],
       aboutButton: {
         label: "Обо мне",
@@ -253,7 +251,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Мій шлях почався в армії. У глухих лісах за сотні кілометрів від дому я зрозумів парадоксальну річ: можна жити в пеклі, але відчувати себе як у раю. З того часу я шукаю цей стан - і допомагаю знаходити його іншим.",
         'Я багато подорожував - жив у Ємені, Індії та Англії, медитував в ашрамах. Понад 30 років практикую усвідомленість - це не хобі, а спосіб жити. Здобув дві вищі освіти (економічну та психологічну), попрацював на різних посадах - від "принеси-подай" до засновника власної компанії. Був одружений, розлучився, зберіг добрі стосунки. Останні десять років живу сам. Ну, не зовсім сам - зі мною кішка.',
         'В якийсь момент я зрозумів, що звук робить те саме, що роками я робив словами: повертає людину в теперішній момент. Так народився <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> - музичний проєкт з гаслом "deep sounds for dark times" (глибокі звуки для темних часів). Послухати можна на <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a> та інших платформах.',
-        "Живу в Києві. Світло іноді гасне, але творчість - ні :)",
+        "Живу в Києві. Світло іноді гасне, творчість - ні.",
       ],
     },
     process: {
@@ -333,10 +331,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Мене звати Алекс Бон. Живу в Києві.",
         "Пишу історії про людей - щоб ви побачили в них себе.",
         "Пишу музику для людей - щоб ви відчули момент.",
-        "Пишу код - бо ідеї не повинні залишатися в голові.",
         "А ще допомагаю розплутати те, що заплуталося у вашому житті.",
         "30 років практикую медитацію та усвідомленість.",
-        "Світло може згаснути, але творчість - ні.",
       ],
       aboutButton: {
         label: "Про мене",
@@ -364,7 +360,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "My path started in the army. In remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can live in hell but feel like you're in paradise. Since then, I've been searching for that state - and helping others find it.",
         "I traveled a lot - lived in Yemen, India, and England, meditated in ashrams. I've been practicing mindfulness for over 30 years - it's not a hobby, it's a way of life. I earned two degrees (economics and psychology), worked in every position from \"fetch this\" to founding my own company. Was married, divorced, kept good relationships. For the last ten years I've been living on my own. Well, not entirely - I have a cat.",
         'At some point I realized that sound does the same thing I had been doing with words for years: it brings a person back to the present moment. That\'s how <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> was born - a music project with the motto "deep sounds for dark times." Listen on <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a>, and other platforms.',
-        "I live in Kyiv. The power sometimes goes out, but creativity doesn't :)",
+        "I live in Kyiv. The power sometimes goes out, creativity doesn't.",
       ],
     },
     process: {
@@ -415,10 +411,8 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "My name is Alex Bon. I live in Kyiv.",
         "I write stories about people - so you can see yourself in them.",
         "I make music for people - so you can feel the moment.",
-        "I write code - because ideas shouldn't stay in your head.",
         "I also help untangle what got tangled in your life.",
         "30 years of meditation and mindfulness practice.",
-        "The power may go out, but creativity doesn't stop.",
       ],
       aboutButton: {
         label: "About me",
