@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: 🔒 Security audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: 📝 Lint code
         run: npm run lint

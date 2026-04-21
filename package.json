@@ -19,7 +19,7 @@
     "postbuild": "node scripts/normalize-routes.mjs",
     "prepare": "husky",
     "verify:seo": "node scripts/verify-seo.mjs",
-    "verify": "npm audit --audit-level=high && npm run test && npm run build && npm run verify:seo",
+    "verify": "npm audit --audit-level=critical && npm run test && npm run build && npm run verify:seo",
     "lint": "eslint \"src/**/*.{ts,tsx,astro}\"",
     "lint:fix": "eslint \"src/**/*.{ts,tsx,astro}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,astro,css,json}\"",

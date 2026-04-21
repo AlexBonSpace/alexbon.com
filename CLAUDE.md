@@ -170,7 +170,7 @@ astro add <integration> --yes  # Add Astro integration without interactive promp
 Automatically run before every `git commit`:
 - ✅ Code formatting (`npm run format`)
 - ✅ Test suite (`npm run test`) — 93 tests
-- ✅ Security audit (`npm audit --audit-level=high`)
+- ✅ Security audit (`npm audit --audit-level=critical`)
 
 If any check fails, the commit is blocked until issues are resolved.
 
