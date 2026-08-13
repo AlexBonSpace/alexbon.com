@@ -2,8 +2,10 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
-const scriptDir = path.dirname(new URL(import.meta.url).pathname);
+// fileURLToPath handles Windows drive letters and percent-encoded spaces correctly
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, "..");
 const distDir = path.join(rootDir, "dist");
 const sitemapPath = path.join(distDir, "sitemap.xml");

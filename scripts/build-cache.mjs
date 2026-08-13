@@ -156,7 +156,8 @@ async function main() {
     const absolute = path.join(POSTS_DIR, relativeFile);
     const raw = await readFile(absolute, "utf8");
     const parsed = parseFrontmatter(raw, relativeFile);
-    const segments = relativeFile.split(path.sep);
+    // fast-glob always returns POSIX-style paths, even on Windows
+    const segments = relativeFile.split("/");
     const locale = segments[0];
     if (!LOCALES.has(locale)) {
       continue;

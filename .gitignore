@@ -31,3 +31,4 @@ src/lib/.cache/
 
 # cloudflare wrangler cache
 .wrangler/
+.claude/

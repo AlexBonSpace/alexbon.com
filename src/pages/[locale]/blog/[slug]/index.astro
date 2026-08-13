@@ -8,7 +8,6 @@ import { getPostBySlug, getPostsByLocale, getPostTranslations, findRelatedPosts 
 import { getPostTypeLabel, buildPostTypePath } from "@/lib/post-types";
 import { buildBreadcrumbJsonLd } from "@/lib/blog";
 import { buildCanonicalUrl, buildLanguageAlternates, DEFAULT_POST_IMAGE } from "@/lib/seo";
-import { formatDate } from "@/lib/datetime";
 import { messagesByLocale } from "@/lib/messages";
 import { translate, type MessageDictionary } from "@/i18n/translator";
 import { notFound } from "@/lib/http";
@@ -88,7 +87,6 @@ const jsonLd = [post.jsonLd, buildBreadcrumbJsonLd(locale, post)];
 const messages = messagesByLocale[locale] as MessageDictionary;
 const typeLabel = getPostTypeLabel(locale, post.type);
 const typeHref = buildPostTypePath(locale, post.type);
-const publishedOn = translate(messages, "Post.publishedOn", { date: formatDate(post.publishedDate, locale) });
 const relatedPostsHeading = translate(messages, "Post.relatedPostsHeading");
 const readMoreRaw = translate(messages, "Blog.readMore");
 const readMoreLabel =
@@ -138,11 +136,6 @@ const ensureTrailingSlash = (value: string) => (value.endsWith("/") ? value : `$
               </h1>
             )
           }
-          <div class="flex flex-wrap gap-3 text-sm text-muted">
-            <time datetime={post.publishedAt} class="font-medium">
-              {publishedOn}
-            </time>
-          </div>
           {
             post.tags.length > 0 && (
               <ul class="flex flex-wrap gap-2 text-xs font-semibold text-muted">
