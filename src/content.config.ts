@@ -16,7 +16,7 @@ const authorDisplaySchema = z
     for (const locale of locales) {
       if (value[locale] !== EXPECTED_AUTHOR_DISPLAY[locale]) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: [locale],
           message: `authorDisplay.${locale} must equal "${EXPECTED_AUTHOR_DISPLAY[locale]}"`,
         });
@@ -26,12 +26,12 @@ const authorDisplaySchema = z
 
 const authorSchemaSchema = z.object({
   sameAs: z
-    .array(z.string().url())
+    .array(z.url())
     .nonempty()
     .superRefine((value, ctx) => {
       if (value.length !== EXPECTED_AUTHOR_SAME_AS.length) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `authorSchema.sameAs must contain ${EXPECTED_AUTHOR_SAME_AS.length} entries`,
         });
         return;
@@ -39,7 +39,7 @@ const authorSchemaSchema = z.object({
       for (let index = 0; index < EXPECTED_AUTHOR_SAME_AS.length; index += 1) {
         if (value[index] !== EXPECTED_AUTHOR_SAME_AS[index]) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: [index],
             message: `authorSchema.sameAs[${index}] must equal "${EXPECTED_AUTHOR_SAME_AS[index]}"`,
           });

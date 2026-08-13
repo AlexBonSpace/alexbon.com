@@ -71,6 +71,9 @@ const messageChannelPolyfillPlugin = () => ({
 export default defineConfig({
   output: "server",
   trailingSlash: "always",
+  // Astro 7 defaults to 'jsx' whitespace rules, which can drop spaces between inline
+  // elements. Keep the HTML-aware behaviour so the upgrade does not change rendering.
+  compressHTML: true,
   adapter: cloudflare({
     imageService: "passthrough",
   }),
@@ -79,15 +82,8 @@ export default defineConfig({
     locales: ["ua", "ru", "en"],
     routing: {
       prefixDefaultLocale: true,
-    },
-  },
-  session: {
-    driver: "cookie",
-    name: "alexbon-session",
-    secret: process.env.ASTRO_SESSION_SECRET ?? "development-session-secret-change-me",
-    cookie: {
-      sameSite: "lax",
-      secure: true,
+      // Astro 6 flipped this default from true to false; set explicitly to keep behaviour.
+      redirectToDefaultLocale: true,
     },
   },
   integrations: [react(), mdx()],

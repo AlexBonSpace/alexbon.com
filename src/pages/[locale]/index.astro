@@ -2,11 +2,9 @@
 import { locales, type Locale } from "@/i18n/config";
 import { notFound } from "@/lib/http";
 
-export const prerender = true;
-
-export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale } }));
-}
+// Redirect-only route: must stay SSR. Prerendering it under Workers static assets
+// emits an empty 200 HTML file instead of issuing the 308.
+export const prerender = false;
 
 const localeParam = Astro.params.locale?.toLowerCase();
 const locale = locales.find((candidate) => candidate === localeParam) as Locale | undefined;
