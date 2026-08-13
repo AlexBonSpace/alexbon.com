@@ -6,6 +6,11 @@ import cloudflare from "@astrojs/cloudflare";
 import { fileURLToPath } from "node:url";
 
 const srcDir = fileURLToPath(new URL("./src", import.meta.url));
+// Load-bearing, do not remove. dist/_worker.js/index.js statically imports the renderers
+// chunk, and react-dom/server's browser build runs `new MessageChannel()` unguarded at
+// module scope. workerd has no MessageChannel, so without this the worker throws
+// "ReferenceError: MessageChannel is not defined" at startup and every SSR route 500s.
+// Verified 2026-08-13: enabling nodejs_compat does NOT provide it either.
 const messageChannelPolyfill = `/* alexbon MessageChannel polyfill */
 if (typeof globalThis.MessageChannel === "undefined") {
   class PolyfillPort {
@@ -46,14 +51,19 @@ const messageChannelPolyfillPlugin = () => ({
   apply: "build",
   enforce: "post",
   generateBundle(_options, bundle) {
-    for (const [fileName, chunk] of Object.entries(bundle)) {
-      if (
-        chunk.type === "chunk" &&
-        fileName.includes("_@astro-renderers_") &&
-        !chunk.code.includes("alexbon MessageChannel polyfill")
-      ) {
-        chunk.code = `${messageChannelPolyfill}\n${chunk.code}`;
-      }
+    // Match on content, not on chunk file name: the previous `_@astro-renderers_` name
+    // check would silently stop applying if an Astro or Vite upgrade renamed the chunk,
+    // and React SSR would then die in workerd at runtime instead of at build time.
+    // Nothing needs patching in the client bundle, so an empty pass here is expected.
+    // Browsers already have MessageChannel, so the client bundle must not carry this.
+    // Guarded in the fail-safe direction: an unknown environment still gets patched,
+    // because over-patching only wastes bytes while under-patching breaks the worker.
+    if (this.environment?.name === "client") return;
+    for (const chunk of Object.values(bundle)) {
+      if (chunk.type !== "chunk") continue;
+      if (!/\bnew MessageChannel\b/.test(chunk.code)) continue;
+      if (chunk.code.includes("alexbon MessageChannel polyfill")) continue;
+      chunk.code = `${messageChannelPolyfill}\n${chunk.code}`;
     }
   },
 });

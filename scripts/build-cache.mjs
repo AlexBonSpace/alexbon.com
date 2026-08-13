@@ -209,7 +209,11 @@ async function main() {
     });
   }
 
-  summaries.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  // Slug breaks ties so the cache order does not depend on filesystem iteration order.
+  summaries.sort((a, b) => {
+    const delta = new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+    return delta !== 0 ? delta : a.slug.localeCompare(b.slug);
+  });
   await mkdir(CACHE_DIR, { recursive: true });
   await writeFile(CACHE_FILE, JSON.stringify(summaries, null, 2));
   console.log(`[cache] Wrote ${summaries.length} post summaries to ${path.relative(ROOT, CACHE_FILE)}`);

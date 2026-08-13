@@ -32,10 +32,7 @@
     "astro": "^5.16.4",
     "dotenv": "^17.2.3",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "rehype-autolink-headings": "^7.1.0",
-    "rehype-slug": "^6.0.0",
-    "remark-gfm": "^4.0.1"
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^12.6.12",
