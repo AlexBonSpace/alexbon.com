@@ -1,20 +1,12 @@
+# Deploy: `npx wrangler deploy` (NOT `wrangler pages deploy` - Pages is unsupported by
+# @astrojs/cloudflare v13+). The adapter generates dist/server/wrangler.json at build time
+# and `wrangler deploy` uses that ("redirected configuration"): it sets `main`, the
+# `[assets]` block (directory dist/client, binding ASSETS) and bindings itself. This file
+# only supplies the values the adapter inherits - do not add `main` or `[assets]` here, the
+# adapter overrides them.
 name = "alexbon-astro"
-main = "@astrojs/cloudflare/entrypoints/server"
-compatibility_date = "2026-08-01"
+compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
-
-# Cloudflare Pages is no longer supported by @astrojs/cloudflare v13+, so this project
-# deploys as a Worker with static assets. `pages_build_output_dir` was replaced by the
-# `assets` block below; deploys run `wrangler deploy`, not `wrangler pages deploy`.
-[assets]
-binding = "ASSETS"
-directory = "./dist"
-# Deliberately no `not_found_handling`: the default lets unmatched paths fall through to
-# the Worker, which is required for the branded 404 from src/lib/http.ts.
-#
-# No `run_worker_first` either: the locale-less entry paths are handled by the generated
-# _redirects file at the edge (see scripts/build-redirects.mjs), and routing them to the
-# Worker first would bypass that file.
 
 [observability]
 enabled = true

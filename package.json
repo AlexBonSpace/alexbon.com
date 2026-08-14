@@ -16,7 +16,7 @@
     "tags:analyze": "node scripts/analyze-tags.mjs",
     "predev": "npm run cache:build",
     "prebuild": "npm run cache:build",
-    "postbuild": "node scripts/build-redirects.mjs",
+    "postbuild": "node scripts/build-edge-config.mjs",
     "prepare": "husky",
     "verify:seo": "node scripts/verify-seo.mjs",
     "verify": "npm audit --audit-level=critical && npm run test && npm run build && npm run verify:seo",

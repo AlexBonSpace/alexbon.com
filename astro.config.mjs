@@ -77,6 +77,10 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "passthrough",
   }),
+  // The site does not use Astro sessions (no Astro.session anywhere). Without this,
+  // @astrojs/cloudflare auto-provisions a SESSION KV namespace binding with no id,
+  // which is dead weight and forces a KV namespace to exist at deploy time.
+  session: false,
   i18n: {
     defaultLocale: "ua",
     locales: ["ua", "ru", "en"],

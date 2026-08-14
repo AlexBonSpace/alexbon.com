@@ -1,11 +1,21 @@
 # Claude Code Context - alexbon.com
 
 ## Project Overview
-Personal blog built with Astro 5 in server mode, deployed to Cloudflare Pages. Multilingual content (UA/RU/EN) with creative writing (articles, notes, stories) managed through MDX files.
+Personal blog built with Astro 7 in server mode, deployed to Cloudflare **Workers** (static
+assets + SSR). Multilingual content (UA/RU/EN) with creative writing (articles, notes,
+stories) managed through MDX files.
+
+> **Migration note (Astro 5 -> 7 / Pages -> Workers):** `@astrojs/cloudflare` v13+ dropped
+> Cloudflare Pages support, so the site now deploys as a Worker. Build output is split into
+> `dist/client` (static assets) and `dist/server` (Worker). The adapter generates
+> `dist/server/wrangler.json` at build time; `wrangler deploy` uses that. Key consequence:
+> **`src/middleware.ts` does NOT run for static-asset requests** (prerendered pages), so
+> edge redirects and security headers live in generated `_redirects` / `_headers` files -
+> see `scripts/build-edge-config.mjs`.
 
 ## Technology Stack
-- **Framework**: Astro 5 with server-side rendering
-- **Deployment**: Cloudflare Pages adapter (`@astrojs/cloudflare`)
+- **Framework**: Astro 7 with server-side rendering
+- **Deployment**: Cloudflare Workers adapter (`@astrojs/cloudflare` v14), static assets + SSR
 - **Styling**: Tailwind CSS v4 with custom design tokens in `src/styles/globals.css`
 - **Interactivity**: React islands (navbar, search page, theme toggle, reading progress) marked with `client:*` directives
 - **Content**: MDX via Astro Content Collections with translation helpers in `src/i18n/` and blog utilities in `src/lib/blog.ts`
@@ -82,11 +92,14 @@ src/
   - Worker bundle contains: runtime code (~2.3 MB including React SSR) + post summaries (~287 KB) + routing (~400 KB)
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
-- **Routes optimization**: `scripts/normalize-routes.mjs` runs automatically after build (`postbuild` hook) to optimize `_routes.json`
-  - Cloudflare Pages has 100-rule limit for routing configuration
-  - Current configuration: 24 optimized entries (6 static assets + 18 wildcards for localized paths)
-  - Uses wildcards like `/{locale}/blog/*` instead of individual post routes
-  - Reduces Worker invocations: blog posts served from CDN, only dynamic routes invoke Worker
+- **Edge config**: `scripts/build-edge-config.mjs` runs after build (`postbuild` hook) and writes:
+  - `dist/client/_redirects` - locale-less section landing pages (`/about/`, `/blog/`, `/search/`)
+    plus legacy dead URLs from `src/config/legacy-redirects.json` (all -> homepage). Runs at the
+    edge, which is required: middleware does not run for non-route paths under Workers.
+  - `dist/client/_headers` - security headers from `src/config/security-headers.json`, applied to
+    every response (the adapter only pre-fills immutable Cache-Control for `/_astro/*`).
+  - `_routes.json` / the old 100-rule Pages limit no longer apply; Workers serves static assets
+    from the CDN and only invokes the Worker for SSR routes automatically.
 
 ### Content Management
 - **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)
@@ -94,7 +107,8 @@ src/
 - Translation groups link content across locales
 
 ### Session & Theme
-- **Session management**: Lightweight cookie driver; set `ASTRO_SESSION_SECRET` (e.g., `openssl rand -base64 32`) in production for secure signing
+- **Sessions**: disabled (`session: false` in `astro.config.mjs`). The site does not use
+  `Astro.session`; without this the Cloudflare adapter auto-provisions an unused SESSION KV binding.
 - **Theme persistence**: Stored in both cookie and localStorage (`ALEXBON_THEME`)
 
 ### Search
@@ -117,7 +131,9 @@ src/
 - Same markup served by `src/pages/404.astro` and SSR fallbacks
 
 ### Security
-- **Headers**: Comprehensive security headers in `src/middleware.ts`
+- **Headers**: single source in `src/config/security-headers.json`. Applied via `_headers` to
+  static-asset responses (most of the site) AND via `src/middleware.ts` to SSR responses - under
+  Workers, prerendered pages bypass the middleware, so `_headers` is what actually protects them.
   - Content-Security-Policy: Protects against XSS, allows scripts from self and Algolia
   - X-Frame-Options: DENY (prevents clickjacking)
   - X-Content-Type-Options: nosniff (prevents MIME-type confusion)
@@ -147,9 +163,9 @@ npm run verify:seo    # Check built sitemap for banned URLs/duplicates/trailing 
 npm run verify        # Run full suite: audit + test + build + verify:seo
 
 # Build & Deployment
-npm run build         # Build Cloudflare SSR bundle + prerendered feeds/sitemap
-npm run preview       # Local preview of the SSR build
-npx wrangler pages deploy dist  # Deploy to Cloudflare Pages Functions
+npm run build         # Build Worker (dist/server) + static assets (dist/client) + edge config
+npx wrangler dev      # Local preview on the real workerd runtime (astro preview is NOT supported by the adapter)
+npx wrangler deploy   # Deploy to Cloudflare Workers (uses adapter-generated dist/server/wrangler.json)
 
 # Algolia (Optional)
 npm run algolia:sync         # Incremental sync: push only changed records to Algolia
