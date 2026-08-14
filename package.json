@@ -7,7 +7,7 @@
     "start": "bash scripts/start-dev.sh",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro build && wrangler dev",
     "astro": "astro",
     "algolia:sync": "node scripts/push-algolia.mjs",
     "test": "vitest run",
