@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 // fileURLToPath handles Windows drive letters and percent-encoded spaces correctly
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(scriptDir, "..");
-const distDir = path.join(rootDir, "dist");
+// Astro 7 + Cloudflare Workers adapter emits static assets into dist/client (not flat dist).
+const distDir = path.join(rootDir, "dist", "client");
 const sitemapPath = path.join(distDir, "sitemap.xml");
 const SITE_URL = "https://www.alexbon.com";
 const REQUIRED_LOCALES = ["ua", "ru", "en"];
