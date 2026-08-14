@@ -1,7 +1,7 @@
 ---
 import "@/lib/polyfills/message-channel";
 import "@/styles/globals.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import JsonLd from "@/components/JsonLd.astro";
 import NavigationShell from "@/components/NavigationShell";
 
@@ -395,7 +395,7 @@ const FONT_STYLESHEET =
     <script is:inline set:html={themeBootstrapScript} />
     {Astro.slots.has("head") ? <slot name="head" /> : null}
     <JsonLd data={structuredData} />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class={`font-sans antialiased ${bodyClass}`}>
     <svg class="fixed inset-0 pointer-events-none opacity-[0.015] mix-blend-overlay" aria-hidden="true">

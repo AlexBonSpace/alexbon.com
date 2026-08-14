@@ -1,21 +1,15 @@
 import type { MiddlewareHandler } from "astro";
+import securityHeaders from "@/config/security-headers.json";
+import legacyRedirects from "@/config/legacy-redirects.json";
 
-export const redirectEntries: Array<[string, string]> = [
-  ["/de/", "/ua/blog/"],
-  ["/pl/", "/ua/blog/"],
-  ["/blog/single-player/", "/en/blog/"],
-  ["/blog/heometriia-soniachnoi-pliamy/", "/ua/blog/"],
-  ["/сведение-счетов-с-близкими-людьми/", "/ru/blog/"],
-  ["/index.html", "/ua/blog/"],
-  ["/o-strakhe-sovershit-oshibku/", "/ru/blog/"],
-  ["/стремление-находиться-под-защитой/", "/ru/blog/"],
-  ["/popadaya_v_lovushku_pribedneniya/", "/ru/blog/"],
-  ["/put-k-sebe/strakh-pered-privyazannostyu/", "/ru/blog/"],
-  ["/put-k-sebe/vymeshchaya-zlobu-na-drugom/", "/ru/blog/"],
-  ["/put-k-sebe/starayas-podlovit-drugogo/", "/ru/blog/"],
-  ["/_next/static/media/e4af272ccee01ff0-s.p.woff2", "/ua/blog/"],
-  ["/favicon.ico", "/favicon.svg"],
-];
+// Dead URLs from the previous, Russian-only site (those posts no longer exist) -> homepage,
+// where locale is auto-detected. This is the SINGLE SOURCE, shared with
+// scripts/build-edge-config.mjs which emits the SAME list into the edge _redirects file.
+// The edge file is what actually redirects them: under Workers static assets this
+// middleware does NOT run for paths that match no route (they are served 404.html directly),
+// so middleware-only redirects are unreliable. The map below is a harmless fallback for
+// paths that do reach the Worker.
+export const redirectEntries = legacyRedirects as Array<[string, string]>;
 
 const fileLikePattern = /\.[^/]+$/;
 
@@ -45,32 +39,12 @@ export function normalizePathname(pathname: string): string {
 
 const buildDestination = (origin: string, targetPath: string) => new URL(targetPath, origin).toString();
 
-/**
- * Security headers applied to all responses
- * Protects against XSS, clickjacking, MIME-sniffing, and other common attacks
- */
-const securityHeaders = {
-  // Content Security Policy - prevents XSS attacks
-  // Allows scripts from self and Algolia (for search)
-  "Content-Security-Policy": [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' *.algolia.net *.algolianet.com",
-    "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
-    "img-src 'self' data: https:",
-    "font-src 'self' data: fonts.gstatic.com",
-    "connect-src 'self' *.algolia.net *.algolianet.com",
-    "frame-src 'self'",
-    "frame-ancestors 'none'",
-  ].join("; "),
-  // Prevents clickjacking attacks
-  "X-Frame-Options": "DENY",
-  // Prevents MIME-sniffing attacks
-  "X-Content-Type-Options": "nosniff",
-  // Controls referrer information
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  // Disables unwanted browser features
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-};
+// Security headers (CSP, X-Frame-Options, etc.) live in src/config/security-headers.json
+// as the single source of truth. This middleware applies them to Worker-served (SSR)
+// responses; scripts/build-edge-config.mjs writes the SAME values into the edge _headers
+// file so that static-asset responses (the bulk of the site) are covered too. Under
+// Cloudflare Workers static assets, prerendered pages are served WITHOUT invoking this
+// middleware, so _headers is not optional - it is what protects most pages.
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   const url = new URL(context.request.url);

@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render as renderEntry } from "astro:content";
 import { locales, type Locale } from "@/i18n/config";
 import { buildCanonicalUrl, SITE_URL } from "@/lib/seo";
 import {
@@ -14,8 +14,6 @@ import {
 } from "@/lib/content-utils";
 import { POSTS_PER_PAGE } from "@/lib/blog-constants";
 import { getSummaryByLocaleAndSlug } from "@/lib/post-summaries";
-
-type PostCollectionEntry = CollectionEntry<"posts">;
 
 export type BlogPost = {
   slug: string;
@@ -39,7 +37,7 @@ export type BlogPost = {
   image?: string;
   translationGroup: string;
   body: string;
-  render: PostCollectionEntry["render"];
+  render: () => ReturnType<typeof renderEntry>;
   summary: string;
   plainText: string;
   searchContent: string;
@@ -123,10 +121,12 @@ function resolveType(
 }
 
 const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
-  const segments = entry.slug.split("/");
+  // Content Layer: entry.id has the same "<locale>/<collection>/<file>" shape that
+  // entry.slug had under legacy collections.
+  const segments = entry.id.split("/");
   const locale = resolveLocaleFromSlug(segments);
   const collection = resolveCollection(segments[1]);
-  const fileSlug = segments[segments.length - 1] ?? entry.slug;
+  const fileSlug = segments[segments.length - 1] ?? entry.id;
   const type = resolveType(collection, entry.data.type);
   const summaryMetadata = getSummaryByLocaleAndSlug(locale, fileSlug);
 
@@ -201,7 +201,7 @@ const SOURCE_POSTS: BlogPost[] = rawPosts.map((entry): BlogPost => {
     image: entry.data.image?.trim() || undefined,
     translationGroup,
     body: rawBody,
-    render: entry.render,
+    render: () => renderEntry(entry),
     summary,
     plainText,
     searchContent: createSearchContent(rawBody),
@@ -252,6 +252,16 @@ for (const post of SOURCE_POSTS) {
   }
 }
 
+/**
+ * Newest first, falling back to slug so posts sharing a publishedAt keep a stable order.
+ * Without the tie-break, ordering follows the content loader's iteration order and can
+ * shuffle posts across pagination boundaries between builds.
+ */
+function byPublishedDesc(a: BlogPost, b: BlogPost): number {
+  const delta = b.publishedDate.getTime() - a.publishedDate.getTime();
+  return delta !== 0 ? delta : a.slug.localeCompare(b.slug);
+}
+
 for (const locale of locales) {
   const localePosts = postsByLocale.get(locale);
   const localeTags = tagsByLocale.get(locale);
@@ -259,14 +269,14 @@ for (const locale of locales) {
 
   if (!localePosts || !localeTags || !localeTypes) continue;
 
-  localePosts.sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime());
+  localePosts.sort(byPublishedDesc);
 
   for (const bucket of localeTags.values()) {
-    bucket.sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime());
+    bucket.sort(byPublishedDesc);
   }
 
   for (const bucket of localeTypes.values()) {
-    bucket.sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime());
+    bucket.sort(byPublishedDesc);
   }
 }
 
@@ -279,9 +289,7 @@ export function getAllPosts(locale?: Locale): BlogPost[] {
     return getPostsByLocale(locale);
   }
 
-  return locales
-    .flatMap((item) => getPostsByLocale(item))
-    .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime());
+  return locales.flatMap((item) => getPostsByLocale(item)).sort(byPublishedDesc);
 }
 
 export function getPostBySlug(locale: Locale, slug: string): BlogPost | undefined {
@@ -398,7 +406,7 @@ export function findRelatedPosts(post: BlogPost, limit = 4): BlogPost[] {
         return b.score - a.score;
       }
       // For equal scores, prefer newer posts
-      return b.post.publishedDate.getTime() - a.post.publishedDate.getTime();
+      return byPublishedDesc(a.post, b.post);
     });
 
   // Take top matches
@@ -413,7 +421,7 @@ export function findRelatedPosts(post: BlogPost, limit = 4): BlogPost[] {
       .filter(
         (candidate) => candidate.slug !== post.slug && candidate.type === post.type && !usedSlugs.has(candidate.slug),
       )
-      .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
+      .sort(byPublishedDesc)
       .slice(0, needed);
 
     result.push(...fallback);
@@ -444,7 +452,7 @@ export function getPostsForTag(locale: Locale, tag: string, options?: { original
         return scoreB - scoreA;
       }
 
-      return b.publishedDate.getTime() - a.publishedDate.getTime();
+      return byPublishedDesc(a, b);
     });
 }
 

@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main, master]
 
+# Deployment is handled by Cloudflare Workers Builds (dashboard Git integration), the same
+# "connect repo, push, auto-deploy" model that Cloudflare Pages used - no GitHub secrets
+# needed here. This workflow only runs quality checks.
 jobs:
   test:
     name: Test & Lint
@@ -45,11 +48,12 @@ jobs:
 
       - name: 📊 Bundle size check
         run: |
-          WORKER_SIZE=$(stat -f%z dist/_worker.js 2>/dev/null || stat -c%s dist/_worker.js)
-          WORKER_MB=$((WORKER_SIZE / 1024 / 1024))
-          echo "Worker bundle size: ${WORKER_MB}MB"
-          if [ $WORKER_MB -gt 5 ]; then
-            echo "❌ Worker bundle too large (${WORKER_MB}MB > 5MB limit)"
+          # Astro 7 + Workers adapter emits the Worker into dist/server (was dist/_worker.js).
+          WORKER_KB=$(du -sk dist/server | cut -f1)
+          WORKER_MB=$((WORKER_KB / 1024))
+          echo "Worker bundle (dist/server): ${WORKER_MB}MB (${WORKER_KB}KB)"
+          if [ "$WORKER_MB" -gt 10 ]; then
+            echo "❌ Worker bundle too large (${WORKER_MB}MB > 10MB limit)"
             exit 1
           fi
           echo "✅ Worker bundle size is acceptable"

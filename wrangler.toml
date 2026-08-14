@@ -1,3 +1,12 @@
+# Deploy: `npx wrangler deploy` (NOT `wrangler pages deploy` - Pages is unsupported by
+# @astrojs/cloudflare v13+). The adapter generates dist/server/wrangler.json at build time
+# and `wrangler deploy` uses that ("redirected configuration"): it sets `main`, the
+# `[assets]` block (directory dist/client, binding ASSETS) and bindings itself. This file
+# only supplies the values the adapter inherits - do not add `main` or `[assets]` here, the
+# adapter overrides them.
 name = "alexbon-astro"
 compatibility_date = "2024-11-01"
-pages_build_output_dir = "./dist"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+[observability]
+enabled = true

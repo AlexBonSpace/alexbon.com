@@ -1,9 +1,7 @@
 import { defineCollection, z } from "astro:content";
-import remarkGfm from "remark-gfm";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import { locales } from "../i18n/config";
-import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS } from "../lib/content-utils";
+import { glob } from "astro/loaders";
+import { locales } from "./i18n/config";
+import { AUTHOR_DISPLAY_BY_LOCALE, AUTHOR_SAME_AS } from "./lib/content-utils";
 
 const EXPECTED_AUTHOR_DISPLAY = AUTHOR_DISPLAY_BY_LOCALE;
 const EXPECTED_AUTHOR_SAME_AS = Array.from(AUTHOR_SAME_AS);
@@ -18,7 +16,7 @@ const authorDisplaySchema = z
     for (const locale of locales) {
       if (value[locale] !== EXPECTED_AUTHOR_DISPLAY[locale]) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: [locale],
           message: `authorDisplay.${locale} must equal "${EXPECTED_AUTHOR_DISPLAY[locale]}"`,
         });
@@ -28,12 +26,12 @@ const authorDisplaySchema = z
 
 const authorSchemaSchema = z.object({
   sameAs: z
-    .array(z.string().url())
+    .array(z.url())
     .nonempty()
     .superRefine((value, ctx) => {
       if (value.length !== EXPECTED_AUTHOR_SAME_AS.length) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `authorSchema.sameAs must contain ${EXPECTED_AUTHOR_SAME_AS.length} entries`,
         });
         return;
@@ -41,7 +39,7 @@ const authorSchemaSchema = z.object({
       for (let index = 0; index < EXPECTED_AUTHOR_SAME_AS.length; index += 1) {
         if (value[index] !== EXPECTED_AUTHOR_SAME_AS[index]) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: [index],
             message: `authorSchema.sameAs[${index}] must equal "${EXPECTED_AUTHOR_SAME_AS[index]}"`,
           });
@@ -68,22 +66,12 @@ const basePostSchema = z.object({
   translationGroup: z.string().optional(),
 });
 
+// Content Layer API. `glob()` derives entry.id the same way legacy collections derived
+// entry.slug (see astro/dist/content/loaders/glob.js -> getContentEntryIdAndSlug), so ids
+// stay in the "<locale>/<collection>/<file>" form that src/lib/blog.ts splits apart.
 const posts = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/posts" }),
   schema: basePostSchema,
-  markdown: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "wrap",
-          properties: { className: ["heading-anchor"] },
-        },
-      ],
-    ],
-  },
 });
 
 export const collections = { posts };

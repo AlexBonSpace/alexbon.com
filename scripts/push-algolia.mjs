@@ -7,7 +7,8 @@ import { algoliasearch } from 'algoliasearch';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const distDir = path.resolve(projectRoot, 'dist');
+// Astro 7 + Cloudflare Workers adapter emits static assets (feeds) into dist/client.
+const distDir = path.resolve(projectRoot, 'dist', 'client');
 const cachePath = path.join(__dirname, '.algolia-cache.json');
 const CACHE_VERSION = 1;
 
