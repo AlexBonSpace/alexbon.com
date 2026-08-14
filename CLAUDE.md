@@ -19,13 +19,13 @@ stories) managed through MDX files.
 - **Styling**: Tailwind CSS v4 with custom design tokens in `src/styles/globals.css`
 - **Interactivity**: React islands (navbar, search page, theme toggle, reading progress) marked with `client:*` directives
 - **Content**: MDX via Astro Content Collections with translation helpers in `src/i18n/` and blog utilities in `src/lib/blog.ts`
-- **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/*/feed-full*.json`
+- **Search**: Optional Algolia integration; indexing via `scripts/push-algolia.mjs` reading locale feeds from `dist/client/*/feed-full*.json`. Three indexes: `TOMA` (ua), `posts_ru`, `posts_en`
 - **Testing**: Vitest with happy-dom (93 tests covering locale utils, blog utils, feed utils, SEO)
 - **Code Quality**: ESLint + Prettier with automatic formatting
 - **Git Hooks**: Husky pre-commit hooks (format, test, security audit)
 - **CI/CD**: GitHub Actions for automated checks on push
 
-### React Components (9 active files, ~700 KB in worker bundle for SSR)
+### React Components (9 active files)
 **Interactive UI (on every page):**
 - `NavigationShell.tsx` - Main navigation wrapper with theme/locale contexts
 - `Navbar.tsx` - Navigation menu with mobile support
@@ -56,10 +56,11 @@ src/
 │       └── ua/          # Ukrainian content (default)
 ├── lib/                 # Core utilities
 │   ├── .cache/         # Generated build cache (never edit manually)
-│   ├── pages.ts        # Translation-aware page helpers
+│   ├── post-summaries.ts # Reads the build-time metadata cache
 │   ├── blog.ts         # Blog data helpers
 │   └── http.ts         # Shared 404 handling
-├── pages/              # File-based routing (/, /about, /blog, /search, feeds, sitemap)
+├── config/             # Shared JSON: security-headers.json, legacy-redirects.json
+├── pages/              # File-based routing (/, /[locale]/*, feeds, sitemap; locale-less /about /blog /search are edge redirects, not pages)
 ├── contexts/           # React contexts (theme, i18n)
 ├── messages/           # Translation dictionaries (JSON)
 └── styles/             # Global CSS and Tailwind tokens
@@ -74,24 +75,34 @@ src/
   - Server-side redirect (no white screen, zero visual delay)
   - Minimal Worker invocations due to low traffic (<10 visits/day)
 - Locale roots redirect to their blog index
-- Trailing slashes enforced via 308 redirects in middleware
+- Trailing slashes: under Workers the static-asset layer normalizes them (307). `src/middleware.ts`
+  still has a 308 rule, but it only runs for Worker-served (SSR) responses - most pages are static
+  and never reach it
+- Legacy/section redirects are NOT in middleware for static paths: they live in the generated
+  `_redirects` file (see `scripts/build-edge-config.mjs` + `src/config/legacy-redirects.json`),
+  because middleware does not run for paths that match no route
 - Language menu uses `navigationAlternatePaths` for deep-linking translated slugs
 
 ### Caching & Performance
 - **Build-time caching**: Post summaries cached in `src/lib/.cache/post-summaries.json` (generated, never edit manually)
 - **Cache optimization**: Only essential metadata stored (title, description, summary, tags, URLs, dates) - no full post text
-  - Current size: ~287 KB for 168 posts (~1.7 KB per post)
-  - Projected at 500 posts: ~870 KB cache → ~3.6 MB total worker bundle (safely under 5MB Cloudflare limit)
-  - Worker bundle size: **3.0 MB** (168 posts) → ~3.6 MB (500 posts) - minimal growth due to prerendering
-  - Bundle includes React runtime (~700 KB) required for SSR rendering of interactive components (navigation, search, theme toggle)
-  - Full post text read directly from MDX during build for RSS/JSON feeds (which are prerendered)
-- **Prerendering strategy**: Content pages use `export const prerender = true` (except root `/`)
-  - Blog posts (`/[locale]/blog/[slug]/`), tag pages, search page - all prerendered as static HTML
-  - Root `/` uses SSR for intelligent locale detection (`resolveRequestLocale`)
-  - MDX content NOT included in worker bundle, only metadata cache
-  - Worker bundle contains: runtime code (~2.3 MB including React SSR) + post summaries (~287 KB) + routing (~400 KB)
+  - Current size: ~448 KB for 318 posts (~1.4 KB per post)
+  - Full post text read directly from MDX during build for RSS/JSON feeds (prerendered) - never bundled into the Worker
+- **Cloudflare Workers size limit** (the "bundle" is the Worker code in `dist/server`, measured GZIPPED):
+  - **Free plan: 3 MB gzipped · Paid plan: 10 MB gzipped**
+  - Current Worker: **~271 KB gzipped** (~1.4 MB uncompressed) - about 9% of the free limit, huge headroom
+  - Static assets (`dist/client`, ~25 MB across ~498 files) are served from Cloudflare's CDN and do
+    NOT count toward the Worker size limit - only `dist/server` does
+  - CI guards this: build fails if `dist/server` exceeds 10 MB uncompressed (see `.github/workflows/ci.yml`)
+  - The whole caching + prerendering design exists to keep the Worker small (this used to be a fight
+    against the old 5 MB Pages limit; on Workers there is now a ~10x margin). Keep it: metadata cache
+    instead of full text, everything prerendered, MDX read only at build time
+- **Prerendering strategy**: Content pages use `export const prerender = true` (except root `/` and the SSR redirect routes)
+  - Blog posts (`/[locale]/blog/[slug]/`), tag pages, type pages, search page - all prerendered as static HTML
+  - Root `/` and `/[locale]` use SSR for locale detection / redirects (`resolveRequestLocale`)
+  - MDX content NOT included in Worker bundle, only the metadata cache
 - Cache regenerates automatically before dev/build; rerun manually with `npm run cache:build`
-- Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in worker to minimize bundle size
+- Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in the Worker to minimize bundle size
 - **Edge config**: `scripts/build-edge-config.mjs` runs after build (`postbuild` hook) and writes:
   - `dist/client/_redirects` - locale-less section landing pages (`/about/`, `/blog/`, `/search/`)
     plus legacy dead URLs from `src/config/legacy-redirects.json` (all -> homepage). Runs at the
@@ -147,7 +158,10 @@ src/
 ## Development Commands
 ```bash
 # Development
-npm run dev           # Start Astro dev server with SSR on Cloudflare shim
+npm run dev           # Fast Astro dev server (Vite). NOTE: redirects/_headers/_redirects/404
+                      #   behave differently here than in production - it is NOT the real Worker
+npm run preview       # Build + run the REAL Worker locally (astro build && wrangler dev) - use this
+                      #   to verify redirects, security headers, 404 as they will actually behave
 npm run cache:build   # Regenerate src/lib/.cache/post-summaries.json (runs automatically in dev/build)
 
 # Code Quality
@@ -191,13 +205,20 @@ Automatically run before every `git commit`:
 If any check fails, the commit is blocked until issues are resolved.
 
 ### GitHub Actions CI
-Automatically triggered on push to `main`, `master`, or `claude/**` branches:
+Runs **checks only** (no deploy) on push to `main`/`master`/`claude/**` and on PRs to `main`/`master`:
 - Code linting and formatting checks
 - Full test suite
 - Production build
 - SEO validation
-- Bundle size verification (<5MB for worker)
+- Bundle size verification (`dist/server` < 10MB uncompressed)
 - Security audit
+
+### Deployment (Cloudflare Workers Builds)
+Deployment is handled by **Cloudflare Workers Builds** (dashboard Git integration), NOT GitHub Actions -
+the same "connect repo, push to `main`, auto-deploy" model Pages used, with no GitHub secrets. Build
+command `npm run build`, deploy command `npx wrangler deploy`. The Worker name in the dashboard must
+match `name` in `wrangler.toml` (`alexbon-astro`). Build-time env vars (e.g. `PUBLIC_ALGOLIA_*` for
+search) are set in the Worker's **Build** variables, not runtime.
 
 ### VS Code Integration
 Auto-formatting configured in `.vscode/settings.json`:
@@ -345,10 +366,13 @@ canonical: https://www.alexbon.com/{locale}/blog/{slug}/
 ```
 
 ## Algolia Search (Optional)
-- **Indexing**: `scripts/push-algolia.mjs` reads all `dist/*/feed-full*.json` pages (follows `next_url`)
+- **Indexing**: `scripts/push-algolia.mjs` reads all `dist/client/*/feed-full*.json` pages (follows `next_url`)
+- **Three indexes**: `TOMA` (ua), `posts_ru`, `posts_en`. UA uses `TOMA` on both write (sync) and read
+  (search) - the name is legacy but consistent
 - **Incremental mode**: Maintains manifest at `scripts/.algolia-cache.json` (gitignored); only pushes changed/removed records
 - **Full mode** (`--full` flag): Replaces entire index via `replaceAllObjects` and rebuilds manifest
-- Requires Algolia API keys in environment variables
+- **Env vars**: run `npm run algolia:sync` locally with `.env` (holds `ALGOLIA_ADMIN_API_KEY`). The Worker
+  build needs only the public `PUBLIC_ALGOLIA_*` vars (search runs client-side); admin key never goes to Cloudflare
 
 ## Analysis Instructions for Claude
 **Always perform deep technical analysis:**
