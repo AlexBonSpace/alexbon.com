@@ -366,7 +366,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
         "Hi, my name is Alexander. Most people know me as Alex Bon.",
         "It's hard to fit me into one word. Psychologist? Yes. Writer? That too. Musician? Recently. Vibe coder? Also me :)",
         "My path started in the army. In remote forests hundreds of kilometers from home, I realized a paradoxical thing: you can live in hell but feel like you're in paradise. Since then, I've been searching for that state - and helping others find it.",
-        "I traveled a lot - lived in Yemen, India, and England, meditated in ashrams. I've been practicing mindfulness for over 30 years - it's not a hobby, it's a way of life. I earned two degrees (economics and psychology), worked in every position from \"fetch this\" to founding my own company. Was married, divorced, kept good relationships. For the last ten years I've been living on my own. Well, not entirely - I have a cat.",
+        "I traveled a lot - lived in Yemen, India, and England, meditated in ashrams. I've been practicing mindfulness for over 30 years - it's not a hobby, it's a way of life. I earned two degrees (economics and psychology), worked in around a dozen professions, from entry-level positions to founding my own company. I was married, got divorced, and stayed on good terms. For the last ten years I've been living on my own. Well, not entirely - I have a cat.",
         'At some point I realized that sound does the same thing I had been doing with words for years: it brings a person back to the present moment. That\'s how <a href="https://www.youtube.com/@AlexBonSpace" target="_blank" rel="noopener noreferrer">Alex Bon Space</a> was born - a music project with the motto "deep sounds for dark times." Listen on <a href="https://open.spotify.com/artist/6oFimUSI5K66NlDyUQyIyU" target="_blank" rel="noopener noreferrer">Spotify</a>, <a href="https://music.apple.com/us/artist/alex-bon-space/1879505673" target="_blank" rel="noopener noreferrer">Apple Music</a>, and other platforms.',
         "I live in Kyiv. The power sometimes goes out, creativity doesn't.",
       ],
@@ -417,9 +417,9 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       metaTitle: "Alex Bon | Reflections - stories, music, mindfulness",
       heroDescription: [
         "My name is Alex Bon. I live in Kyiv.",
-        "I write stories about people - so you can see yourself in them.",
-        "I make music for people - so you can feel the moment.",
-        "I also help untangle what got tangled in your life.",
+        "I write stories about people — so you can see yourself in them.",
+        "I make music for people — so you can feel the moment.",
+        "I also help untangle the knots in your life.",
         "30 years of meditation and mindfulness practice.",
       ],
       aboutButton: {
