@@ -1,12 +1,24 @@
 # Deploy: `npx wrangler deploy` (NOT `wrangler pages deploy` - Pages is unsupported by
 # @astrojs/cloudflare v13+). The adapter generates dist/server/wrangler.json at build time
-# and `wrangler deploy` uses that ("redirected configuration"): it sets `main`, the
-# `[assets]` block (directory dist/client, binding ASSETS) and bindings itself. This file
-# only supplies the values the adapter inherits - do not add `main` or `[assets]` here, the
-# adapter overrides them.
+# and `wrangler deploy` uses that ("redirected configuration"): it sets `main`, the assets
+# directory (dist/client) and bindings itself. Do not add `main` here.
 name = "alexbon-astro"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
 [observability]
 enabled = true
+
+# Only the SSR redirect routes may invoke the Worker. By default every request that matches
+# no static asset falls through to the Worker, so bots scanning junk URLs (/wp-login.php,
+# /wp-content/plugins/*/readme.txt, /.env) each cost a Worker invocation just to get a 404.
+# On 2026-10-09 one scanner burned ~128k invocations that way and nearly hit the Free plan's
+# 100k/day limit. With an explicit run_worker_first list, every other path is asset-only:
+# served from the CDN, or answered with dist/client/404.html by the asset layer - free.
+# Verified locally with `wrangler dev` (Worker-invocation probe) on 2026-10-09.
+# If you add a new SSR (prerender = false) route, add its path here or it will 404.
+# `binding` must stay set: the adapter only fills the assets block when it is missing.
+[assets]
+binding = "ASSETS"
+not_found_handling = "404-page"
+run_worker_first = ["/", "/ua/", "/ru/", "/en/", "/ua", "/ru", "/en"]

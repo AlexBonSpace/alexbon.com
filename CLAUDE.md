@@ -109,8 +109,15 @@ src/
     edge, which is required: middleware does not run for non-route paths under Workers.
   - `dist/client/_headers` - security headers from `src/config/security-headers.json`, applied to
     every response (the adapter only pre-fills immutable Cache-Control for `/_astro/*`).
-  - `_routes.json` / the old 100-rule Pages limit no longer apply; Workers serves static assets
-    from the CDN and only invokes the Worker for SSR routes automatically.
+  - `_routes.json` / the old 100-rule Pages limit no longer apply.
+- **Worker invocations are an allowlist** (`[assets]` in `wrangler.toml`): `run_worker_first` lists
+  the only paths that reach the Worker (`/`, `/ua/`, `/ru/`, `/en/` and their no-slash forms);
+  `not_found_handling = "404-page"` makes the asset layer answer every other miss with
+  `dist/client/404.html`. Without this, ANY URL with no matching asset invokes the Worker -
+  on 2026-10-09 a WordPress plugin scanner (~128k junk URLs from one IP) burned the Free plan's
+  100k/day limit that way. **A new SSR route (`prerender = false`) must be added to
+  `run_worker_first`, or it will 404.** (The locale-less `/blog/{page,tag,type}/*` and `/feed.xml`
+  SSR routes already 404'd before this change - Astro i18n does not serve them.)
 
 ### Content Management
 - **Manual timestamps**: Keep `updatedAt` = `publishedAt` unless content materially changes (no automated git sync)
