@@ -70,8 +70,12 @@ src/
 
 ### Routing & Redirects
 - **Locale-first routing**: All content under locale prefixes (`/ua/`, `/ru/`, `/en/`)
-- **Root `/` uses SSR** for instant locale detection and 308 redirect
+- **Root `/` uses SSR** for instant locale detection and 302 redirect
   - Priority: `ALEXBON_LOCALE` cookie → `Accept-Language` header → `ua` fallback
+  - 302 on purpose: the target depends on the visitor, and browsers cache 308 forever
+  - Requires `i18n.routing.redirectToDefaultLocale: false` in `astro.config.mjs`. With `true`,
+    Astro replaces this page's response with its own "302 to /ua/" and detection never runs
+    (that was the live behaviour from at least Nov 2025 until 2026-10-24)
   - Server-side redirect (no white screen, zero visual delay)
   - Minimal Worker invocations due to low traffic (<10 visits/day)
 - Locale roots redirect to their blog index

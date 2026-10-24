@@ -7,5 +7,7 @@ const locale = resolveRequestLocale({
   cookies: Astro.cookies,
 });
 
-return Astro.redirect(`/${locale}/`, 308);
+// 302, не 308: цель зависит от куки и языка браузера. Постоянный (308) редирект браузер
+// запоминает и потом не спрашивает сервер, поэтому смена языка не сработала бы на "/".
+return Astro.redirect(`/${locale}/`, 302);
 ---

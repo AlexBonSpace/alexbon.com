@@ -86,8 +86,9 @@ export default defineConfig({
     locales: ["ua", "ru", "en"],
     routing: {
       prefixDefaultLocale: true,
-      // Astro 6 flipped this default from true to false; set explicitly to keep behaviour.
-      redirectToDefaultLocale: true,
+      // Must stay false: when true, Astro discards the response of src/pages/index.astro and
+      // always sends "/" to /ua/ with a 302, so cookie/Accept-Language detection never runs.
+      redirectToDefaultLocale: false,
     },
   },
   integrations: [react(), mdx()],
