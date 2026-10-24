@@ -109,8 +109,14 @@ src/
 - Blog listings, search, tag, and type pages consume build-time cache instead of `getCollection` in the Worker to minimize bundle size
 - **Edge config**: `scripts/build-edge-config.mjs` runs after build (`postbuild` hook) and writes:
   - `dist/client/_redirects` - locale-less section landing pages (`/about/`, `/blog/`, `/search/`)
-    plus legacy dead URLs from `src/config/legacy-redirects.json` (all -> homepage). Runs at the
-    edge, which is required: middleware does not run for non-route paths under Workers.
+    plus legacy dead URLs from `src/config/legacy-redirects.json` (-> homepage, except
+    `/favicon.svg` -> `/favicon-32x32.png`). Runs at the edge, which is required: middleware does
+    not run for non-route paths under Workers.
+  - **`_redirects` rules win over existing files.** Never redirect a path that is a real file in
+    `public/`: on 2026-10-24 a legacy `/favicon.ico -> /favicon.svg` rule (harmless under Pages,
+    where middleware never saw static files) started firing at the edge and replaced the site
+    icon with the leftover default Astro logo. `/favicon.svg` now points to the real PNG icon so
+    browsers that cached that permanent redirect still land on the right icon.
   - `dist/client/_headers` - security headers from `src/config/security-headers.json`, applied to
     every response (the adapter only pre-fills immutable Cache-Control for `/_astro/*`).
   - `_routes.json` / the old 100-rule Pages limit no longer apply.
