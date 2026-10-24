@@ -1,0 +1,2 @@
+# Keep LF everywhere (matches Prettier endOfLine: "lf"); overrides core.autocrlf=true on Windows.
+* text=auto eol=lf
