@@ -170,9 +170,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     invitation: {
       heading: "",
       body: "",
-      buttons: [
-        { label: "Написать в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-      ],
+      buttons: [{ label: "Написать в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" }],
     },
     testimonials: {
       heading: "",
@@ -281,9 +279,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     invitation: {
       heading: "",
       body: "",
-      buttons: [
-        { label: "Написати в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-      ],
+      buttons: [{ label: "Написати в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" }],
     },
     testimonials: {
       heading: "",
@@ -383,9 +379,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
     invitation: {
       heading: "",
       body: "",
-      buttons: [
-        { label: "Message on Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-      ],
+      buttons: [{ label: "Message on Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" }],
     },
     testimonials: {
       heading: "",
