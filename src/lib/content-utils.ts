@@ -122,12 +122,7 @@ const AUTHOR_SUPPORT_OFFERS = {
   ],
 };
 
-const CONTACT_LINKS = [
-  AUTHOR_CONTACTS.telegram,
-  AUTHOR_CONTACTS.whatsapp,
-  AUTHOR_CONTACTS.viber,
-  AUTHOR_CONTACTS.googleMaps,
-];
+const CONTACT_LINKS = [AUTHOR_CONTACTS.telegram, AUTHOR_CONTACTS.googleMaps];
 
 export function createPlainText(raw: string | undefined | null): string {
   if (!raw) return "";

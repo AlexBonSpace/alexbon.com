@@ -244,8 +244,6 @@ export async function buildRssFeed(locale: Locale) {
     <language>${language}</language>
     <description>${escapeXml(description)}</description>
     <copyright>CC BY 4.0</copyright>
-    <managingEditor>contact@alexbon.com (Alex Bon)</managingEditor>
-    <webMaster>contact@alexbon.com (Alex Bon)</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <generator>alexbon.com feed builder</generator>
     <image>

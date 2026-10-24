@@ -58,7 +58,7 @@ export interface LandingContent {
     buttons: Array<{
       label: string;
       href: string;
-      icon?: "telegram" | "whatsapp" | "viber";
+      icon?: "telegram";
     }>;
   };
   testimonials: {
@@ -172,8 +172,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       body: "",
       buttons: [
         { label: "Написать в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-        { label: "Написать в WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
-        { label: "Написать в Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {
@@ -213,7 +211,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
       pricing: {
         heading: "Стоимость консультаций",
-        online: "Онлайн (Zoom, Telegram, Viber, WhatsApp) - 2000 грн / 40 € / 45 $",
+        online: "Онлайн (Zoom, Telegram) - 2000 грн / 40 € / 45 $",
         office: "В кабинете (Киев, м. Левобережная) - 2500 грн / 50 € / 57 $",
       },
     },
@@ -285,8 +283,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       body: "",
       buttons: [
         { label: "Написати в Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-        { label: "Написати в WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
-        { label: "Написати у Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {
@@ -326,7 +322,7 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       },
       pricing: {
         heading: "Вартість консультацій",
-        online: "Онлайн (Zoom, Telegram, Viber, WhatsApp) - 2000 грн / 40 € / 45 $",
+        online: "Онлайн (Zoom, Telegram) - 2000 грн / 40 € / 45 $",
         office: "У кабінеті (Київ, м. Лівобережна) - 2500 грн / 50 € / 57 $",
       },
     },
@@ -389,8 +385,6 @@ export const contentByLocale: Record<LocaleKey, LandingContent> = {
       body: "",
       buttons: [
         { label: "Message on Telegram", href: AUTHOR_CONTACTS.telegram, icon: "telegram" },
-        { label: "Message on WhatsApp", href: AUTHOR_CONTACTS.whatsapp, icon: "whatsapp" },
-        { label: "Message on Viber", href: AUTHOR_CONTACTS.viber, icon: "viber" },
       ],
     },
     testimonials: {

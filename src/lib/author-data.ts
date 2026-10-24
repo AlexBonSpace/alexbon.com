@@ -48,9 +48,7 @@ export const AUTHOR_ROLE: Record<Locale, string> = {
 // ============================================================================
 
 export const AUTHOR_CONTACTS = {
-  telegram: "https://t.me/alexbon_com",
-  whatsapp: "https://wa.me/+380986552222",
-  viber: "viber://chat?number=+380986552222",
+  telegram: "https://t.me/alexbonspace",
   googleMaps: "https://g.page/AlexBon?share",
 } as const;
 
@@ -177,9 +175,9 @@ export const AUTHOR_CONSULTATION = {
     en: "usually once a week",
   } as Record<Locale, string>,
   formats: {
-    ru: ["Zoom", "Telegram", "Viber", "WhatsApp", "очно в Киеве"],
-    ua: ["Zoom", "Telegram", "Viber", "WhatsApp", "очно в Києві"],
-    en: ["Zoom", "Telegram", "Viber", "WhatsApp", "in-person in Kyiv"],
+    ru: ["Zoom", "Telegram", "очно в Киеве"],
+    ua: ["Zoom", "Telegram", "очно в Києві"],
+    en: ["Zoom", "Telegram", "in-person in Kyiv"],
   } as Record<Locale, string[]>,
 } as const;
 
